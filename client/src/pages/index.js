@@ -1,0 +1,11 @@
+import { default as Accessories } from './Accessories';
+import { default as Admin } from './Admin';
+import { default as Blog } from './Blog';
+import { default as Error } from './Error';
+import { default as Firearms } from './Firearms';
+import { default as Home } from './Home';
+import { default as Login } from './Login';
+import { default as Register } from './Register';
+import { default as MainLayout } from './MainLayout';
+import { default as Performance } from './Performance';
+import { default as Profile } from './Profile';
