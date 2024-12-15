@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import {
   FaSearch,
   FaMagento,
   FaBars,
 } from 'react-icons/fa';
+import Logo from './Logo';
 const Navbar = () => {
   return (
     <Wrapper>
       <div className="nav-center">
-        <p className="logo">G-Arms</p>
+        <Logo />
         <div className="menu-btn">
           <FaBars />
         </div>
@@ -44,19 +46,13 @@ const Wrapper = styled.nav`
   place-items: center;
   .nav-center {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 300px 1fr;
     justify-content: space-between;
     align-items: center;
     width: 90%;
     max-width: 1240px;
     margin: 0 auto;
-    .logo {
-      justify-self: start;
-      font-size: 3rem;
-      text-transform: uppercase;
-      font-weight: bold;
-      color: white;
-    }
+
     .menu-btn {
       display: none;
     }
@@ -86,7 +82,14 @@ const Wrapper = styled.nav`
         display: block;
         justify-self: end;
         font-size: 2rem;
+        color: white;
+        transition: 1s all ease-in-out;
+        &:hover {
+          scale: calc(1.2);
+          color: aliceblue;
+        }
       }
+
       .links {
         display: none;
       }

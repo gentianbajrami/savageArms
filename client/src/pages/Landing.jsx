@@ -45,7 +45,7 @@ const Landing = () => {
   return (
     <Wrapper image={image}>
       <div className="content">
-        <h1>Welcome to Savage Arms</h1>
+        <h1>Welcome to G-Arms</h1>
         <button>See them all</button>
       </div>
     </Wrapper>
@@ -83,6 +83,7 @@ const Wrapper = styled.main`
       margin-bottom: 20px;
       text-transform: uppercase;
       margin-bottom: 2rem;
+      font-weight: bold;
     }
 
     button {
@@ -96,7 +97,7 @@ const Wrapper = styled.main`
       border-radius: 5px;
 
       &:hover {
-        background-color: #2980b9;
+        background-color: #ad0101;
       }
     }
   }
