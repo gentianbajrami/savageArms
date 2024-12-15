@@ -1,11 +1,12 @@
 {
   "name": "savagearms",
   "version": "1.0.0",
-  "description": "[Jobify](https://jobify.live/)",
+  "description": "[SavageArms](https://savageArms.live/)",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "setup-project": "npm i && cd client && npm i"
+    "setup-project": "npm i && cd client && npm i",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,7 @@
     "cookie-parser": "^1.4.7",
     "datauri": "^4.1.0",
     "dayjs": "^1.11.13",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "express-async-errors": "^3.1.1",
     "express-mongo-sanitize": "^2.2.0",
@@ -26,10 +27,10 @@
     "helmet": "^8.0.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.0",
+    "mongoose": "^8.9.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nanoid": "^5.0.8",
+    "nanoid": "^5.0.9",
     "nodemon": "^3.1.7"
   }
 }
