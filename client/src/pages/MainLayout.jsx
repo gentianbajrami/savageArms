@@ -1,6 +1,18 @@
+import styled from 'styled-components';
+import { Navbar } from '../components';
+import { Outlet } from 'react-router-dom';
+import Footer from './Footer';
+
 const MainLayout = () => {
   return (
-    <div>MainLayout Page</div>
-  )
-}
-export default MainLayout
+    <Wrapper>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.div``;
+
+export default MainLayout;
