@@ -1,33 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import {
-  FaSearch,
-  FaMagento,
-  FaBars,
-} from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import Logo from './Logo';
+import { useAppContext } from '../context/AppContext';
+import Sidebar from './Sidebar';
+import NavLinks from './NavLinks';
+
 const Navbar = () => {
+  const { toggleSidebar, isSidebarOpen } =
+    useAppContext();
   return (
     <Wrapper>
       <div className="nav-center">
         <Logo />
-        <div className="menu-btn">
+        <div
+          className="menu-btn"
+          onClick={toggleSidebar}
+        >
           <FaBars />
+          {isSidebarOpen && (
+            <div className="sidebar">
+              <Sidebar />
+            </div>
+          )}
         </div>
 
-        <div className="links">
-          <a href="#">Firearms</a>
-          <a href="#">Accessories</a>
-          <a href="#">Performance</a>
-          <a href="#">Blog</a>
-          <a href="#">
-            <FaMagento />
-          </a>
-          <a href="#">
-            <FaSearch />
-          </a>
-        </div>
+        <NavLinks />
       </div>
     </Wrapper>
   );
@@ -56,42 +55,35 @@ const Wrapper = styled.nav`
     .menu-btn {
       display: none;
     }
-    .links {
+    .navLinks {
       justify-self: end;
-      display: flex;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      margin-right: 2rem;
-
-      color: white;
-      a {
-        color: white;
-        text-decoration: none;
-        font-weight: 400;
-        padding: 0.5rem 1rem;
-        letter-spacing: 1px;
-        border-radius: 5px;
-      }
-      :hover {
-        background-color: antiquewhite;
-        color: black;
-      }
+    }
+    .sidebar {
+      display: none;
     }
     @media (max-width: 992px) {
       .menu-btn {
         display: block;
+        position: relative;
         justify-self: end;
         font-size: 2rem;
         color: white;
         transition: 1s all ease-in-out;
-        &:hover {
+        &:hover svg {
           scale: calc(1.2);
           color: aliceblue;
         }
       }
 
-      .links {
+      .navLinks {
         display: none;
+      }
+      .sidebar {
+        display: block;
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        transition: var(--transition);
       }
     }
   }
