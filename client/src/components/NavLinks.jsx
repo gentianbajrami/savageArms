@@ -43,17 +43,23 @@ const Wrapper = styled.ul`
   text-transform: uppercase;
   margin-right: 2rem;
   color: white;
-  a {
-    color: white;
-    text-decoration: none;
-    font-weight: 400;
+  li {
     padding: 0.5rem 1rem;
     letter-spacing: 1px;
     border-radius: 5px;
   }
-  a:hover {
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+  }
+  li:hover,
+  li:hover a {
     background-color: antiquewhite;
     color: black;
+  }
+  li:hover svg {
+    color: black !important;
   }
 `;
 export default NavLinks;

@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 import { Navbar } from '../components';
-import { Outlet } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigation,
+} from 'react-router-dom';
 import Footer from './Footer';
 
 const MainLayout = () => {
+  const navigation = useNavigation();
+  const isPageLoading =
+    navigation.state === 'loading';
   return (
     <Wrapper>
       <Navbar />
-      <Outlet />
+      {isPageLoading ? <Loading /> : <Outlet />}
       <Footer />
     </Wrapper>
   );

@@ -10,7 +10,7 @@ const Sidebar = () => {
   );
 };
 const Wrapper = styled.div`
-  background: #333;
+  background: #000000;
   padding: 1rem;
   place-items: center;
   border-radius: var(--border-radius);
