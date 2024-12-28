@@ -51,7 +51,7 @@ html {
   --border-radius: 0.25rem;
   --letter-spacing: 1px;
   --transition: 0.3s ease-in-out all;
-  --max-width: 1120px;
+  --max-width: 1240px;
   --fixed-width: 600px;
   --fluid-width: 90vw;
   --nav-height: 6rem;
@@ -357,4 +357,10 @@ button:disabled {
 .declined {
   background: #ffeeee;
   color: #d66a6a;
+}
+.page {
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  padding: 5rem;
+  background-color: var(--grey-50);
 }

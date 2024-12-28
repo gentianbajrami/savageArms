@@ -34,7 +34,7 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   width: 100%;
-  background: rgba(1, 1, 1, 0.5);
+  background: rgba(1, 1, 1, 0.8);
   position: fixed;
   top: 0;
   left: 0;

@@ -5,6 +5,7 @@ import {
   useNavigation,
 } from 'react-router-dom';
 import Footer from './Footer';
+import Loading from '../components/Loading';
 
 const MainLayout = () => {
   const navigation = useNavigation();
