@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import styled from 'styled-components';
 
 import { FaBars } from 'react-icons/fa';
@@ -10,8 +13,36 @@ import NavLinks from './NavLinks';
 const Navbar = () => {
   const { toggleSidebar, isSidebarOpen } =
     useAppContext();
+  const [isScrolled, setIsScrolled] =
+    useState(false);
+
+  // Detect scrolling and change background opacity
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      setIsScrolled(true); // Scrolled down 50px or more
+    } else {
+      setIsScrolled(false); // Not scrolled
+    }
+  };
+
+  useEffect(() => {
+    // Attach scroll event listener
+    window.addEventListener(
+      'scroll',
+      handleScroll
+    );
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        handleScroll
+      );
+    };
+  }, []);
+
   return (
-    <Wrapper>
+    <Wrapper isScrolled={isScrolled}>
       <div className="nav-center">
         <Logo />
         <div
@@ -34,7 +65,10 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   width: 100%;
-  background: rgba(1, 1, 1, 0.8);
+  background-color: ${({ isScrolled }) =>
+    isScrolled
+      ? 'rgba(1, 1, 1, 1)'
+      : 'rgba(1, 1, 1, 0.8)'};
   position: fixed;
   top: 0;
   left: 0;
@@ -43,6 +77,8 @@ const Wrapper = styled.nav`
   height: 5rem;
   display: grid;
   place-items: center;
+  transition: background-color 0.6s ease-in-out;
+
   .nav-center {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -61,6 +97,7 @@ const Wrapper = styled.nav`
     .sidebar {
       display: none;
     }
+
     @media (max-width: 992px) {
       .menu-btn {
         display: block;
