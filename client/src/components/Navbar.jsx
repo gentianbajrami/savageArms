@@ -13,8 +13,8 @@ import NavLinks from './NavLinks';
 const Navbar = () => {
   const { toggleSidebar, isSidebarOpen } =
     useAppContext();
-  const [isScrolled, setIsScrolled] =
-    useState(false);
+  const [isscrolled, setIsScrolled] =
+    useState('false');
 
   // Detect scrolling and change background opacity
   const handleScroll = () => {
@@ -42,7 +42,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <Wrapper isScrolled={isScrolled}>
+    <Wrapper isscrolled={isscrolled}>
       <div className="nav-center">
         <Logo />
         <div
@@ -65,8 +65,8 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   width: 100%;
-  background-color: ${({ isScrolled }) =>
-    isScrolled
+  background-color: ${({ isscrolled }) =>
+    isscrolled
       ? 'rgba(1, 1, 1, 1)'
       : 'rgba(1, 1, 1, 0.8)'};
   position: fixed;
