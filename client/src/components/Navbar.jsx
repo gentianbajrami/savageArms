@@ -1,33 +1,63 @@
-import React from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import styled from 'styled-components';
 
-import {
-  FaSearch,
-  FaMagento,
-  FaBars,
-} from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import Logo from './Logo';
+import { useAppContext } from '../context/AppContext';
+import Sidebar from './Sidebar';
+import NavLinks from './NavLinks';
+
 const Navbar = () => {
+  const { toggleSidebar, isSidebarOpen } =
+    useAppContext();
+  const [isScrolled, setIsScrolled] =
+    useState(false);
+
+  // Detect scrolling and change background opacity
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      setIsScrolled(true); // Scrolled down 50px or more
+    } else {
+      setIsScrolled(false); // Not scrolled
+    }
+  };
+
+  useEffect(() => {
+    // Attach scroll event listener
+    window.addEventListener(
+      'scroll',
+      handleScroll
+    );
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        handleScroll
+      );
+    };
+  }, []);
+
   return (
-    <Wrapper>
+    <Wrapper isScrolled={isScrolled}>
       <div className="nav-center">
         <Logo />
-        <div className="menu-btn">
+        <div
+          className="menu-btn"
+          onClick={toggleSidebar}
+        >
           <FaBars />
+          {isSidebarOpen && (
+            <div className="sidebar">
+              <Sidebar />
+            </div>
+          )}
         </div>
 
-        <div className="links">
-          <a href="#">Firearms</a>
-          <a href="#">Accessories</a>
-          <a href="#">Performance</a>
-          <a href="#">Blog</a>
-          <a href="#">
-            <FaMagento />
-          </a>
-          <a href="#">
-            <FaSearch />
-          </a>
-        </div>
+        <NavLinks />
       </div>
     </Wrapper>
   );
@@ -35,7 +65,10 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   width: 100%;
-  background: rgba(1, 1, 1, 0.5);
+  background-color: ${({ isScrolled }) =>
+    isScrolled
+      ? 'rgba(1, 1, 1, 1)'
+      : 'rgba(1, 1, 1, 0.8)'};
   position: fixed;
   top: 0;
   left: 0;
@@ -44,6 +77,8 @@ const Wrapper = styled.nav`
   height: 5rem;
   display: grid;
   place-items: center;
+  transition: background-color 0.6s ease-in-out;
+
   .nav-center {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -56,42 +91,36 @@ const Wrapper = styled.nav`
     .menu-btn {
       display: none;
     }
-    .links {
+    .navLinks {
       justify-self: end;
-      display: flex;
-      font-size: 1.1rem;
-      text-transform: uppercase;
-      margin-right: 2rem;
-
-      color: white;
-      a {
-        color: white;
-        text-decoration: none;
-        font-weight: 400;
-        padding: 0.5rem 1rem;
-        letter-spacing: 1px;
-        border-radius: 5px;
-      }
-      :hover {
-        background-color: antiquewhite;
-        color: black;
-      }
     }
+    .sidebar {
+      display: none;
+    }
+
     @media (max-width: 992px) {
       .menu-btn {
         display: block;
+        position: relative;
         justify-self: end;
         font-size: 2rem;
         color: white;
         transition: 1s all ease-in-out;
-        &:hover {
+        &:hover svg {
           scale: calc(1.2);
           color: aliceblue;
         }
       }
 
-      .links {
+      .navLinks {
         display: none;
+      }
+      .sidebar {
+        display: block;
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        transition: var(--transition);
       }
     }
   }

@@ -1,4 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
 import {
   Accessories,
   Admin,
@@ -11,6 +14,7 @@ import {
   Performance,
   Profile,
   Register,
+  About,
 } from './pages';
 
 const router = createBrowserRouter([
@@ -21,18 +25,29 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> }, // homepage content
       { path: 'firearms', element: <Firearms /> },
-      { path: 'accessories', element: <Accessories /> },
-      { path: 'performance', element: <Performance /> },
+      {
+        path: 'accessories',
+        element: <Accessories />,
+      },
+      {
+        path: 'performance',
+        element: <Performance />,
+      },
       { path: 'blog', element: <Blog /> },
       { path: 'login', element: <Profile /> },
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
       { path: 'admin', element: <Admin /> },
+      { path: 'about', element: <About /> },
     ],
   },
 ]);
 
 const App = () => {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <RouterProvider
+      router={router}
+    ></RouterProvider>
+  );
 };
 export default App;

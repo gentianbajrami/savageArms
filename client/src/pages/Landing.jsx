@@ -15,6 +15,7 @@ import img9 from '../assets/images/banners/2024-06-03-11-43-49-83.jpg';
 import img10 from '../assets/images/banners/2024-06-13-07-40-14-3865.jpg';
 import img11 from '../assets/images/banners/2024-06-28-11-47-30-3905.jpg';
 import img12 from '../assets/images/banners/stance-black-night-sights-9mm-bullets.jpg';
+
 const Landing = () => {
   const images = [
     img1,
@@ -46,7 +47,9 @@ const Landing = () => {
     <Wrapper image={image}>
       <div className="content">
         <h1>Welcome to G-Arms</h1>
-        <button>See them all</button>
+        <button className="btn">
+          See them all
+        </button>
       </div>
     </Wrapper>
   );
@@ -62,6 +65,7 @@ const Wrapper = styled.main`
   align-items: center;
   justify-content: center;
   position: relative;
+  transition: background-image 1.3s ease-in-out;
 
   &::before {
     content: '';
@@ -88,17 +92,6 @@ const Wrapper = styled.main`
 
     button {
       padding: 10px 20px;
-      letter-spacing: 1px;
-      background-color: #cd0000;
-      text-transform: uppercase;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-
-      &:hover {
-        background-color: #ad0101;
-      }
     }
   }
 `;
