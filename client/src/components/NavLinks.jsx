@@ -16,7 +16,7 @@ const NavLinks = ({ isSidebar = false }) => {
         <a href="#">Firearms</a>
       </li>
       <li>
-        <a href="#">Accessories</a>
+        <a href="/accessories">Accessories</a>
       </li>
       <li>
         <a href="#">Performance</a>
