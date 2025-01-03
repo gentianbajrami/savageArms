@@ -1,11 +1,12 @@
-import { default as Accessories } from './Accessories';
-import { default as Admin } from './Admin';
-import { default as Blog } from './Blog';
-import { default as Error } from './Error';
-import { default as Firearms } from './Firearms';
-import { default as Home } from './Home';
-import { default as Login } from './Login';
-import { default as Register } from './Register';
-import { default as MainLayout } from './MainLayout';
-import { default as Performance } from './Performance';
-import { default as Profile } from './Profile';
+export { default as Admin } from './Admin';
+export { default as Blog } from './Blog';
+export { default as Error } from './Error';
+export { default as Firearms } from './Firearms';
+export { default as Home } from './Home';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as MainLayout } from './MainLayout';
+export { default as Performance } from './Performance';
+export { default as Profile } from './Profile';
+export { default as Accessories } from './Accessories';
+
