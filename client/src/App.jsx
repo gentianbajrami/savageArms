@@ -15,6 +15,8 @@ import {
   Profile,
   Register,
   About,
+  Suppressor,
+  Bipods,
 } from './pages';
 
 const router = createBrowserRouter([
@@ -27,7 +29,20 @@ const router = createBrowserRouter([
       { path: 'firearms', element: <Firearms /> },
       {
         path: 'accessories',
-        element: <Accessories />,
+        children: [
+          {
+            index: true,
+            element: <Accessories />,
+          },
+          {
+            path: 'suppressor',
+            element: <Suppressor />,
+          },
+          {
+            path: 'bipods',
+            element: <Bipods />,
+          },
+        ],
       },
       {
         path: 'performance',
@@ -38,7 +53,10 @@ const router = createBrowserRouter([
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
       { path: 'admin', element: <Admin /> },
-      { path: 'about', element: <About /> },
+      {
+        path: 'about',
+        element: <About />,
+      },
     ],
   },
 ]);
