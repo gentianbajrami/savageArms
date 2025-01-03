@@ -27,7 +27,11 @@ const Accessories = () => {
         {data.map(({ img, name }) => {
           return (
             <Link to={`${name}`} className="box">
-              <img src={img} alt={name} />
+              <img
+                src={img}
+                alt={name}
+                loading="lazy"
+              />
               <span>{name}</span>
             </Link>
           );
