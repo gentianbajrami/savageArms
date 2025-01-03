@@ -3,9 +3,10 @@ import { Banner } from '../components';
 import Suppressors from '../assets/images/arms/surpersor.jpg';
 import Bipods from '../assets/images/arms/bipods.jpg';
 import Magazines from '../assets/images/arms/magazines.jpg';
+import { Link } from 'react-router-dom';
 const Accessories = () => {
   const data = [
-    { name: 'surpressor', img: Suppressors },
+    { name: 'suppressor', img: Suppressors },
     { name: 'bipods', img: Bipods },
     { name: 'magazine', img: Magazines },
   ];
@@ -25,10 +26,10 @@ const Accessories = () => {
       <div className="boxes">
         {data.map(({ img, name }) => {
           return (
-            <article className="box">
+            <Link to={`${name}`} className="box">
               <img src={img} alt={name} />
               <span>{name}</span>
-            </article>
+            </Link>
           );
         })}
       </div>
@@ -81,6 +82,11 @@ const Wrapper = styled.div`
       font-weight: bold;
       border-radius: 5px;
       letter-spacing: var(--letter-spacing);
+    }
+  }
+  @media (max-width: 500px) {
+    .box img {
+      width: 250px;
     }
   }
 `;
