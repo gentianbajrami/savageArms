@@ -1,4 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
 import {
   Accessories,
   Admin,
@@ -11,6 +14,9 @@ import {
   Performance,
   Profile,
   Register,
+  About,
+  Suppressor,
+  Bipods,
 } from './pages';
 
 const router = createBrowserRouter([
@@ -21,18 +27,45 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> }, // homepage content
       { path: 'firearms', element: <Firearms /> },
-      { path: 'accessories', element: <Accessories /> },
-      { path: 'performance', element: <Performance /> },
+      {
+        path: 'accessories',
+        children: [
+          {
+            index: true,
+            element: <Accessories />,
+          },
+          {
+            path: 'suppressor',
+            element: <Suppressor />,
+          },
+          {
+            path: 'bipods',
+            element: <Bipods />,
+          },
+        ],
+      },
+      {
+        path: 'performance',
+        element: <Performance />,
+      },
       { path: 'blog', element: <Blog /> },
       { path: 'login', element: <Profile /> },
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
       { path: 'admin', element: <Admin /> },
+      {
+        path: 'about',
+        element: <About />,
+      },
     ],
   },
 ]);
 
 const App = () => {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <RouterProvider
+      router={router}
+    ></RouterProvider>
+  );
 };
 export default App;

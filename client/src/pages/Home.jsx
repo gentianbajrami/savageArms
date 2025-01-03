@@ -1,6 +1,11 @@
+import Landing from './Landing';
+import { FeatureArms } from '../components';
 const Home = () => {
   return (
-    <div>Home Page</div>
-  )
-}
-export default Home
+    <>
+      <Landing />
+      <FeatureArms />
+    </>
+  );
+};
+export default Home;

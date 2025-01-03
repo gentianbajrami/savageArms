@@ -9,4 +9,6 @@ export { default as MainLayout } from './MainLayout';
 export { default as Performance } from './Performance';
 export { default as Profile } from './Profile';
 export { default as Accessories } from './Accessories';
-
+export { default as About } from './About';
+export { default as Suppressor } from './Suppressor';
+export { default as Bipods } from './Bipods';
