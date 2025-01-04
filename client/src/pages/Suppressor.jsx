@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Banner } from '../components';
+import {
+  Banner,
+  SuppressorTypes,
+} from '../components';
 import SilentEdgeX from '../assets/images/arms/SilentEdgeX.webp';
 import { Link } from 'react-router-dom';
 
@@ -67,16 +70,7 @@ const Suppressor = () => {
             </li>
           </ul>
         </div>
-        <div className="img-container">
-          <img
-            src={SilentEdgeX}
-            alt="Silent Edge X"
-            loading="lazy"
-          />
-          <Link to={'/products'} className="btn">
-            shop now
-          </Link>
-        </div>
+        <SuppressorTypes />
       </div>
     </Wrapper>
   );
