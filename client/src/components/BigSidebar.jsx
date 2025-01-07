@@ -51,6 +51,9 @@ const Wrapper = styled.aside`
       transition: margin-left 0.5s ease-in-out;
       margin-left: -29rem;
       padding-top: 3rem;
+      background-color: var(
+        --background-secondary-color
+      );
     }
     .show-sidebar {
       margin-left: 0;
