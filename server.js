@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 //routers
 import authRouter from './routes/authRouter.js';
@@ -21,6 +22,14 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Allow requests from your frontend
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  })
+);
+
 
 app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/auth', authRouter);

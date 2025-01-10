@@ -1,7 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import {
   Accessories,
   Admin,
@@ -19,6 +16,8 @@ import {
   Bipods,
 } from './pages';
 
+import { action1 as registerAction } from './pages/Register';
+import { action1 as loginAction } from './pages/Login';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -49,9 +48,7 @@ const router = createBrowserRouter([
         element: <Performance />,
       },
       { path: 'blog', element: <Blog /> },
-      { path: 'login', element: <Profile /> },
-      { path: 'register', element: <Register /> },
-      { path: 'login', element: <Login /> },
+      { path: 'profile', element: <Profile /> },
       { path: 'admin', element: <Admin /> },
       {
         path: 'about',
@@ -59,13 +56,20 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    path: '/login',
+    element: <Login />,
+    action: loginAction,
+  },
+  {
+    path: '/register',
+    element: <Register />,
+    action: registerAction,
+  },
 ]);
 
 const App = () => {
-  return (
-    <RouterProvider
-      router={router}
-    ></RouterProvider>
-  );
+  return <RouterProvider router={router}></RouterProvider>;
 };
 export default App;
