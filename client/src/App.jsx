@@ -14,6 +14,8 @@ import {
   About,
   Suppressor,
   Bipods,
+  DashboardLayout,
+  Dashboard,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -56,7 +58,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: '/login',
     element: <Login />,
@@ -66,6 +67,14 @@ const router = createBrowserRouter([
     path: '/register',
     element: <Register />,
     action: registerAction,
+   },                                  
+   {
+    path: '/dashboard',
+    element: <DashboardLayout />,
+    errorElement: <Error />,
+    children: [
+      { index: true, element: <Dashboard /> },
+    ],
   },
 ]);
 

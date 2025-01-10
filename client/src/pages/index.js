@@ -12,3 +12,5 @@ export { default as Accessories } from './Accessories';
 export { default as About } from './About';
 export { default as Suppressor } from './Suppressor';
 export { default as Bipods } from './Bipods';
+export { default as DashboardLayout } from './Dashboard/DashboardLayout';
+export { default as Dashboard } from './Dashboard/Dashboard';
