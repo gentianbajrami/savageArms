@@ -17,6 +17,8 @@ import {
   About,
   Suppressor,
   Bipods,
+  DashboardLayout,
+  Dashboard,
 } from './pages';
 
 const router = createBrowserRouter([
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
         path: 'about',
         element: <About />,
       },
+    ],
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardLayout />,
+    errorElement: <Error />,
+    children: [
+      { index: true, element: <Dashboard /> },
     ],
   },
 ]);
