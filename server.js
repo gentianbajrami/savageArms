@@ -12,11 +12,8 @@ import cors from 'cors';
 //routers
 import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
-<<<<<<< HEAD
 import firearmRouter from './routes/firearmRouter.js';
-=======
 import blogRouter from './routes/blogRouter.js';
->>>>>>> 1565061a6ecf6f0bee7660c4ea2626570fb66317
 
 //middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -38,21 +35,18 @@ app.use(
   cors({
     origin: 'http://localhost:5173', // Allow requests from your frontend
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+    methods: [
+      'GET',
+      'POST',
+      'PUT',
+      'DELETE',
+      'PATCH',
+    ],
   })
 );
 
-<<<<<<< HEAD
 app.use('/api/v1/firearms',authenticateUser, firearmRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
-=======
-
-app.use(
-  '/api/v1/users',
-  authenticateUser,
-  userRouter
-);
->>>>>>> 1565061a6ecf6f0bee7660c4ea2626570fb66317
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/blogs', blogRouter);
 
