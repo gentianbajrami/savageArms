@@ -11,6 +11,7 @@ import cors from 'cors';
 //routers
 import authRouter from './routes/authRouter.js';
 import userRouter from './routes/userRouter.js';
+import firearmRouter from './routes/firearmRouter.js';
 
 //middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -30,7 +31,7 @@ app.use(
   })
 );
 
-
+app.use('/api/v1/firearms',authenticateUser, firearmRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/auth', authRouter);
 
