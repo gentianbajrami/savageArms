@@ -34,7 +34,6 @@ export const updateFirearm = async (req, res) => {
   const updatedFirearm = await Firearms.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
-    console.log(updatedFirearm);
   res.status(StatusCodes.OK).json({ msg: 'firearm modified', firearm: updatedFirearm });
 };
 
