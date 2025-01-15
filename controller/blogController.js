@@ -47,7 +47,7 @@ export const getSingleBlog = async (
   next
 ) => {
   const blog = await Blog.findById(req.params.id);
-  res.status(StatusCodes.OK).json({ job: blog });
+  res.status(StatusCodes.OK).json({ blog });
 };
 
 export const updateBlog = async (
@@ -85,10 +85,20 @@ export const deleteBlog = async (
   res,
   next
 ) => {
-  const removedBlog =
-    await Blog.findByIdAndDelete(req.params.id);
+  const blog = await Blog.findById(req.params.id);
+  if (!blog) {
+    throw new BadRequestError('Blog not found');
+  }
+
+  if (blog.imagePublicId) {
+    await cloudinary.v2.uploader.destroy(
+      blog.imagePublicId
+    );
+  }
+
+  await blog.deleteOne();
   res.status(StatusCodes.OK).json({
     msg: 'job deleted',
-    blog: removedBlog,
+    blog,
   });
 };

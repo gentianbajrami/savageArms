@@ -3,7 +3,10 @@ import links from '../utils/links';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const DashboardLinks = ({ toggleSidebar }) => {
+const DashboardLinks = ({
+  toggleSidebar,
+  shouldToggle = false,
+}) => {
   return (
     <Wrapper>
       {links.map(({ text, path, icon }) => {
@@ -18,7 +21,9 @@ const DashboardLinks = ({ toggleSidebar }) => {
             to={path}
             className={'nav-link'}
             end
-            onClick={toggleSidebar}
+            onClick={
+              shouldToggle && toggleSidebar
+            }
           >
             <span className="icon"> {icon}</span>
             {text}

@@ -1,5 +1,7 @@
-import AboutUsTimeline from '../components/AboutUsTimeline';
+import React from 'react';
+
 const Blog = () => {
-  return <div className="page"></div>;
+  return <div>Blog</div>;
 };
+
 export default Blog;
