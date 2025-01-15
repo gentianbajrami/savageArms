@@ -1,16 +1,51 @@
 import React from 'react';
-import { Form, redirect } from 'react-router-dom';
+import customFetch from '../../utils';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import {
+  Form,
+  redirect,
+  useLoaderData,
+} from 'react-router-dom';
+import styled from 'styled-components';
 import {
   FormRow,
   SubmitButton,
 } from '../../components';
-import styled from 'styled-components';
-import customFetch from '../../utils';
-import { toast } from 'react-toastify';
 
+const singleBlogQuery = id => {
+  return {
+    queryKey: ['blog', id],
+    queryFn: async () => {
+      const response = await customFetch.get(
+        `/blogs/${id}`
+      );
+      console.log(response.data);
+      return response.data;
+    },
+  };
+};
+
+export const loader =
+  queryClient =>
+  async ({ params }) => {
+    try {
+      await queryClient.ensureQueryData(
+        singleBlogQuery(params.id)
+      );
+      return { id: params.id };
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        error?.response?.data?.msg ||
+          'something went wrong'
+      );
+      return redirect('/dashboard');
+    }
+  };
 export const action =
   queryClient =>
-  async ({ request }) => {
+  async ({ request, params }) => {
     const formData = await request.formData();
     const file = formData.get('image');
     if (file && file.size > 500000) {
@@ -19,9 +54,12 @@ export const action =
     }
 
     try {
-      await customFetch.post('/blogs', formData);
+      await customFetch.patch(
+        '/blogs/' + params.id,
+        formData
+      );
       queryClient.invalidateQueries(['blogs']);
-      toast.success('Blog created successfully');
+      toast.success('Blog updated successfully');
       return redirect('/dashboard/blog');
     } catch (error) {
       toast.error(error?.response?.data?.msg);
@@ -29,7 +67,12 @@ export const action =
     return null;
   };
 
-const CreateBlog = () => {
+const EditBlog = () => {
+  const { id } = useLoaderData();
+  const { blog } = useQuery(
+    singleBlogQuery(id)
+  ).data;
+  console.log(blog);
   return (
     <Wrapper>
       <Form
@@ -37,9 +80,13 @@ const CreateBlog = () => {
         method="post"
         encType="multipart/form-data"
       >
-        <h4 className="form-title">Add blog</h4>
+        <h4 className="form-title">Edit blog</h4>
         <div className="form-center">
-          <FormRow type={'text'} name={'title'} />
+          <FormRow
+            type={'text'}
+            name={'title'}
+            defaultValue={blog?.title}
+          />
           <div className="form-row">
             <label
               htmlFor="image"
@@ -62,6 +109,7 @@ const CreateBlog = () => {
             <textarea
               name="content"
               className="form-input"
+              defaultValue={blog?.content}
             ></textarea>
           </div>
           <SubmitButton formBtn />
@@ -116,4 +164,4 @@ const Wrapper = styled.section`
     }
   }
 `;
-export default CreateBlog;
+export default EditBlog;

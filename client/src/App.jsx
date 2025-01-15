@@ -25,11 +25,18 @@ import {
   DashboardLayout,
   Dashboard,
   CreateBlog,
+  BlogDashboard,
+  EditBlog,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
 import { action1 as loginAction } from './pages/Login';
 import { action as createBlogAction } from './pages/Blog/CreateBlog';
+import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
+import { action as editBlogAction } from './pages/Blog/EditBlog';
+
+import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
+import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,15 +105,31 @@ const router = createBrowserRouter([
         element: <CreateBlog />,
         action: createBlogAction(queryClient),
       },
+      {
+        path: 'blog',
+        element: <BlogDashboard />,
+        loader: blogDashboardLoader(queryClient),
+      },
+      {
+        path: 'delete-blog/:id',
+        action: deleteBlogAction(queryClient),
+      },
+      {
+        path: 'edit-blog/:id',
+        element: <EditBlog />,
+        loader: editBlogLoader(queryClient),
+        action: editBlogAction(queryClient),
+      },
     ],
   },
 ]);
 
 const App = () => {
   return (
-    <RouterProvider
-      router={router}
-    ></RouterProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />;
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 export default App;
