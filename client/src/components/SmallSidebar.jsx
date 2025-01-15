@@ -33,6 +33,7 @@ const SmallSidebar = () => {
           <div className="links">
             <DashboardLinks
               toggleSidebar={toggleSidebar}
+              shouldToggle
             />
           </div>
           <div className="sidebar-footer">

@@ -14,3 +14,6 @@ export { default as Suppressor } from './Suppressor';
 export { default as Bipods } from './Bipods';
 export { default as DashboardLayout } from './Dashboard/DashboardLayout';
 export { default as Dashboard } from './Dashboard/Dashboard';
+export { default as CreateBlog } from './Blog/CreateBlog';
+export { default as BlogDashboard } from './Blog/BlogDashboard';
+export { default as EditBlog } from './Blog/EditBlog';

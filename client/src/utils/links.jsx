@@ -32,6 +32,11 @@ const links = [
     path: 'admin',
     icon: <MdAdminPanelSettings />,
   },
+  {
+    text: 'blog',
+    path: 'blog',
+    icon: <MdAdminPanelSettings />,
+  },
 ];
 
 export default links;
