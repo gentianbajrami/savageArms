@@ -37,6 +37,7 @@ import { action as editBlogAction } from './pages/Blog/EditBlog';
 
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
+import { loader as blogLoader } from './pages/Blog';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -75,7 +76,11 @@ const router = createBrowserRouter([
         path: 'performance',
         element: <Performance />,
       },
-      { path: 'blog', element: <Blog /> },
+      {
+        path: 'blog',
+        element: <Blog />,
+        loader: blogLoader(queryClient),
+      },
       { path: 'profile', element: <Profile /> },
       { path: 'admin', element: <Admin /> },
       {
