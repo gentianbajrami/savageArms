@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {
   FormRow,
   SingleBlog,
+  SingleBlogDashboard,
 } from '../../components';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -18,7 +19,7 @@ import PageBtnContainer from '../../components/PageBtnContainer';
 const blogsQuery = params => {
   const { search, page } = params;
   return {
-    queryKey: ['jobs', search ?? '', page ?? 1],
+    queryKey: ['blogs', search ?? '', page ?? 1],
     queryFn: async () => {
       const { data } = await customFetch(
         '/blogs',
@@ -111,7 +112,7 @@ const BlogDashboard = () => {
         <div className="blog">
           {blogs.map(blog => {
             return (
-              <SingleBlog
+              <SingleBlogDashboard
                 key={blog?._id}
                 {...blog}
               />

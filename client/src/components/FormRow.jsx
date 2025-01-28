@@ -4,6 +4,7 @@ const FormRow = ({
   labelText,
   defaultValue,
   onChange,
+  placeholder,
 }) => {
   return (
     <div className="form-row">
@@ -20,6 +21,7 @@ const FormRow = ({
         className="form-input"
         defaultValue={defaultValue || ''}
         required
+        placeholder={placeholder}
       ></input>
     </div>
   );
