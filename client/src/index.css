@@ -410,3 +410,13 @@ button:disabled {
     display: none;
   }
 }
+
+.delete-btn {
+  background-color: black;
+  color: white;
+  transition: var(--transition);
+}
+.delete-btn:hover {
+  background-color: red;
+  transition: var(--transition);
+}
