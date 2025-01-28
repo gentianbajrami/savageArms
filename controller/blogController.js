@@ -38,8 +38,46 @@ export const allBlogs = async (
   res,
   next
 ) => {
-  const blogs = await Blog.find({});
-  res.status(200).json({ blogs });
+  const { search } = req.query;
+  console.log('backend search', search);
+  const queryObject = {};
+  if (search) {
+    queryObject.$or = [
+      {
+        title: {
+          $regex: search,
+          $options: 'i',
+        },
+      },
+      {
+        content: {
+          $regex: search,
+          $options: 'i',
+        },
+      },
+    ];
+  }
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 2;
+  const skip = (page - 1) * limit;
+  const blogs = await Blog.find(queryObject)
+    .skip(skip)
+    .limit(limit);
+
+  const totalBlogs = await Blog.countDocuments(
+    queryObject
+  );
+  const numOfPages = Math.ceil(
+    totalBlogs / limit
+  );
+
+  res.status(200).json({
+    totalBlogs,
+    numOfPages,
+    currentPage: page,
+    blogs,
+  });
 };
 export const getSingleBlog = async (
   req,

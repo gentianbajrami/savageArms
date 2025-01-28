@@ -1,7 +1,9 @@
 import React from 'react';
-
+import styled from 'styled-components';
 const Blog = () => {
-  return <div>Blog</div>;
+  return <Wrapper className="page">Blog</Wrapper>;
 };
+
+const Wrapper = styled.main``;
 
 export default Blog;

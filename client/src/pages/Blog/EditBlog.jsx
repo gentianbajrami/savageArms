@@ -158,10 +158,5 @@ const Wrapper = styled.section`
       align-items: center;
     }
   }
-  @media (min-width: 1200px) {
-    .form-center {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
 `;
 export default EditBlog;
