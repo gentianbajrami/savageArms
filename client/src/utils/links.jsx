@@ -8,13 +8,13 @@ import { MdAdminPanelSettings } from 'react-icons/md';
 
 const links = [
   {
-    text: 'add gun',
-    path: '.',
+    text: 'add firearm',
+    path: 'add-firearm',
     icon: <FaWpforms />,
   },
   {
-    text: 'all guns',
-    path: 'all-jobs',
+    text: 'all firearms',
+    path: 'all-firearms',
     icon: <MdQueryStats />,
   },
   {

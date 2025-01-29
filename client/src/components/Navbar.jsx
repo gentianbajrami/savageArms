@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { FaBars } from 'react-icons/fa';
@@ -10,45 +7,14 @@ import { useAppContext } from '../context/AppContext';
 import Sidebar from './Sidebar';
 import NavLinks from './NavLinks';
 
-const Navbar = () => {
-  const { toggleSidebar, isSidebarOpen } =
-    useAppContext();
-  const [isscrolled, setIsScrolled] =
-    useState('false');
-
-  // Detect scrolling and change background opacity
-  const handleScroll = () => {
-    if (window.scrollY > 50) {
-      setIsScrolled(true); // Scrolled down 50px or more
-    } else {
-      setIsScrolled(false); // Not scrolled
-    }
-  };
-
-  useEffect(() => {
-    // Attach scroll event listener
-    window.addEventListener(
-      'scroll',
-      handleScroll
-    );
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener(
-        'scroll',
-        handleScroll
-      );
-    };
-  }, []);
+const Navbar = ({ isScrolled }) => {
+  const { toggleSidebar, isSidebarOpen } = useAppContext();
 
   return (
-    <Wrapper isscrolled={isscrolled}>
+    <Wrapper $isScrolled={isScrolled}>
       <div className="nav-center">
         <Logo />
-        <div
-          className="menu-btn"
-          onClick={toggleSidebar}
-        >
+        <div className="menu-btn" onClick={toggleSidebar}>
           <FaBars />
           {isSidebarOpen && (
             <div className="sidebar">
@@ -56,7 +22,6 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
         <NavLinks />
       </div>
     </Wrapper>
@@ -65,14 +30,10 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   width: 100%;
-  background-color: ${({ isscrolled }) =>
-    isscrolled
-      ? 'rgba(1, 1, 1, 1)'
-      : 'rgba(1, 1, 1, 0.8)'};
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  background-color: ${({ $isScrolled }) =>
+    $isScrolled ? 'rgba(1, 1, 1, 1)' : 'rgba(1, 1, 1, 0.8)'};
+  position: ${({ $isScrolled }) => ($isScrolled ? 'fixed' : 'absolute')};
+  top: ${({ $isScrolled }) => ($isScrolled ? '0' : '3rem')};
   z-index: 1000;
   height: 5rem;
   display: grid;
@@ -115,9 +76,11 @@ const Wrapper = styled.nav`
       .navLinks {
         display: none;
       }
+      
       .sidebar {
         display: block;
         position: absolute;
+        border: 2px solid red;
         top: 2rem;
         right: 2rem;
         transition: var(--transition);
