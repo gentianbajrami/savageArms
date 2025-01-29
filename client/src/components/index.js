@@ -10,3 +10,5 @@ export { default as DashboardNavbar } from './DashboardNavbar';
 export { default as SubmitButton } from './SubmitButton';
 export { default as SingleBlogDashboard } from './SingleBlogDashboard';
 export { default as SingleBlog } from './SingleBlog';
+export { default as BipodsType } from './BipodsType';
+export { default as BipodsTile } from './BipodsTile';

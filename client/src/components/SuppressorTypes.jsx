@@ -211,6 +211,7 @@ const Wrapper = styled.div`
       margin-bottom: 1.5rem;
       border-bottom: 1px solid var(--grey-500);
       padding-bottom: 0.3rem;
+      padding-left: 4rem;
     }
     span {
       font-weight: 400;
