@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
+import { Form, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import day from 'dayjs';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
-day.extend(advancedFormat);
-const SingleBlog = ({
+
+const SingleBlogDashboard = ({
   image,
   title,
   content,
-  date,
+  _id,
 }) => {
   const [showMore, setShowMore] = useState(false);
 
@@ -20,34 +19,46 @@ const SingleBlog = ({
       <img src={image} alt="no image" />
       <div className="content">
         <h2>{title}</h2>
-        <div className="content-text">
-          {showMore ? (
-            <p>{content}</p>
-          ) : content?.length > 200 ? (
-            <p>
-              {content.slice(0, 200)} ...{' '}
-              <button
-                onClick={toggleShowMore}
-                className="showMoreBtn"
-              >
-                Show more
-              </button>
-            </p>
-          ) : (
-            <p>{content}</p>
-          )}
-        </div>
+        {content.length > 200}
+        {showMore ? (
+          <p>{content}</p>
+        ) : content.length > 200 ? (
+          <p>
+            {content.slice(0, 200)} ...{' '}
+            <button
+              onClick={toggleShowMore}
+              className="showMoreBtn"
+            >
+              Show more
+            </button>
+          </p>
+        ) : (
+          <p>{content}</p>
+        )}
         {showMore && (
           <button
-            className="showLessBtn"
+            className="showMoreBtn"
             onClick={toggleShowMore}
           >
             Show less
           </button>
         )}
-        <p className="date">
-          {day(date).format('MMM Do,YYYY')}
-        </p>
+        <div className="actions">
+          <Link
+            to={`../edit-blog/${_id}`}
+            className="btn"
+          >
+            Edit
+          </Link>
+          <Form
+            method="post"
+            action={`../delete-blog/${_id}`}
+          >
+            <button type="submit" className="btn">
+              Delete
+            </button>
+          </Form>
+        </div>
       </div>
     </Wrapper>
   );
@@ -86,16 +97,17 @@ const Wrapper = styled.article`
       line-height: 1.3;
       letter-spacing: var(--letter-spacing);
     }
-    .date {
-      margin-top: 1.5rem;
-    }
-    .content-text {
-      max-height: 10rem;
-      overflow-y: auto;
-    }
   }
-  .showMoreBtn,
-  .showLessBtn {
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.3rem;
+  }
+
+  .showMoreBtn {
     background: transparent;
     color: red;
     border: none;
@@ -106,9 +118,6 @@ const Wrapper = styled.article`
   .showMoreBtn:hover {
     color: darkred;
   }
-  .showLessBtn {
-    margin-top: 0.5rem;
-  }
 `;
 
-export default SingleBlog;
+export default SingleBlogDashboard;
