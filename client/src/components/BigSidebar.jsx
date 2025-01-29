@@ -42,11 +42,9 @@ const Wrapper = styled.aside`
     display: block;
     box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
     .sidebar-container {
-      min-height: 100vh;
       height: 100%;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
       padding: 1rem;
+      min-height: 100vh;
       text-align: center;
       transition: margin-left 0.5s ease-in-out;
       margin-left: -29rem;
@@ -77,10 +75,12 @@ const Wrapper = styled.aside`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 7rem;
   }
   .links {
     display: grid;
     place-items: center;
+    margin-bottom: 15rem;
   }
   .sidebar-footer {
     padding: 2rem;
