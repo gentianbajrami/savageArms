@@ -5,6 +5,7 @@ import {
   Link,
   redirect,
   useLoaderData,
+  useNavigation,
   useSubmit,
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,6 +18,7 @@ import {
   SingleBlog,
 } from '../components';
 import PageBtnContainer from '../components/PageBtnContainer';
+import Loading from '../components/Loading';
 
 const blogsQuery = params => {
   const { search, page } = params;
@@ -72,8 +74,6 @@ const Blog = () => {
       }, 2000);
     };
   };
-
-  console.log(searchValues);
 
   return (
     <Wrapper className="page">
