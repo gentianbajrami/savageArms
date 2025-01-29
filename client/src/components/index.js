@@ -8,5 +8,6 @@ export { default as BigSidebar } from './BigSidebar';
 export { default as SmallSidebar } from './SmallSidebar';
 export { default as DashboardNavbar } from './DashboardNavbar';
 export { default as SubmitButton } from './SubmitButton';
+export { default as SingleBlogDashboard } from './SingleBlogDashboard';
 export { default as SingleBlog } from './SingleBlog';
 export { default as FormRowSelect } from './FormRowSelect';
