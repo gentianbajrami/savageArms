@@ -9,8 +9,8 @@ import {
 const FirearmsSchema = new mongoose.Schema(
   {
     fullName: String,
-    photo: [String],
-    features: [String],
+    photo: String,
+    features: String,
     caliber: { type: String, enum: Object.values(FIREARMS_CALIBER) },
     model: { type: String, enum: Object.values(FIREARMS_MODEL) },
     manufacturer: { type: String, enum: Object.values(FIREARMS_MANUFACTURER) },

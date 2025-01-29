@@ -85,6 +85,9 @@ const Wrapper = styled.aside`
   .sidebar-footer {
     padding: 2rem;
   }
+  .pending{
+    background: var(--background-color);
+  }
 `;
 
 export default BigSidebar;

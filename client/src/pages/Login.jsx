@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 export const action1 = async ({ request }) => {
   const formData = await request.formData();
-  console.log(formData);
   const data = Object.fromEntries(formData);
   try {
     await customFetch.post('/auth/login', data);
