@@ -1,7 +1,11 @@
 export { default as Admin } from './Admin';
 export { default as Blog } from './Blog';
 export { default as Error } from './Error';
-export { default as Firearms } from './Firearms';
+export { default as Firearms } from './Firearms/Firearms';
+export { default as AllFirearms } from './Firearms/AllFirearms';
+export { default as DeleteFirearm } from './Firearms/DeleteFirearm';
+export { default as EditFirearm } from './Firearms/EditFirearm';
+export { default as AddFirearm } from './Firearms/AddFirearm';
 export { default as Home } from './Home';
 export { default as Login } from './Login';
 export { default as Register } from './Register';

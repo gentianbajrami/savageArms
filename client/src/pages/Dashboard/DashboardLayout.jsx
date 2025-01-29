@@ -1,50 +1,83 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-} from 'react';
+import { Outlet, redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { BigSidebar, DashboardNavbar, SmallSidebar } from '../../components';
+import { createContext, useContext, useEffect, useState } from 'react';
+import customFetch from '../../utils';
+import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-import {
-  Outlet,
-  useNavigation,
-} from 'react-router-dom';
-import { IoAdd } from 'react-icons/io5';
-import {
-  BigSidebar,
-  DashboardNavbar,
-  SmallSidebar,
-} from '../../components';
-import Loading from '../../components/Loading';
+// const userQuery = {
+//   queryKey: ['user'],
+//   queryFn: async () => {
+//     const { data } = await customFetch.get('/users/current-user');
+//     return data;
+//   },
+// };
+
+export const loader = async () => {
+  try {
+    const data = await customFetch.get('/users/current-user');
+    return data
+  } catch (error) {
+    return redirect('/');
+  }
+};
 
 const DashboardContext = createContext();
+
 const DashboardLayout = () => {
-  const [showSidebar, setShowSidebar] =
-    useState(false);
+  const { user } = useLoaderData()
+  console.log(user);
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isPageLoading = navigation.state === 'loading';
+  const [showSidebar, setShowSidebar] = useState(false);
+  // const [isAuthError, setIsAuthError] = useState(false);
+
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
   };
 
-  const navigation = useNavigation();
-  const isPageLoading =
-    navigation.state === 'loading';
+  const logoutUser = async () => {
+    navigate('/');
+    await customFetch.get('/auth/logout');
+    // queryClient.invalidateQueries();
+    toast.success('Logging out...');
+  };
+
+  // customFetch.interceptors.response.use(
+  //   (response) => {
+  //     return response;
+  //   },
+  //   (error) => {
+  //     if (error?.response?.status === 401) {
+  //       setIsAuthError(true);
+  //     }
+  //     return Promise.reject(error);
+  //   }
+  // );
+
+  // useEffect(() => {
+  //   if (!isAuthError) return;
+  //   logoutUser();
+  // }, [isAuthError]);
 
   return (
     <DashboardContext.Provider
-      value={{ toggleSidebar, showSidebar }}
+      value={{
+        user,
+        showSidebar,
+        toggleSidebar,
+        logoutUser,
+      }}
     >
       <Wrapper>
         <main className="dashboard">
           <SmallSidebar />
           <BigSidebar />
           <div>
-            {/*Dashboard Navbar TODO */}
             <DashboardNavbar />
             <div className="dashboard-page">
-              {isPageLoading ? (
-                <Loading />
-              ) : (
-                <Outlet />
-              )}
+              {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
             </div>
           </div>
         </main>
@@ -52,8 +85,7 @@ const DashboardLayout = () => {
     </DashboardContext.Provider>
   );
 };
-export const useDashboardContext = () =>
-  useContext(DashboardContext);
+export const useDashboardContext = () => useContext(DashboardContext);
 
 const Wrapper = styled.div`
   .dashboard {
