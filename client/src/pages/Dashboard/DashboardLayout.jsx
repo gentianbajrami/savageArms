@@ -1,10 +1,27 @@
-import { Outlet, redirect, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
-import { BigSidebar, DashboardNavbar, SmallSidebar } from '../../components';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  Outlet,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+} from 'react-router-dom';
+import {
+  BigSidebar,
+  DashboardNavbar,
+  SmallSidebar,
+} from '../../components';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import customFetch from '../../utils';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import Loading from '../../components/Loading';
+
 // const userQuery = {
 //   queryKey: ['user'],
 //   queryFn: async () => {
@@ -15,8 +32,10 @@ import styled from 'styled-components';
 
 export const loader = async () => {
   try {
-    const data = await customFetch.get('/users/current-user');
-    return data
+    const data = await customFetch.get(
+      '/users/current-user'
+    );
+    return data;
   } catch (error) {
     return redirect('/');
   }
@@ -25,12 +44,14 @@ export const loader = async () => {
 const DashboardContext = createContext();
 
 const DashboardLayout = () => {
-  const { user } = useLoaderData()
+  const { user } = useLoaderData();
   console.log(user);
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const isPageLoading = navigation.state === 'loading';
-  const [showSidebar, setShowSidebar] = useState(false);
+  const isPageLoading =
+    navigation.state === 'loading';
+  const [showSidebar, setShowSidebar] =
+    useState(false);
   // const [isAuthError, setIsAuthError] = useState(false);
 
   const toggleSidebar = () => {
@@ -77,7 +98,11 @@ const DashboardLayout = () => {
           <div>
             <DashboardNavbar />
             <div className="dashboard-page">
-              {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
+              {isPageLoading ? (
+                <Loading />
+              ) : (
+                <Outlet context={{ user }} />
+              )}
             </div>
           </div>
         </main>
@@ -85,7 +110,8 @@ const DashboardLayout = () => {
     </DashboardContext.Provider>
   );
 };
-export const useDashboardContext = () => useContext(DashboardContext);
+export const useDashboardContext = () =>
+  useContext(DashboardContext);
 
 const Wrapper = styled.div`
   .dashboard {
