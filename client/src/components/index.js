@@ -14,3 +14,5 @@ export { default as BipodsType } from './BipodsType';
 export { default as BipodsTile } from './BipodsTile';
 export { default as FormRowSelect } from './FormRowSelect';
 export { default as PerformanceTile } from './PerformanceTile';
+export { default as CartItemsList } from './CartItemsList';
+export { default as CartTotal } from './CartTotal';
