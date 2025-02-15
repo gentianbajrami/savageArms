@@ -39,20 +39,13 @@ const Footer = () => {
             </ul>
           </div>
           <div className="newsLetter">
-            <button className="btn">
-              sign up for our e-mail newsletter
-            </button>
-            <p>
-              Stay informed about our latest deals
-              and promotions.
-            </p>
+            <button className="btn">sign up for our e-mail newsletter</button>
+            <p>Stay informed about our latest deals and promotions.</p>
           </div>
         </div>
         <hr />
         <div className="terms">
-          <p>
-            2024. G-Arms, Inc. All right reserved
-          </p>
+          <p>2024. G-Arms, Inc. All right reserved</p>
           <div className="cookies">
             <p>Terms & conditions</p>
             <p>Privacy policy</p>
