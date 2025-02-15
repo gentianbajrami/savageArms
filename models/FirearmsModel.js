@@ -10,6 +10,7 @@ const FirearmsSchema = new mongoose.Schema(
   {
     fullName: String,
     photo: String,
+    photoPublicId: String,
     features: String,
     caliber: { type: String, enum: Object.values(FIREARMS_CALIBER) },
     model: { type: String, enum: Object.values(FIREARMS_MODEL) },

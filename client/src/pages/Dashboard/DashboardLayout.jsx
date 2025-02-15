@@ -20,6 +20,15 @@ import customFetch from '../../utils';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+
+export const loader = async () => {
+  try {
+    const data = await customFetch.get('/users/current-user');
+    return data
+  } catch (error) {
+    return redirect('/');
+  }
+};
 import Loading from '../../components/Loading';
 
 // const userQuery = {
@@ -29,17 +38,6 @@ import Loading from '../../components/Loading';
 //     return data;
 //   },
 // };
-
-export const loader = async () => {
-  try {
-    const data = await customFetch.get(
-      '/users/current-user'
-    );
-    return data;
-  } catch (error) {
-    return redirect('/');
-  }
-};
 
 const DashboardContext = createContext();
 
@@ -52,6 +50,7 @@ const DashboardLayout = () => {
     navigation.state === 'loading';
   const [showSidebar, setShowSidebar] =
     useState(false);
+
   // const [isAuthError, setIsAuthError] = useState(false);
 
   const toggleSidebar = () => {
@@ -110,8 +109,7 @@ const DashboardLayout = () => {
     </DashboardContext.Provider>
   );
 };
-export const useDashboardContext = () =>
-  useContext(DashboardContext);
+export const useDashboardContext = () => useContext(DashboardContext);
 
 const Wrapper = styled.div`
   .dashboard {

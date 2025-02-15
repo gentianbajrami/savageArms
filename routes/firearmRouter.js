@@ -11,13 +11,22 @@ import {
   validateFirearmsInput,
   validateIdParam,
 } from '../middleware/validationMiddleware.js';
+import upload from '../middleware/multerMiddleware.js';
 
-router.route('/').get(getAllFirearms).post(validateFirearmsInput, createFirearm);
+router
+  .route('/')
+  .get(getAllFirearms)
+  .post(upload.single('photo'), validateFirearmsInput, createFirearm);
 
 router
   .route('/:id')
   .get(validateIdParam, getOneFirearm)
-  .patch(validateFirearmsInput, validateIdParam, updateFirearm)
+  .patch(
+    upload.single('photo'),
+    validateFirearmsInput,
+    validateIdParam,
+    updateFirearm
+  )
   .delete(validateIdParam, deleteFirearm);
 
 export default router;
