@@ -42,6 +42,8 @@ export const createFirearm = async (req, res, next) => {
       throw new Error('Only admins and companies can create firearms');
     }
 
+/////Test code 
+
     const firearmData = { ...req.body, companyId: userId };
 
     if (req.file) {
