@@ -26,7 +26,6 @@ export const loader = queryClient => async () => {
 
 const Cart = () => {
   const { data } = useQuery(cartQuery);
-  console.log(data);
   const cart = data?.cart || [];
 
   if (cart.length == 0) {
@@ -54,7 +53,18 @@ const Cart = () => {
   );
 };
 
-const Wrapper = styled.main``;
+const Wrapper = styled.main`
+  .cart-container {
+    display: grid;
+    gap: 2rem;
+  }
+
+  @media (min-width: 1000px) {
+    .cart-container {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+`;
 
 const NotLoggedInWrapper = styled.div`
   display: grid;

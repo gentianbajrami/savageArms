@@ -70,13 +70,14 @@ export const removeProductFromCart = async (
   return res.send('removeProductFromCart');
 };
 export const getCart = async (req, res, next) => {
+  console.log(req.user.userId);
   const cart = await Cart.findOne({
     createdBy: req.user.userId,
   }).populate('cartItems.product');
 
   if (!cart)
     return new NotFoundError('Cart not found');
-
+  console.log(cart);
   return res
     .status(StatusCodes.OK)
     .json({ cart });
