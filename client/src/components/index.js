@@ -11,3 +11,6 @@ export { default as SubmitButton } from './SubmitButton';
 export { default as SingleBlogDashboard } from './SingleBlogDashboard';
 export { default as SingleBlog } from './SingleBlog';
 export { default as FormRowSelect } from './FormRowSelect';
+export { default as BipodsType } from './BipodsType';
+export { default as BipodsTile } from './BipodsTile';
+export { default as PerformanceTile } from './PerformanceTile';

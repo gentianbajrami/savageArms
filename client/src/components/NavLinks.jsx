@@ -13,13 +13,13 @@ const NavLinks = ({ isSidebar = false }) => {
       }`}
     >
       <li>
-        <a href="#">Firearms</a>
+        <a href="/products">Firearms</a>
       </li>
       <li>
         <a href="/accessories">Accessories</a>
       </li>
       <li>
-        <a href="#">Performance</a>
+        <a href="/performance">Performance</a>
       </li>
       <li>
         <a href="/blog">Blog</a>
