@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 
 const SecondaryMenu = ({ isScrolled }) => {
   return (
-    <Wrapper className={`secondary-menu ${isScrolled ? 'hidden' : ''}`}>
+    <Wrapper
+      className={`secondary-menu ${
+        isScrolled ? 'hidden' : ''
+      }`}
+    >
       <div className="menu-container">
         <div className="menu-left">
           <p>shop</p>
@@ -47,6 +51,7 @@ const Wrapper = styled.nav`
   .menu-left {
     display: flex;
     align-items: center;
+    color: white;
   }
 
   .menu-right {

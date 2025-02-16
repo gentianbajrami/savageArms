@@ -372,7 +372,11 @@ button:disabled {
   padding: 7rem 5rem;
   background-color: var(--grey-50);
 }
-
+@media (max-width: 600px) {
+  .page {
+    padding: 7rem 1rem;
+  }
+}
 .showSidebar {
   margin-left: 10rem;
   background-color: red;
