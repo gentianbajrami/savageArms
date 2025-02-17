@@ -13,72 +13,51 @@ import customFetch from '../../utils/index';
 import SubmitButton from '../../components/SubmitButton';
 import FormRowSelect from '../../components/FormRowSelect';
 
-export const action1 = async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const file = formData.get('photo');
-  if (file && file.size > 500000) {
-    toast.error('Image size to large');
+export const action1 =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const file = formData.get('photo');
+    if (file && file.size > 500000) {
+      toast.error('Image size to large');
     return null;
   }
+
   try {
     await customFetch.post('/firearms', formData);
-    toast.success('Firearm added successfully');
-    return redirect('/dashboard/firearms');
+    queryClient.invalidateQueries(['firearms']);
+    toast.success('Firearm created successfully');
+    return redirect('/dashboard/all-firearms');
   } catch (error) {
     toast.error(error?.response?.data?.msg);
-    return {
-      error:
-        error.response?.data?.message ||
-        'Failed to add firearm',
-    };
   }
+  return null;
 };
 
 const AddFirearm = () => {
   const { user } = useOutletContext();
   return (
     <Wrapper>
-      <Form
-        method="post"
-        className="form"
-        encType="multipart/form-data"
-      >
+      <Form method="post" className="form" encType="multipart/form-data">
         <h4>Add Firearm</h4>
         <div className="form-center">
-          <FormRow
-            type="text"
-            name="fullName"
-            label="Full Name"
-          />
+          <FormRow type="text" name="fullName" label="Full Name" />
           <FormRow type="text" name="features" />
           <FormRow type="number" name="price" />
           <FormRow type="number" name="stock" />
-          <FormRow
-            type="text"
-            name="description"
-          />
-          <FormRow
-            type="number"
-            name="capacity"
-          />
+          <FormRow type="text" name="description" />
+          <FormRow type="number" name="capacity" />
           <FormRowSelect
             name="caliber"
             labelText="firearms caliber"
             list={Object.values(FIREARMS_CALIBER)}
-            defaultValue={
-              FIREARMS_CALIBER['10mm']
-            }
+            defaultValue={FIREARMS_CALIBER['10mm']}
           />
           <FormRowSelect
             name="manufacturer"
             labelText="firearms manufacturer"
-            list={Object.values(
-              FIREARMS_MANUFACTURER
-            )}
-            defaultValue={
-              FIREARMS_MANUFACTURER.BENELLI
-            }
+            list={Object.values(FIREARMS_MANUFACTURER)}
+            defaultValue={FIREARMS_MANUFACTURER.BENELLI}
           />
           <FormRowSelect
             name="type"
@@ -93,10 +72,7 @@ const AddFirearm = () => {
             defaultValue={FIREARMS_MODEL.HANDGUN}
           />
           <div className="form-row">
-            <label
-              htmlFor="photo"
-              className="form-label"
-            >
+            <label htmlFor="photo" className="form-label">
               Select an image (max 0.5MB)
             </label>
             <input

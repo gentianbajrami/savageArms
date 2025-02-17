@@ -13,28 +13,8 @@ export const getOneFirearm = async (req, res) => {
   res.status(StatusCodes.OK).json({ firearm });
 };
 
-// export const createFirearm = async (req, res, next) => {
-//   const userId = req.user.userId;
-//   const user = await User.findById(userId);
-//   console.log(user);
-//   if (user.role !== 'admin' && user.role !== 'company') {
-//     throw new Error('Only admins and companies can create firearms');
-//   }
-
-//   const firearm = new Firearms({
-//     ...req.body,
-//     companyId: userId,
-//   });
-
-//   await firearm.save();
-//   res.status(StatusCodes.CREATED).json({ firearm });
-// };
-
 export const createFirearm = async (req, res, next) => {
   try {
-
-    console.log('File:', req.file); // Debugging: Log the uploaded file
-    console.log('Body:', req.body); 
     const userId = req.user.userId;
     const user = await User.findById(userId);
 
@@ -42,13 +22,11 @@ export const createFirearm = async (req, res, next) => {
       throw new Error('Only admins and companies can create firearms');
     }
 
-/////Test code 
-
     const firearmData = { ...req.body, companyId: userId };
 
     if (req.file) {
       const file = formatImage(req.file);
-      const response = await cloudinary.v2.uploader.upload(file)
+      const response = await cloudinary.v2.uploader.upload(file);
       firearmData.photo = response.secure_url;
       firearmData.photoPublicId = response.public_id;
     }
