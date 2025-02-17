@@ -127,7 +127,7 @@ const router = createBrowserRouter([
       {
         path: 'add-firearm',
         element: <AddFirearm />,
-        action: addFirearmAction,
+        action: addFirearmAction(queryClient),
       },
       {
         path: 'edit-firearm/:id',
