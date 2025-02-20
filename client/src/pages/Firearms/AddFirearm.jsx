@@ -39,7 +39,7 @@ const AddFirearm = () => {
   return (
     <Wrapper>
       <Form method="post" className="form" encType="multipart/form-data">
-        <h4>Add Firearm</h4>
+        <h4 className="form-title">Add Firearm</h4>
         <div className="form-center">
           <FormRow type="text" name="fullName" label="Full Name" />
           <FormRow type="text" name="features" />

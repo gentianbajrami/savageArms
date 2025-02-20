@@ -16,3 +16,5 @@ export { default as BipodsTile } from './BipodsTile';
 export { default as PerformanceTile } from './PerformanceTile';
 export { default as CartItemsList } from './CartItemsList';
 export { default as CartTotal } from './CartTotal';
+export { default as FirearmsContainer } from './FirearmsContainer';
+export { default as SearchContainer } from './SearchContainer';
