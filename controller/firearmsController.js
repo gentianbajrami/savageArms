@@ -3,9 +3,46 @@ import Firearms from '../models/FirearmsModel.js';
 import { StatusCodes } from 'http-status-codes';
 import cloudinary from 'cloudinary';
 import { formatImage } from '../middleware/multerMiddleware.js';
+import {
+  FIREARMS_CALIBER,
+  FIREARMS_MODEL,
+  FIREARMS_TYPE,
+} from '../utils/constants.js';
+
 export const getAllFirearms = async (req, res) => {
-  const firearms = await Firearms.find({ companyId: req.user.userId });
-  res.status(StatusCodes.OK).json({ firearms });
+  const { search, caliber, model, sort } = req.query;
+  const queryObject = {};
+
+  if (search) {
+    queryObject.$or = [
+      { fullName: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  if (caliber && caliber !== 'all') queryObject.caliber = caliber;
+  if (model && model !== 'all') queryObject.model = model;
+
+  const sortOptions = {
+    newest: '-createdAt',
+    oldest: 'createdAt',
+    'a-z': 'fullName',
+    'z-a': '-fullName',
+  };
+
+  const sortKey = sortOptions[sort] || sortOptions.newest;
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const firearms = await Firearms.find(queryObject)
+    .sort(sortKey)
+    .skip(skip)
+    .limit(limit);
+
+  const meta = { FIREARMS_CALIBER, FIREARMS_MODEL, FIREARMS_TYPE };
+
+  res.status(StatusCodes.OK).json({ products: firearms, meta, params: queryObject });
 };
 
 export const getOneFirearm = async (req, res) => {
@@ -15,6 +52,9 @@ export const getOneFirearm = async (req, res) => {
 
 export const createFirearm = async (req, res, next) => {
   try {
+    console.log('File:', req.file);
+    console.log('Body:', req.body);
+
     const userId = req.user.userId;
     const user = await User.findById(userId);
 
@@ -22,7 +62,10 @@ export const createFirearm = async (req, res, next) => {
       throw new Error('Only admins and companies can create firearms');
     }
 
-    const firearmData = { ...req.body, companyId: userId };
+    const firearmData = {
+      ...req.body,
+      companyId: userId,
+    };
 
     if (req.file) {
       const file = formatImage(req.file);
@@ -54,9 +97,10 @@ export const updateFirearm = async (req, res) => {
       { new: true }
     );
 
-    res
-      .status(StatusCodes.OK)
-      .json({ msg: 'Firearm modified', firearm: updatedFirearm });
+    res.status(StatusCodes.OK).json({
+      msg: 'Firearm modified',
+      firearm: updatedFirearm,
+    });
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Failed to update firearm' });
   }
