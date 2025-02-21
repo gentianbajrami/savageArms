@@ -8,21 +8,23 @@ import ProductsContainer from '../components/ProductsContainer';
 const allProductsQuery = queryParams => {
   const {
     search,
-    category,
-    company,
-    sort,
+    caliber,
+    model,
+    order,
     price,
     shipping,
     page,
+    type,
   } = queryParams;
 
   return {
     queryKey: [
       'firearms',
       search ?? '',
-      category ?? 'all',
-      company ?? 'all',
-      sort ?? 'a-z',
+      caliber ?? 'all',
+      model ?? 'all',
+      type ?? 'all',
+      order ?? 'a-z',
       price ?? 100000,
       shipping ?? false,
       page ?? 1,
@@ -49,12 +51,11 @@ export const loader =
       );
     console.log(response.data);
     const products = response.data?.products;
-    const meta = response.meta;
+    const meta = response.data?.meta;
     return { products, meta, params };
   };
 
 const Products = () => {
-  const { products } = useLoaderData();
   return (
     <div
       className="page"

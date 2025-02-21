@@ -295,7 +295,9 @@ button:disabled {
 .form-row {
   margin-bottom: 1rem;
 }
-
+.form-select {
+  text-transform: capitalize;
+}
 .form-textarea {
   height: 7rem;
 }

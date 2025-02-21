@@ -3,6 +3,11 @@ import Firearms from '../models/FirearmsModel.js';
 import { StatusCodes } from 'http-status-codes';
 import cloudinary from 'cloudinary';
 import { formatImage } from '../middleware/multerMiddleware.js';
+import {
+  FIREARMS_CALIBER,
+  FIREARMS_MODEL,
+  FIREARMS_TYPE,
+} from '../utils/constants.js';
 
 export const getAllFirearms = async (
   req,
@@ -40,8 +45,8 @@ export const getAllFirearms = async (
   const sortOptions = {
     newest: '-createdAt',
     oldest: 'createdAt',
-    'a-z': 'position',
-    'z-a': '-position',
+    'a-z': 'fullName',
+    'z-a': '-fullName',
   };
 
   const sortKey =
@@ -57,10 +62,17 @@ export const getAllFirearms = async (
     .sort(sortKey)
     .skip(skip)
     .limit(limit);
+
+  const meta = {
+    FIREARMS_CALIBER,
+    FIREARMS_MODEL,
+    FIREARMS_TYPE,
+  };
+
   console.log(queryObject);
   res.status(StatusCodes.OK).json({
     products: firearms,
-    meta: {},
+    meta,
     params: queryObject,
   });
 };

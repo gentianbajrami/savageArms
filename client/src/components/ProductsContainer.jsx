@@ -22,9 +22,18 @@ const ProductsContainer = () => {
       </h5>
       <div className="firearms">
         {products.map(
-          ({ fullName, photo, price, model }) => {
+          ({
+            fullName,
+            photo,
+            price,
+            model,
+            _id,
+          }) => {
             return (
-              <ProductWrapper className="firearm-card">
+              <ProductWrapper
+                key={_id}
+                className="firearm-card"
+              >
                 <div className="firearm-banner">
                   {model}
                 </div>
