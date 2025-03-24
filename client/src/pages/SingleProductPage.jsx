@@ -1,0 +1,118 @@
+import React from 'react';
+import { Banner } from '../components';
+import customFetch, {
+  formatPrice,
+} from '../utils';
+import { useLoaderData } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
+
+const singleProductQuery = id => {
+  return {
+    queryKey: ['product', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(
+        '/firearms/' + id
+      );
+      return data;
+    },
+  };
+};
+export const loader =
+  queryClient =>
+  async ({ params }) => {
+    await queryClient.ensureQueryData(
+      singleProductQuery(params.id)
+    );
+    return { id: params.id };
+  };
+
+const SingleProductPage = () => {
+  const { id } = useLoaderData();
+  const { firearm } = useQuery(
+    singleProductQuery(id)
+  ).data;
+  const product = firearm || {};
+  console.log(product);
+
+  return (
+    <Wrapper className="page">
+      <Banner title={'Products'} />
+      <div className="product">
+        <img
+          src={product?.photo}
+          alt={product?.fullName}
+          loading="lazy"
+        />
+        <div className="data">
+          <div className="header">
+            <p>{product.fullName}</p>
+            <p className="company">
+              {product.manufacturer}
+            </p>
+            <p className="price">
+              {formatPrice(product.price)}
+            </p>
+            <p>{product.description}</p>
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  );
+};
+const Wrapper = styled.div`
+  max-width: 1200px;
+  margin: 1rem auto;
+  .product {
+    display: grid;
+    gap: 2rem;
+  }
+  img {
+    width: 24rem;
+    height: 24rem;
+    border-radius: 1rem;
+    object-fit: cover;
+    margin: 0 auto;
+  }
+  .data {
+    display: grid;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .header {
+    :first-child {
+      font-size: 2rem;
+      line-height: 1.8;
+      text-transform: capitalize;
+      font-weight: 700;
+    }
+    .company {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      color: var(--grey-600);
+      font-weight: bold;
+    }
+    .price {
+      font-size: 1.25rem;
+      line-height: 1.2;
+      margin-top: 0.5rem;
+    }
+    :last-child {
+      margin-top: 1rem;
+      line-height: 2;
+      color: var(--grey-600);
+    }
+  }
+
+  @media (min-width: 500px) {
+    .product {
+      grid-template-columns: 1fr 1fr;
+      justify-content: center;
+    }
+    .data {
+      justify-content: start;
+    }
+  }
+`;
+export default SingleProductPage;

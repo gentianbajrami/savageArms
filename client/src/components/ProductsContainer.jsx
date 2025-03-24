@@ -33,6 +33,7 @@ const ProductsContainer = () => {
               <ProductWrapper
                 key={_id}
                 className="firearm-card"
+                href={`/products/${_id}`}
               >
                 <div className="firearm-banner">
                   {model}
@@ -87,7 +88,7 @@ const Wrapper = styled.main`
   }
 `;
 
-const ProductWrapper = styled.div`
+const ProductWrapper = styled.a`
   background: white;
   border-radius: 8px;
   overflow: hidden;

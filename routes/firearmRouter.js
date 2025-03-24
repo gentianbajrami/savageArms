@@ -16,7 +16,11 @@ import upload from '../middleware/multerMiddleware.js';
 router
   .route('/')
   .get(getAllFirearms)
-  .post(upload.single('photo'), validateFirearmsInput, createFirearm);
+  .post(
+    upload.single('photo'),
+    validateFirearmsInput,
+    createFirearm
+  );
 
 router
   .route('/:id')
