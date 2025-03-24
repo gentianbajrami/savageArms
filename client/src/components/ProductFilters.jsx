@@ -109,12 +109,6 @@ const Filters = () => {
             submit(e.currentTarget.form)
           }
         />
-        {/* <FormCheckbox
-        name="shipping"
-        label="free shipping"
-        size="checkbox-sm"
-        defaultValue={shipping}
-        /> */}
 
         <Link to="/products" className="btn">
           reset
