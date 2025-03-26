@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 const Wrapper = styled.section`
- border-radius: var(--border-radius);
+  border-radius: var(--border-radius);
   width: 100%;
+  border: 5px solid red;
   background: var(--background-secondary-color);
   padding: 3rem 2rem 4rem;
   .form-title {
