@@ -32,6 +32,8 @@ import {
   DeleteFirearm,
   EditFirearm,
   Cart,
+  Products,
+  SingleProductPage,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -51,6 +53,8 @@ import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
 import { loader as blogLoader } from './pages/Blog';
 import { loader as cartLoader } from './pages/Cart';
+import { loader as productLoader } from './pages/Products';
+import { loader as singleProductLoader } from './pages/SingleProductPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -104,6 +108,16 @@ const router = createBrowserRouter([
         path: 'cart',
         element: <Cart />,
         loader: cartLoader(queryClient),
+      },
+      {
+        path: 'products',
+        element: <Products />,
+        loader: productLoader(queryClient),
+      },
+      {
+        path: 'products/:id',
+        element: <SingleProductPage />,
+        loader: singleProductLoader(queryClient),
       },
     ],
   },

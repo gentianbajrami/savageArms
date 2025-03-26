@@ -18,3 +18,4 @@ export { default as CartItemsList } from './CartItemsList';
 export { default as CartTotal } from './CartTotal';
 export { default as FirearmsContainer } from './FirearmsContainer';
 export { default as SearchContainer } from './SearchContainer';
+export { default as FormRange } from './FormRange';
