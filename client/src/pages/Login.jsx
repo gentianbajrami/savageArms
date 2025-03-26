@@ -25,7 +25,7 @@ const Login = () => {
   return (
     <Wrapper>
       <Form method="post" className="form">
-        <h4>Login</h4>
+        <h4 className="login">Login</h4>
         <FormRow
           type="email"
           name="email"
@@ -51,23 +51,23 @@ const Wrapper = styled.section`
   display: grid;
   align-items: center;
 
-  .form{
+  .form {
     border-top: 5px solid var(--primary-500);
     max-width: 400px;
   }
-  h4{
+  h4 {
     text-align: center;
     margin-bottom: 1.38rem;
   }
-  p{
+  p {
     margin-top: 1rem;
     text-align: center;
     line-height: 1.5;
   }
-  .btn{
+  .btn {
     margin-top: 1rem;
   }
-  .member-btn{
+  .member-btn {
     color: var(--primary-500);
     letter-spacing: var(--letter-spacing);
     margin-left: 0.25rem;

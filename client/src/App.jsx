@@ -45,7 +45,7 @@ import { action as createBlogAction } from './pages/Blog/CreateBlog';
 import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
 import { action as editBlogAction } from './pages/Blog/EditBlog';
 
-// import { loader as allFirearmsLoader} from './pages/Firearms/AllFirearms'
+import { loader as allFirearmsLoader} from './pages/Firearms/AllFirearms'
 // import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
@@ -157,7 +157,7 @@ const router = createBrowserRouter([
       {
         path: 'all-firearms',
         element: <AllFirearms />,
-        // loader: allFirearmsLoader(queryClient),
+        loader: allFirearmsLoader,
       },
       {
         path: 'create-blog',

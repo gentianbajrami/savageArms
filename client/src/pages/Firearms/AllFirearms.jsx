@@ -1,21 +1,32 @@
-import customFetch from "../../utils";
+import { toast } from 'react-toastify';
+import { FirearmsContainer, SearchContainer } from '../../components';
+import customFetch from '../../utils/index';
+import { useLoaderData } from 'react-router-dom';
+import { useContext, createContext } from 'react';
 
-const action1 = async  ({ request }) => {
-  const formData = request.formData();
-  const data = Object.fromEntries(formData);
-
+export const loader = async () => {
   try {
-    await customFetch.get('dashboard/all-firearms', data);
-    return null
+    const { data } = await customFetch.get('/firearms');
+    console.log(data);
+    return { data };
   } catch (error) {
-    toast.error(error?.response?.data?.msg)
-    return { error: error.response?.data?.message || 'Failed to get all firearms' }
+    console.error('Error fetching firearms:', error);
+    toast.error(error?.response?.data?.msg || 'Failed to load firearms');
+    return null;
   }
-}
+};
 
+const AllFirearmsContext = createContext();
 const AllFirearms = () => {
+  const { data } = useLoaderData();
   return (
-    <div>AllFirearms</div>
-  )
-}
-export default AllFirearms
+    <AllFirearmsContext.Provider value={{ data }}>
+      <SearchContainer />
+      <FirearmsContainer />
+    </AllFirearmsContext.Provider>
+  );
+};
+
+export const useAllFirearmsContext = () => useContext(AllFirearmsContext);
+
+export default AllFirearms;
