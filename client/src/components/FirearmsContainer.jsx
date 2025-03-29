@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 const FirearmsContainer = () => {
   const { data } = useAllFirearmsContext();
-  const { firearms } = data;
-  if (firearms.length === 0) {
+  const { products } = data;
+  if (products.length === 0) {
     return (
       <Wrapper>
         <h2>No firearms to display...</h2>
@@ -15,7 +15,7 @@ const FirearmsContainer = () => {
   return (
     <Wrapper>
       <div className="firearms">
-        {firearms.map((firearm) => {
+        {products.map((firearm) => {
           return <Firearm key={firearm._id} {...firearm} />;
         })}
       </div>
