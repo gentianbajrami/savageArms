@@ -3,7 +3,6 @@ import { FormRow } from '../components';
 import customFetch from '../utils';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-
 export const action1 = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
@@ -19,7 +18,6 @@ export const action1 = async ({ request }) => {
 
 const Login = () => {
   const navigation = useNavigation();
-  console.log(navigation);
   const isSubmitting = navigation.state === 'submitting';
 
   return (

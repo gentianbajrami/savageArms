@@ -20,10 +20,12 @@ const AllFirearmsContext = createContext();
 const AllFirearms = () => {
   const { data } = useLoaderData();
   return (
-    <AllFirearmsContext.Provider value={{ data }}>
-      <SearchContainer />
-      <FirearmsContainer />
-    </AllFirearmsContext.Provider>
+    <>
+      <AllFirearmsContext.Provider value={{ data }}>
+        <SearchContainer />
+        <FirearmsContainer />
+      </AllFirearmsContext.Provider>
+    </>
   );
 };
 

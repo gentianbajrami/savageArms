@@ -1,19 +1,14 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-} from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import customFetch from '../utils';
 
 const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
-  const [isSidebarOpen, setIsSidebar] =
-    useState(false);
+  const [isSidebarOpen, setIsSidebar] = useState(false);
   const [user, setUser] = useState(null);
+  const [isUserLoading, setIsUserLoading] = useState(true);
 
-  const saveUser = user => {
+  const saveUser = (user) => {
     setUser(user);
   };
 
@@ -23,20 +18,20 @@ const AppProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const { data } = await customFetch.get(
-        `/users/showMe`,
-        { withCredentials: true }
-      );
+      const { data } = await customFetch.get('/users/current-user', {
+        withCredentials: true,
+      });
       saveUser(data.user);
     } catch (error) {
       removeUser();
+    } finally {
+      setIsUserLoading(false);
     }
-    setIsUserLoading(false);
   };
 
   const logoutUser = async () => {
     try {
-      await customFetch.delete('/auth/logout', {
+      await customFetch.get('/auth/logout', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -48,11 +43,10 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  //   useEffect(() => {
-  //     fetchUser();
-  //   }, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-  // Toggle Sidebar
   const toggleSidebar = () => {
     setIsSidebar(!isSidebarOpen);
   };
@@ -63,6 +57,7 @@ const AppProvider = ({ children }) => {
         isSidebarOpen,
         toggleSidebar,
         user,
+        isUserLoading,
         saveUser,
         removeUser,
         logoutUser,
