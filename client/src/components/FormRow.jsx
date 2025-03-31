@@ -2,16 +2,13 @@ const FormRow = ({
   type,
   name,
   labelText,
-  defaultValue,
+  defaultValue = '',
   onChange,
   placeholder,
 }) => {
   return (
     <div className="form-row">
-      <label
-        htmlFor={name}
-        className="form-label"
-      >
+      <label htmlFor={name} className="form-label">
         {labelText || name}
       </label>
       <input
@@ -22,9 +19,8 @@ const FormRow = ({
         defaultValue={defaultValue || ''}
         required
         placeholder={placeholder}
-      ></input>
+      />
     </div>
   );
 };
-
 export default FormRow;

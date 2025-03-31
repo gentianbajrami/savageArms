@@ -8,6 +8,7 @@ export const loader = async () => {
   try {
     const { data } = await customFetch.get('/firearms');
     console.log(data);
+
     return { data };
   } catch (error) {
     console.error('Error fetching firearms:', error);
