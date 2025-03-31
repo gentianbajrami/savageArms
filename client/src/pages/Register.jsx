@@ -1,8 +1,10 @@
 import { Form, redirect, useNavigation, Link } from 'react-router-dom';
-import { FormRow } from '../components';
+import { FormRow, FormRowSelect } from '../components';
 import customFetch from '../utils';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import Firearms from './Firearms/Firearms';
+import { ROLE } from '../../../utils/constants';
 
 export const action1 = async ({ request }) => {
   const formData = await request.formData();
@@ -13,7 +15,7 @@ export const action1 = async ({ request }) => {
     toast.success('Registration successful');
     return redirect('/login');
   } catch (error) {
-    toast.error(error?.response?.data?.msg)
+    toast.error(error?.response?.data?.msg);
     return { error: error.response?.data?.message || 'Failed to register' };
   }
 };
@@ -46,12 +48,17 @@ const Register = () => {
           defaultValue="gentian.bajrami20@outlook.com"
         />
         <FormRow type="password" name="password" defaultValue="secret123" />
-        <FormRow type="text" name="role" defaultValue="user" />
+        <FormRowSelect
+          name="role"
+          labelText="Role"
+          defaultValue={ROLE.USER}
+          list={Object.values(ROLE)}
+        />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'submit'}
         </button>
         <p>
-          Already a member? 
+          Already a member?
           <Link to="/login" className="member-btn">
             Login
           </Link>

@@ -27,7 +27,7 @@ const Firearm = ({ _id, fullName, photo, price, description }) => {
           <Link to={`../edit-firearm/${_id}`} className="btn edit-btn">
             Edit
           </Link>
-          <Form>
+          <Form method="post" action={`../delete-firearm/${_id}`}>
             <button type="submit" className="btn delete-btn">
               Delete
             </button>

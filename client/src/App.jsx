@@ -1,11 +1,5 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   Accessories,
@@ -29,7 +23,6 @@ import {
   EditBlog,
   AddFirearm,
   AllFirearms,
-  DeleteFirearm,
   EditFirearm,
   Cart,
   Products,
@@ -39,14 +32,14 @@ import {
 import { action1 as registerAction } from './pages/Register';
 import { action1 as loginAction } from './pages/Login';
 import { action1 as addFirearmAction } from './pages/Firearms/AddFirearm';
-// import { action1 as deleteFirearmAction } from './pages/Firearms/DeleteFirearm';
-// import { action1 as editFirearmAction } from './pages/Firearms/EditFirearm';
+import { action1 as deleteFirearmAction } from './pages/Firearms/DeleteFirearm';
+import { action1 as editFirearmAction } from './pages/Firearms/EditFirearm';
 import { action as createBlogAction } from './pages/Blog/CreateBlog';
 import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
 import { action as editBlogAction } from './pages/Blog/EditBlog';
 
-import { loader as allFirearmsLoader} from './pages/Firearms/AllFirearms'
-// import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
+import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
+import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 
@@ -146,14 +139,10 @@ const router = createBrowserRouter([
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
-        // loader: editFirearmLoader(queryClient),
-        // action: editFirearmAction(queryClient),
+        loader: editFirearmLoader,
+        action: editFirearmAction,
       },
-      {
-        path: 'delete-firearm/:id',
-        element: <DeleteFirearm />,
-        // action: deleteFirearmAction(queryClient),
-      },
+      { path: 'delete-firearm/:id', action: deleteFirearmAction },
       {
         path: 'all-firearms',
         element: <AllFirearms />,

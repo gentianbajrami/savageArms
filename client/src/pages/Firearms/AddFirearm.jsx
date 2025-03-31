@@ -1,6 +1,5 @@
 import FormRow from '../../components/FormRow';
 import Wrapper from './DashboardFormPage';
-import { useOutletContext } from 'react-router-dom';
 import {
   FIREARMS_TYPE,
   FIREARMS_MODEL,
@@ -20,22 +19,21 @@ export const action1 =
     const file = formData.get('photo');
     if (file && file.size > 500000) {
       toast.error('Image size to large');
-    return null;
-  }
+      return null;
+    }
 
-  try {
-    await customFetch.post('/firearms', formData);
-    queryClient.invalidateQueries(['firearms']);
-    toast.success('Firearm created successfully');
-    return redirect('/dashboard/all-firearms');
-  } catch (error) {
-    toast.error(error?.response?.data?.msg);
-  }
-  return null;
-};
+    try {
+      await customFetch.post('/firearms', formData);
+      queryClient.invalidateQueries(['firearms']);
+      toast.success('Firearm created successfully');
+      return redirect('/dashboard/all-firearms');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+    return null;
+  };
 
 const AddFirearm = () => {
-  const { user } = useOutletContext();
   return (
     <Wrapper>
       <Form method="post" className="form" encType="multipart/form-data">
