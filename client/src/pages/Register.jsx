@@ -52,7 +52,7 @@ const Register = () => {
           name="role"
           labelText="Role"
           defaultValue={ROLE.USER}
-          list={Object.values(ROLE)}
+          list={Object.values(ROLE).filter((role) => role !== ROLE.ADMIN)}
         />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'submit'}

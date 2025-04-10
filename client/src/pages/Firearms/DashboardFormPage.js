@@ -6,6 +6,7 @@ const Wrapper = styled.section`
   border: 5px solid red;
   background: var(--background-secondary-color);
   padding: 3rem 2rem 4rem;
+
   .form-title {
     margin-bottom: 2rem;
   }

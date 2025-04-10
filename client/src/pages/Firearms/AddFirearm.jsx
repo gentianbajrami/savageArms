@@ -17,7 +17,7 @@ export const action1 =
   async ({ request }) => {
     const formData = await request.formData();
     const file = formData.get('photo');
-    if (file && file.size > 500000) {
+    if (file && file.size > 5000000) {
       toast.error('Image size to large');
       return null;
     }
@@ -71,7 +71,7 @@ const AddFirearm = () => {
           />
           <div className="form-row">
             <label htmlFor="photo" className="form-label">
-              Select an image (max 0.5MB)
+              Select an image
             </label>
             <input
               type="file"
