@@ -43,6 +43,7 @@ import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 
+import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
 import { loader as blogLoader } from './pages/Blog';
 import { loader as cartLoader } from './pages/Cart';
@@ -92,7 +93,6 @@ const router = createBrowserRouter([
         loader: blogLoader(queryClient),
       },
       { path: 'profile', element: <Profile /> },
-      { path: 'admin', element: <Admin /> },
       {
         path: 'about',
         element: <About />,
@@ -130,12 +130,17 @@ const router = createBrowserRouter([
     loader: dashboardLoader,
     errorElement: <Error />,
     children: [
-      { index: true, element: <Dashboard /> },
       {
-        path: 'add-firearm',
+        index: true,
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
+      {
+        path: 'add-firearm', // ✅ accessible at /dashboard/add-firearm too
+        element: <AddFirearm />,
+        action: addFirearmAction(queryClient),
+      },
+      { path: 'admin', element: <Admin />, action: adminLoader },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
