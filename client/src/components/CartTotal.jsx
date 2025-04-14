@@ -7,6 +7,7 @@ const CartTotal = ({
   tax,
   shipping,
   orderTotal,
+  showBtn = true,
 }) => {
   return (
     <Wrapper>
@@ -28,9 +29,11 @@ const CartTotal = ({
           <span>{formatPrice(orderTotal)}</span>
         </p>
       </div>
-      <Link to={'checkout'} className="btn">
-        proceed to Checkout
-      </Link>
+      {showBtn && (
+        <Link to={'../checkout'} className="btn">
+          proceed to Checkout
+        </Link>
+      )}
     </Wrapper>
   );
 };

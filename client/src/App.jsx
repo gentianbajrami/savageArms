@@ -33,6 +33,7 @@ import {
   Cart,
   Products,
   SingleProductPage,
+  Checkout,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -46,6 +47,7 @@ import { action as editBlogAction } from './pages/Blog/EditBlog';
 import { action as singleProductAction } from './pages/SingleProductPage';
 import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
 import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
+import { action as checkoutAction } from './components/CheckoutForm';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -122,6 +124,12 @@ const router = createBrowserRouter([
               deleteCartItemAction(queryClient),
           },
         ],
+      },
+      {
+        path: 'checkout',
+        element: <Checkout />,
+        loader: cartLoader(queryClient),
+        action: checkoutAction(queryClient),
       },
       {
         path: 'products',
