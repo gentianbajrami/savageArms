@@ -140,7 +140,7 @@ const router = createBrowserRouter([
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
-      { path: 'admin', element: <Admin />, action: adminLoader },
+      { path: 'admin', element: <Admin />, loader: adminLoader },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
