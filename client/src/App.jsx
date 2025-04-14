@@ -1,5 +1,11 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   Accessories,
@@ -37,6 +43,9 @@ import { action1 as editFirearmAction } from './pages/Firearms/EditFirearm';
 import { action as createBlogAction } from './pages/Blog/CreateBlog';
 import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
 import { action as editBlogAction } from './pages/Blog/EditBlog';
+import { action as singleProductAction } from './pages/SingleProductPage';
+import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
+import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -101,6 +110,18 @@ const router = createBrowserRouter([
         path: 'cart',
         element: <Cart />,
         loader: cartLoader(queryClient),
+        children: [
+          {
+            path: 'update/:id',
+            action:
+              updateCartItemAction(queryClient),
+          },
+          {
+            path: 'remove/:id',
+            action:
+              deleteCartItemAction(queryClient),
+          },
+        ],
       },
       {
         path: 'products',
@@ -111,6 +132,7 @@ const router = createBrowserRouter([
         path: 'products/:id',
         element: <SingleProductPage />,
         loader: singleProductLoader(queryClient),
+        action: singleProductAction(queryClient),
       },
     ],
   },
@@ -140,14 +162,21 @@ const router = createBrowserRouter([
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
-      { path: 'admin', element: <Admin />, loader: adminLoader },
+      {
+        path: 'admin',
+        element: <Admin />,
+        loader: adminLoader,
+      },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
         loader: editFirearmLoader,
         action: editFirearmAction,
       },
-      { path: 'delete-firearm/:id', action: deleteFirearmAction },
+      {
+        path: 'delete-firearm/:id',
+        action: deleteFirearmAction,
+      },
       {
         path: 'all-firearms',
         element: <AllFirearms />,

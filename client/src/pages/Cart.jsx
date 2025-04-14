@@ -27,20 +27,37 @@ export const loader = queryClient => async () => {
 const Cart = () => {
   const { data } = useQuery(cartQuery);
   const cart = data?.cart || [];
+  console.log(data);
 
-  if (cart.length == 0) {
+  // if (cart.length == 0) {
+  //   return (
+  //     <NotLoggedInWrapper className="page">
+  //       <p>
+  //         {' '}
+  //         Please login/register to see your cart
+  //       </p>
+  //       <Link to="/login" className="btn">
+  //         Login
+  //       </Link>
+  //     </NotLoggedInWrapper>
+  //   );
+  // }
+
+  if (
+    !data.cart ||
+    cart?.cartItems?.length === 0
+  ) {
     return (
       <NotLoggedInWrapper className="page">
-        <p>
-          {' '}
-          Please login/register to see your cart
-        </p>
-        <Link to="/login" className="btn">
-          Login
+        <p> Please add some products in cart</p>
+        <Link to="/products" className="btn">
+          Products
         </Link>
       </NotLoggedInWrapper>
     );
   }
+
+  // return <div>Hello</div>;
 
   return (
     <Wrapper className="page">

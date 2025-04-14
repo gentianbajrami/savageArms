@@ -25,7 +25,7 @@ export const addProductToCart = async (
       );
 
     if (existingItem) {
-      existingItem.quantity += amount;
+      existingItem.quantity += +amount;
     } else {
       doesCartExist.cartItems.push({
         product: id,
@@ -67,7 +67,44 @@ export const removeProductFromCart = async (
   res,
   next
 ) => {
-  return res.send('removeProductFromCart');
+  const { id: productId } = req.params;
+
+  const cart = await Cart.findOne({
+    createdBy: req.user.userId,
+  });
+
+  if (!cart) {
+    return res
+      .status(404)
+      .json({ msg: 'Cart not found' });
+  }
+
+  cart.cartItems = cart.cartItems.filter(
+    item => item.product.toString() !== productId
+  );
+
+  // Recalculate totals
+  const orderTotal = cart.cartItems.reduce(
+    (sum, item) =>
+      sum + item.price * item.quantity,
+    0
+  );
+
+  const numItemsInCart = cart.cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+
+  cart.orderTotal = orderTotal;
+  cart.numItemsInCart = numItemsInCart;
+  cart.cartTotal =
+    orderTotal + cart.tax + cart.shipping;
+
+  await cart.save();
+
+  return res.status(200).json({
+    msg: 'Cart Item removed succesfully',
+  });
 };
 export const getCart = async (req, res, next) => {
   console.log(req.user.userId);
@@ -75,10 +112,65 @@ export const getCart = async (req, res, next) => {
     createdBy: req.user.userId,
   }).populate('cartItems.product');
 
-  if (!cart)
-    return new NotFoundError('Cart not found');
+  // if (!cart)
+  //   return new NotFoundError('Cart not found');
   console.log(cart);
   return res
     .status(StatusCodes.OK)
     .json({ cart });
+};
+
+export const updateProductQuantityInCart = async (
+  req,
+  res
+) => {
+  const { id: productId } = req.params;
+  const { quantity } = req.body;
+
+  if (!quantity || quantity < 1) {
+    return res.status(400).json({
+      msg: 'Quantity must be at least 1',
+    });
+  }
+
+  const cart = await Cart.findOne({
+    createdBy: req.user.userId,
+  });
+
+  if (!cart) {
+    return res
+      .status(404)
+      .json({ msg: 'Cart not found' });
+  }
+
+  const item = cart.cartItems.find(
+    item => item.product.toString() === productId
+  );
+
+  if (!item) {
+    return res
+      .status(404)
+      .json({ msg: 'Product not in cart' });
+  }
+
+  item.quantity = quantity;
+
+  // Recalculate totals
+  cart.orderTotal = cart.cartItems.reduce(
+    (sum, i) => sum + i.price * i.quantity,
+    0
+  );
+  cart.numItemsInCart = cart.cartItems.reduce(
+    (sum, i) => sum + i.quantity,
+    0
+  );
+  cart.cartTotal =
+    cart.orderTotal + cart.tax + cart.shipping;
+
+  await cart.save();
+
+  return res.status(200).json({
+    msg: 'Product quantity updated',
+    cart,
+  });
 };
