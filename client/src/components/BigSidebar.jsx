@@ -80,12 +80,12 @@ const Wrapper = styled.aside`
   .links {
     display: grid;
     place-items: center;
-    margin-bottom: 15rem;
+    margin-bottom: 3rem;
   }
   .sidebar-footer {
     padding: 2rem;
   }
-  .pending{
+  .pending {
     background: var(--background-color);
   }
 `;
