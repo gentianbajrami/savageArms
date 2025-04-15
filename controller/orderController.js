@@ -13,6 +13,12 @@ export const createCheckoutSession = async (
   const cart = await Cart.findOne({
     createdBy: req.user.userId,
   }).populate('cartItems.product');
+
+  if (cart.cartItems.length === 0) {
+    return res
+      .status(400)
+      .json({ msg: 'No items in cart' });
+  }
   const cartItems = cart.cartItems;
   console.log(cartItems);
 
@@ -70,7 +76,7 @@ export const confirmOrder = async (req, res) => {
       .json({ msg: 'No cart found' });
   }
 
-  const order = await Order.create({
+  await Order.create({
     user: req.user.userId,
     orderItems: cart.cartItems,
     orderTotal: cart.cartTotal,
@@ -81,11 +87,15 @@ export const confirmOrder = async (req, res) => {
     paymentIntentId,
   });
 
+  const orders = await Order.find({
+    user: req.user.userId,
+  });
+
   await cart.deleteOne();
 
   res.status(200).json({
     msg: 'Order created successfully',
-    order,
+    orders,
   });
 };
 

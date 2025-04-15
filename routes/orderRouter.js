@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  confirmOrder,
   createCheckoutSession,
   getAllOrders,
 } from '../controller/orderController.js';
@@ -11,6 +12,11 @@ router.post(
   '/create-checkout-session',
   authenticateUser,
   createCheckoutSession
+);
+router.post(
+  '/confirm-order',
+  authenticateUser,
+  confirmOrder
 );
 
 export default router;
