@@ -1,50 +1,66 @@
-import { Form, redirect } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useNavigate,
+} from 'react-router-dom';
 import FormInput from './FormRow';
 import SubmitBtn from './SubmitButton';
 
-import customFetch, {
-  formatPrice,
-} from '../utils';
+import customFetch from '../utils';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import { userQuery } from '../utils/allQueryForProject';
+import {
+  CardElement,
+  useElements,
+  useStripe,
+} from '@stripe/react-stripe-js';
+import { useState } from 'react';
 
 export const action =
   queryClient =>
   async ({ request }) => {
     const formData = await request.formData();
-    const data = Object.fromEntries(formData);
+    const dataObj = Object.fromEntries(formData);
 
     try {
-      await customFetch.post('/orders', data);
-      queryClient.removeQueries(['orders']);
-      toast.success('order placed successfully');
-      return redirect('/orders');
+      const { data } = await customFetch.post(
+        '/orders/create-checkout-session',
+        dataObj
+      );
+      // Redirect the user to Stripe hosted payment page
+      window.location.href = data.url;
+      return null;
     } catch (error) {
       console.log(error);
       const errorMessage =
         error?.response?.data?.error?.message ||
-        'there was an error placing your order';
+        'There was an error creating checkout session';
       toast.error(errorMessage);
-      //   if (error?.response?.status === 401 || 403)
-      //     return redirect('/login');
       return null;
     }
   };
 
 const CheckoutForm = () => {
+  const user =
+    useQuery(userQuery).data?.user || null;
+
   return (
     <Wrapper>
-      <Form method="POST">
+      <Form method="post">
         <h4>shipping information</h4>
         <FormInput
           label="first name"
           name="name"
           type="text"
+          defaultValue={user?.firstName}
         />
         <FormInput
           label="address"
           name="address"
           type="text"
+          defaultValue={user?.address}
         />
         <div>
           <SubmitBtn text="place your order" />

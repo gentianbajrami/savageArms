@@ -5,26 +5,31 @@ import {
   CheckoutForm,
 } from '../components';
 import styled from 'styled-components';
+import {
+  cartQuery,
+  userQuery,
+} from '../utils/allQueryForProject';
 
-const cartQuery = {
-  queryKey: ['cart'],
-  queryFn: async () => {
-    const { data } = await customFetch.get(
-      '/cart'
-    );
-    return data;
-  },
+export const loader = queryClient => async () => {
+  try {
+    await queryClient.ensureQueryData(cartQuery);
+    await queryClient.ensureQueryData(userQuery);
+    return null;
+  } catch (error) {
+    return redirect('/');
+  }
 };
 
 const Checkout = () => {
-  const { data } = useQuery(cartQuery);
-  const cart = data?.cart || [];
-  console.log(data);
+  const cart =
+    useQuery(cartQuery).data?.cart || [];
+  console.log(cart);
 
   if (cart?.cartTotal === 0) {
     return <Banner title="Your cart is empty" />;
   }
 
+  console.log(cart);
   return (
     <Wrapper className="page">
       {/* <Banner title="Checkout" /> */}
@@ -46,7 +51,7 @@ const Wrapper = styled.main`
     padding-bottom: 1.4rem;
     margin-bottom: 4rem;
   }
-  max-width: var(--max-width);
+  max-width: 1400px;
   margin: 0 auto;
   .checkout {
     display: grid;

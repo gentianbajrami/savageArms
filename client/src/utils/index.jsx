@@ -14,7 +14,8 @@ export const formatPrice = price => {
       style: 'currency',
       currency: 'USD',
     }
-  ).format((price / 100).toFixed(2));
+  ).format(price.toFixed(2));
+
   return dollarsAmount;
 };
 

@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import {
-  createOrder,
+  createCheckoutSession,
   getAllOrders,
-} from '../controller/orderController';
+} from '../controller/orderController.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
 const router = Router();
 
 router.get('/', authenticateUser, getAllOrders);
-router.post('/', createOrder);
+router.post(
+  '/create-checkout-session',
+  authenticateUser,
+  createCheckoutSession
+);
 
 export default router;

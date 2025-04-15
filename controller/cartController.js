@@ -35,7 +35,7 @@ export const addProductToCart = async (
     }
 
     doesCartExist.numItemsInCart += amount;
-    doesCartExist.cartTotal +=
+    doesCartExist.orderTotal +=
       product.price * amount;
     console.log(doesCartExist);
     await doesCartExist.save();
@@ -53,8 +53,9 @@ export const addProductToCart = async (
         },
       ],
       numItemsInCart: amount,
-      cartTotal: product.price * amount,
+      orderTotal: product.price * amount,
     });
+    console.log(newCart);
     await newCart.save();
     return res
       .status(StatusCodes.OK)
@@ -77,6 +78,13 @@ export const removeProductFromCart = async (
     return res
       .status(404)
       .json({ msg: 'Cart not found' });
+  }
+
+  if (cart.cartItems.length === 1) {
+    cart.deleteOne();
+    return res.status(200).json({
+      msg: 'Cart Item removed succesfully',
+    });
   }
 
   cart.cartItems = cart.cartItems.filter(
@@ -164,7 +172,7 @@ export const updateProductQuantityInCart = async (
     (sum, i) => sum + i.quantity,
     0
   );
-  cart.cartTotal =
+  cart.orderTotal =
     cart.orderTotal + cart.tax + cart.shipping;
 
   await cart.save();
