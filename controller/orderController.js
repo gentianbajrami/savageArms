@@ -39,7 +39,7 @@ export const createCheckoutSession = async (
       })),
       mode: 'payment',
       customer_email: req.user.email,
-      success_url: `http://localhost:5173/orders`,
+      success_url: `http://localhost:5173/confirm-order?sessionId={CHECKOUT_SESSION_ID}&name=${name}&address=${address}`,
       cancel_url: `http://localhost:5173/cart`,
       metadata: {
         userId: req.user.userId,
@@ -53,15 +53,14 @@ export const createCheckoutSession = async (
 };
 
 export const confirmOrder = async (req, res) => {
-  const { paymentIntentId, name, address } =
-    req.body;
+  const { sessionId, name, address } = req.body;
 
-  const paymentIntent =
-    await stripe.paymentIntents.retrieve(
-      paymentIntentId
+  const session =
+    await stripe.checkout.sessions.retrieve(
+      sessionId
     );
-
-  if (paymentIntent.status !== 'succeeded') {
+  console.log(sessionId, session);
+  if (session.payment_status !== 'paid') {
     return res
       .status(400)
       .json({ msg: 'Payment not completed' });
@@ -84,7 +83,7 @@ export const confirmOrder = async (req, res) => {
     name,
     address,
     status: 'paid',
-    paymentIntentId,
+    paymentIntentId: session.payment_intent,
   });
 
   const orders = await Order.find({

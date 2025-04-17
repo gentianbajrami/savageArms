@@ -18,3 +18,13 @@ export const userQuery = {
     return data;
   },
 };
+
+export const ordersQuery = {
+  queryKey: ['orders'],
+  queryFn: async () => {
+    const { data } = await customFetch.get(
+      '/orders'
+    );
+    return data;
+  },
+};

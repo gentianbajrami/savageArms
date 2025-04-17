@@ -35,8 +35,13 @@ export const addProductToCart = async (
     }
 
     doesCartExist.numItemsInCart += amount;
-    doesCartExist.orderTotal +=
+    doesCartExist.cartTotal +=
       product.price * amount;
+    doesCartExist.orderTotal =
+      doesCartExist.cartTotal +
+      doesCartExist.tax +
+      doesCartExist.shipping;
+
     console.log(doesCartExist);
     await doesCartExist.save();
     return res
@@ -53,7 +58,13 @@ export const addProductToCart = async (
         },
       ],
       numItemsInCart: amount,
-      orderTotal: product.price * amount,
+      cartTotal: product.price * amount,
+      tax: process.env.TAX,
+      shipping: process.env.SHIPPING,
+      orderTotal:
+        product.price * amount +
+        process.env.SHIPPING +
+        process.env.TAX,
     });
     console.log(newCart);
     await newCart.save();
@@ -81,7 +92,7 @@ export const removeProductFromCart = async (
   }
 
   if (cart.cartItems.length === 1) {
-    cart.deleteOne();
+    await cart.deleteOne();
     return res.status(200).json({
       msg: 'Cart Item removed succesfully',
     });
@@ -92,7 +103,7 @@ export const removeProductFromCart = async (
   );
 
   // Recalculate totals
-  const orderTotal = cart.cartItems.reduce(
+  const cartTotal = cart.cartItems.reduce(
     (sum, item) =>
       sum + item.price * item.quantity,
     0
@@ -103,11 +114,12 @@ export const removeProductFromCart = async (
     0
   );
 
-  cart.orderTotal = orderTotal;
+  cart.cartTotal = cartTotal;
   cart.numItemsInCart = numItemsInCart;
-  cart.cartTotal =
-    orderTotal + cart.tax + cart.shipping;
+  cart.orderTotal =
+    cartTotal + cart.tax + cart.shipping;
 
+  console.log('Cart before saving', cart);
   await cart.save();
 
   return res.status(200).json({
@@ -164,7 +176,7 @@ export const updateProductQuantityInCart = async (
   item.quantity = quantity;
 
   // Recalculate totals
-  cart.orderTotal = cart.cartItems.reduce(
+  cart.cartTotal = cart.cartItems.reduce(
     (sum, i) => sum + i.price * i.quantity,
     0
   );

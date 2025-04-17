@@ -34,6 +34,7 @@ import {
   Products,
   SingleProductPage,
   Checkout,
+  Orders,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -53,6 +54,8 @@ import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
+import { loader as ordersLoader } from './pages/Orders';
+import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
 
 import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
@@ -141,6 +144,15 @@ const router = createBrowserRouter([
         element: <SingleProductPage />,
         loader: singleProductLoader(queryClient),
         action: singleProductAction(queryClient),
+      },
+      {
+        path: '/orders',
+        element: <Orders />,
+        loader: ordersLoader(queryClient),
+      },
+      {
+        path: '/confirm-order',
+        loader: confirmOrderLoader(queryClient),
       },
     ],
   },
