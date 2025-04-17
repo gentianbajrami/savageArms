@@ -33,6 +33,8 @@ import {
   Cart,
   Products,
   SingleProductPage,
+  Checkout,
+  Orders,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -46,11 +48,14 @@ import { action as editBlogAction } from './pages/Blog/EditBlog';
 import { action as singleProductAction } from './pages/SingleProductPage';
 import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
 import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
+import { action as checkoutAction } from './components/CheckoutForm';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
+import { loader as ordersLoader } from './pages/Orders';
+import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
 
 import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
@@ -124,6 +129,12 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'checkout',
+        element: <Checkout />,
+        loader: cartLoader(queryClient),
+        action: checkoutAction(queryClient),
+      },
+      {
         path: 'products',
         element: <Products />,
         loader: productLoader(queryClient),
@@ -133,6 +144,15 @@ const router = createBrowserRouter([
         element: <SingleProductPage />,
         loader: singleProductLoader(queryClient),
         action: singleProductAction(queryClient),
+      },
+      {
+        path: '/orders',
+        element: <Orders />,
+        loader: ordersLoader(queryClient),
+      },
+      {
+        path: '/confirm-order',
+        loader: confirmOrderLoader(queryClient),
       },
     ],
   },

@@ -15,6 +15,7 @@ import userRouter from './routes/userRouter.js';
 import firearmRouter from './routes/firearmRouter.js';
 import blogRouter from './routes/blogRouter.js';
 import cartRouter from './routes/cartRouter.js';
+import orderRouter from './routes/orderRouter.js';
 
 //middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -63,6 +64,7 @@ app.use(
   authenticateUser,
   cartRouter
 );
+app.use('/api/v1/orders', orderRouter);
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });
