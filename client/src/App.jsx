@@ -56,6 +56,7 @@ import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 import { loader as ordersLoader } from './pages/Orders';
 import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
+import { loader as homeLoader } from './pages/Home';
 
 import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
@@ -78,7 +79,11 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <Error />,
     children: [
-      { index: true, element: <Home /> }, // homepage content
+      {
+        index: true,
+        element: <Home />,
+        loader: homeLoader(queryClient),
+      }, // homepage content
       { path: 'firearms', element: <Firearms /> },
       {
         path: 'accessories',

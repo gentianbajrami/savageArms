@@ -28,3 +28,34 @@ export const ordersQuery = {
     return data;
   },
 };
+
+export const allProductsQuery = queryParams => {
+  const {
+    search,
+    caliber,
+    model,
+    order,
+    price,
+    shipping,
+    page,
+    type,
+  } = queryParams;
+
+  return {
+    queryKey: [
+      'firearms',
+      search ?? '',
+      caliber ?? 'all',
+      model ?? 'all',
+      type ?? 'all',
+      order ?? 'a-z',
+      price ?? 100000,
+      shipping ?? false,
+      page ?? 1,
+    ],
+    queryFn: () =>
+      customFetch('/firearms', {
+        params: queryParams,
+      }),
+  };
+};
