@@ -133,6 +133,13 @@ const Wrapper = styled.section`
     }
   }
 
+  @media (min-width: 1200px) {
+    .slider-item img {
+      width: 340px;
+      height: 250px;
+    }
+  }
+
   .slider-item p {
     margin-top: 1rem;
     text-align: center;
