@@ -34,7 +34,7 @@ export const addProductToCart = async (
       });
     }
 
-    doesCartExist.numItemsInCart += amount;
+    doesCartExist.numItemsInCart += +amount;
     doesCartExist.cartTotal +=
       product.price * amount;
     doesCartExist.orderTotal =

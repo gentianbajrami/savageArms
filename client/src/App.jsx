@@ -64,6 +64,7 @@ import { loader as blogLoader } from './pages/Blog';
 import { loader as cartLoader } from './pages/Cart';
 import { loader as productLoader } from './pages/Products';
 import { loader as singleProductLoader } from './pages/SingleProductPage';
+import { loader as mainLayoutLoader } from './pages/MainLayout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -77,6 +78,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    loader: mainLayoutLoader(queryClient),
     errorElement: <Error />,
     children: [
       {

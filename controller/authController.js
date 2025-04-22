@@ -1,35 +1,54 @@
 import { StatusCodes } from 'http-status-codes';
 import UserModel from '../models/UserModel.js';
-import { comparePassword, hashPassword } from '../utils/passwordUtils.js';
+import {
+  comparePassword,
+  hashPassword,
+} from '../utils/passwordUtils.js';
 import { UnauthenticatedError } from '../errors/customErrors.js';
 import { createJWT } from '../utils/tokenUtils.js';
 
 export const register = async (req, res) => {
-  const isFirstUser = (await UserModel.countDocuments()) === 0;
+  const isFirstUser =
+    (await UserModel.countDocuments()) === 0;
   req.body.role = isFirstUser
     ? 'admin'
     : req.body.role === 'company'
     ? 'company'
     : 'user';
 
-  const hashedPassword = await hashPassword(req.body.password);
+  const hashedPassword = await hashPassword(
+    req.body.password
+  );
   req.body.password = hashedPassword;
 
   const user = await UserModel.create(req.body);
-  res.status(StatusCodes.CREATED).json({ msg: 'user created' });
+  res
+    .status(StatusCodes.CREATED)
+    .json({ msg: 'user created' });
 };
 
 export const login = async (req, res) => {
-  const user = await UserModel.findOne({ email: req.body.email });
+  const user = await UserModel.findOne({
+    email: req.body.email,
+  });
 
   const isValidUser =
-    user && (await comparePassword(req.body.password, user.password));
+    user &&
+    (await comparePassword(
+      req.body.password,
+      user.password
+    ));
 
   if (!isValidUser) {
-    throw new UnauthenticatedError('invalid credentials');
+    throw new UnauthenticatedError(
+      'invalid credentials'
+    );
   }
 
-  const token = createJWT({ userId: user._id, role: user.role });
+  const token = createJWT({
+    userId: user._id,
+    role: user.role,
+  });
 
   const oneDay = 1000 * 60 * 60 * 24;
   res.cookie('token', token, {
@@ -37,7 +56,9 @@ export const login = async (req, res) => {
     expires: new Date(Date.now() + oneDay),
     secure: process.env.NODE_ENV === 'production',
   });
-  res.status(StatusCodes.CREATED).json({ msg: 'user logged in' });
+  res
+    .status(StatusCodes.CREATED)
+    .json({ msg: 'user logged in' });
 };
 
 export const logout = (req, res) => {
@@ -45,5 +66,7 @@ export const logout = (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now()),
   });
-  res.status(StatusCodes.OK).json({msg: 'user logged out'})
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: 'user logged out' });
 };

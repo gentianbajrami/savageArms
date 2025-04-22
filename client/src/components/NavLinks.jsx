@@ -1,39 +1,44 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FaCartPlus } from 'react-icons/fa';
 import {
-  FaSearch,
-  FaMagento,
-} from 'react-icons/fa';
+  NavLink,
+  useLoaderData,
+} from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 
 const NavLinks = ({ isSidebar = false }) => {
+  const { user } = useAppContext();
   return (
     <Wrapper
       className={`${
         isSidebar ? 'sidebarLinks' : 'navLinks'
       }`}
     >
-      <li>
-        <a href="/products">Firearms</a>
-      </li>
-      <li>
-        <a href="/accessories">Accessories</a>
-      </li>
-      <li>
-        <a href="/performance">Performance</a>
-      </li>
-      <li>
-        <a href="/blog">Blog</a>
-      </li>
-      <li>
-        <a href="#">
-          <FaMagento />
-        </a>
-      </li>
-      <li>
-        <a href="#">
+      <NavLink to="/products">
+        <p>Firearms</p>
+      </NavLink>
+      <NavLink to="/accessories">
+        <p>Accessories</p>
+      </NavLink>
+      <NavLink to="/performance">
+        <p>Performance</p>
+      </NavLink>
+      <NavLink to={'/blog'}>
+        <p>Blog</p>
+      </NavLink>
+      {user && (
+        <NavLink to="/cart">
+          <p className="cart">
+            <FaCartPlus />
+          </p>
+        </NavLink>
+      )}
+      {/* <li>
+        <a to="#">
           <FaSearch />
         </a>
-      </li>
+      </li> */}
     </Wrapper>
   );
 };
@@ -41,24 +46,23 @@ const Wrapper = styled.ul`
   display: flex;
   font-size: 1.1rem;
   text-transform: uppercase;
-  margin-right: 2rem;
   color: white;
-  li {
+  a {
     padding: 0.5rem 1rem;
     letter-spacing: 1px;
     border-radius: 5px;
   }
-  a {
+  p {
     color: white;
     text-decoration: none;
     font-weight: 400;
   }
-  li:hover,
-  li:hover a {
+  a:hover,
+  a:hover p {
     background-color: antiquewhite;
     color: black;
   }
-  li:hover svg {
+  a:hover svg {
     color: black !important;
   }
 `;

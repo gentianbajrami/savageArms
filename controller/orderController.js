@@ -1,4 +1,6 @@
+import { BadRequestError } from '../errors/customErrors.js';
 import Cart from '../models/Cart.js';
+import FirearmsModel from '../models/FirearmsModel.js';
 import Order from '../models/Order.js';
 import Stripe from 'stripe';
 const stripe = new Stripe(
@@ -69,6 +71,7 @@ export const confirmOrder = async (req, res) => {
   const cart = await Cart.findOne({
     createdBy: req.user.userId,
   });
+
   if (!cart) {
     return res
       .status(404)
@@ -89,6 +92,20 @@ export const confirmOrder = async (req, res) => {
   const orders = await Order.find({
     user: req.user.userId,
   });
+
+  for (const item of cart.cartItems) {
+    const product = item.product;
+    if (product.stock < item.quantity) {
+      throw new BadRequestError(
+        `Not enough stock for ${product.fullName}`
+      );
+    }
+
+    await FirearmsModel.updateOne(
+      { _id: product },
+      { $inc: { stock: -item.quantity } }
+    );
+  }
 
   await cart.deleteOne();
 
