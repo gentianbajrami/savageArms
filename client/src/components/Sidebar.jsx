@@ -17,6 +17,9 @@ const Wrapper = styled.div`
   .sidebarLinks {
     display: grid;
     gap: 1rem;
+    /* background-color: black;
+    border-radius: var(--border-radius);
+    padding: 1rem; */
   }
 `;
 export default Sidebar;
