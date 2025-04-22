@@ -1,5 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
-import { NotFoundError } from '../errors/customErrors.js';
+import {
+  BadRequestError,
+  NotFoundError,
+} from '../errors/customErrors.js';
 import Cart from '../models/Cart.js';
 import Product from '../models/FirearmsModel.js';
 
@@ -13,6 +16,12 @@ export const addProductToCart = async (
   const product = await Product.findById(id);
   if (!product)
     return new NotFoundError('Product not found');
+
+  if (product.stock < amount) {
+    throw new BadRequestError(
+      'Amount must be smaller than stock'
+    );
+  }
 
   const doesCartExist = await Cart.findOne({
     createdBy: req.user.userId,
