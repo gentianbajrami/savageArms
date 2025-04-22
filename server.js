@@ -47,11 +47,7 @@ app.use(
   })
 );
 
-app.use(
-  '/api/v1/firearms',
-  authenticateUser,
-  firearmRouter
-);
+app.use('/api/v1/firearms', firearmRouter);
 app.use(
   '/api/v1/users',
   authenticateUser,

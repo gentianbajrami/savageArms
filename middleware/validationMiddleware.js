@@ -132,10 +132,10 @@ export const validateIdParam =
           `No firearm with id ${value}`
         );
       }
-      const isAdmin = req.user.role === 'admin';
-      const isOwner =
-        req.user.userId ===
-        firearm.companyId.toString();
+      // const isAdmin = req.user?.role === 'admin';
+      // const isOwner =
+      //   req.user?.userId ===
+      //   firearm.companyId.toString();
 
       // kshyre taj qa pot vyn qikjo se qitu keq o mu perdor
       // if (!isAdmin && !isOwner) {

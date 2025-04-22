@@ -5,7 +5,10 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 
-import { useLoaderData } from 'react-router-dom';
+import {
+  Link,
+  useLoaderData,
+} from 'react-router-dom';
 import {
   FaChevronRight,
   FaChevronLeft,
@@ -52,11 +55,12 @@ const FeatureArmsCarousel = () => {
             offsetIndex < VISIBLE_COUNT;
 
           return (
-            <div
-              key={p.id}
+            <Link
+              key={p?._id}
               className={`slider-item ${
                 isVisible ? 'visible' : ''
               }`}
+              to={'/products/' + p._id}
               style={{
                 transform: `translateX(${offsetPercent}%)`,
               }}
@@ -66,7 +70,7 @@ const FeatureArmsCarousel = () => {
                 alt={p.fullName}
               />
               <p>{p.fullName}</p>
-            </div>
+            </Link>
           );
         })}
       </div>
@@ -114,6 +118,8 @@ const Wrapper = styled.section`
     transition: transform 1.5s ease,
       opacity 0.1s ease;
     opacity: 0;
+    text-decoration: none;
+    color: black;
   }
 
   .slider-item.visible {
