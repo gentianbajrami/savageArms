@@ -15,7 +15,7 @@ import SubmitButton from '../../components/SubmitButton';
 export const loader = async ({ params }) => {
   try {
     const { data } = await customFetch.get(`/firearms/${params.id}`);
-    return { firearm: data };
+    return { data };
   } catch (error) {
     toast.error(error?.response?.data?.msg);
     return redirect('/dashboard/all-firearms');
@@ -40,7 +40,8 @@ export const action1 = async ({ request, params }) => {
 };
 
 const EditFirearm = () => {
-  const { firearm } = useLoaderData();
+  const { data } = useLoaderData();
+  const firearm = data?.firearm;
   console.log(firearm);
   if (!firearm || Object.keys(firearm).length === 0) {
     return <p>Loading firearm data...</p>;
