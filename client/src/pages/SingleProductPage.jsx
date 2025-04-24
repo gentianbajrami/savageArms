@@ -3,9 +3,14 @@ import { Banner } from '../components';
 import customFetch, {
   formatPrice,
 } from '../utils';
-import { useLoaderData } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useLoaderData,
+} from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
 
 const singleProductQuery = id => {
   return {
@@ -25,6 +30,26 @@ export const loader =
       singleProductQuery(params.id)
     );
     return { id: params.id };
+  };
+
+export const action =
+  queryClient =>
+  async ({ request, params }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    console.log(data);
+    try {
+      await customFetch.post(
+        '/cart/add-product/' + params.id,
+        data
+      );
+      queryClient.invalidateQueries(['cart']);
+      toast.success('Product added successfully');
+      return redirect('/products');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+    return null;
   };
 
 const SingleProductPage = () => {
@@ -53,8 +78,38 @@ const SingleProductPage = () => {
             <p className="price">
               {formatPrice(product.price)}
             </p>
-            <p>{product.description}</p>
+            <p className="desc">
+              {product.description}
+            </p>
+            <p className="features">
+              {product.features}
+            </p>
+            <p className="type">
+              Type: {product.type}
+            </p>
+            <p className="type">
+              {' '}
+              Model: {product.model}
+            </p>
           </div>
+          <Form method="post">
+            <div className="amount">
+              <label htmlFor="amount">
+                Amount
+              </label>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                min="1"
+                defaultValue={1}
+                max={product?.stock}
+              />
+            </div>
+            <button type="submit" className="btn">
+              Add to cart
+            </button>
+          </Form>
         </div>
       </div>
     </Wrapper>
@@ -98,10 +153,33 @@ const Wrapper = styled.div`
       line-height: 1.2;
       margin-top: 0.5rem;
     }
-    :last-child {
+    .desc,
+    .features,
+    .type {
       margin-top: 1rem;
       line-height: 2;
       color: var(--grey-600);
+    }
+    .type {
+      margin-top: 0;
+      text-transform: capitalize;
+    }
+  }
+
+  form {
+    .amount {
+      margin-bottom: 1rem;
+      display: grid;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: start;
+      input {
+        width: 15rem;
+        padding: 0.5rem;
+        border: 1px solid var(--grey-300);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+      }
     }
   }
 

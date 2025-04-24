@@ -42,11 +42,14 @@ export const action1 = async ({ request, params }) => {
 const EditFirearm = () => {
   const { data } = useLoaderData();
   const firearm = data?.firearm;
-  console.log(firearm);
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+
   if (!firearm || Object.keys(firearm).length === 0) {
     return <p>Loading firearm data...</p>;
   }
 
+  console.log(firearm);
   return (
     <Wrapper>
       <Form method="post" className="form" encType="multipart/form-data">

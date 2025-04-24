@@ -1,160 +1,155 @@
 import React, {
   useState,
   useEffect,
+  useRef,
 } from 'react';
 import styled from 'styled-components';
-import img1 from '../assets/images/arms/deagle.jpg';
-import img2 from '../assets/images/arms/model870.jpg';
-import img3 from '../assets/images/arms/pistol.jpg';
-import img4 from '../assets/images/arms/shotgun.webp';
 
-const images = [img1, img2, img3, img4];
+import {
+  Link,
+  useLoaderData,
+} from 'react-router-dom';
+import {
+  FaChevronRight,
+  FaChevronLeft,
+} from 'react-icons/fa';
 
+const AUTO_INTERVAL = 3000; // ms between auto slides
+const VISIBLE_COUNT = 3; // how many products are visible
+
+/* ─────────────────────────────── component ─────────────────────────────── */
 const FeatureArmsCarousel = () => {
-  const [currentIndex, setCurrentIndex] =
-    useState(0);
-  const [imagesToShow, setImagesToShow] =
-    useState(3); // Default to 3 images
+  const [index, setIndex] = useState(0);
+  const { products } = useLoaderData();
 
-  // Adjust imagesToShow based on screen size
-  useEffect(() => {
-    const updateImagesToShow = () => {
-      setImagesToShow(
-        window.innerWidth > 992 ? 3 : 2
-      );
-    };
-
-    // Initial check
-    updateImagesToShow();
-
-    // Update on resize
-    window.addEventListener(
-      'resize',
-      updateImagesToShow
-    );
-
-    return () => {
-      window.removeEventListener(
-        'resize',
-        updateImagesToShow
-      );
-    };
-  }, []);
-
-  const prevSlide = () => {
-    setCurrentIndex(prevIndex =>
-      prevIndex === 0
-        ? images.length - 1
-        : prevIndex - 1
+  // auto-slide every AUTO_INTERVAL ms
+  const next = () => {
+    setIndex(
+      prev => (prev + 1) % products.length
     );
   };
-
-  const nextSlide = () => {
-    setCurrentIndex(
-      prevIndex => (prevIndex + 1) % images.length
+  const prev = () => {
+    setIndex(
+      prev =>
+        (prev - 1 + products.length) %
+        products.length
     );
   };
-
-  // Dynamically slice images based on the current index and imagesToShow
-  const displayedImages = Array(imagesToShow)
-    .fill()
-    .map(
-      (_, idx) =>
-        images[
-          (currentIndex + idx) % images.length
-        ] // Ensures circular navigation
-    );
 
   return (
     <Wrapper>
-      <h2>Feature Arms</h2>
-      <div className="carousel">
-        <button
-          className="prev"
-          onClick={prevSlide}
-        >
-          &#10094;
-        </button>
-        <div className="image-container">
-          {displayedImages.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Slide ${index}`}
-            />
-          ))}
-        </div>
-        <button
-          className="next"
-          onClick={nextSlide}
-        >
-          &#10095;
-        </button>
+      <div className="prev" onClick={prev}>
+        <FaChevronLeft />
+      </div>
+
+      <div className="slider">
+        {products.map((p, i) => {
+          // circular offset
+          const offsetIndex =
+            (i - index + products.length) %
+            products.length;
+          // use multiples of own width: 0, 100%, 200%, ...
+          const offsetPercent = offsetIndex * 100;
+          // mark only first VISIBLE_COUNT items as visible
+          const isVisible =
+            offsetIndex < VISIBLE_COUNT;
+
+          return (
+            <Link
+              key={p?._id}
+              className={`slider-item ${
+                isVisible ? 'visible' : ''
+              }`}
+              to={'/products/' + p._id}
+              style={{
+                transform: `translateX(${offsetPercent}%)`,
+              }}
+            >
+              <img
+                src={p.photo}
+                alt={p.fullName}
+              />
+              <p>{p.fullName}</p>
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="next" onClick={next}>
+        <FaChevronRight />
       </div>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
-  margin: 5rem auto;
-  h2 {
-    text-align: center;
-    letter-spacing: var(--letter-spacing);
-    margin-bottom: 2.5rem;
-  }
-  .carousel {
+const Wrapper = styled.section`
+  /* min-height: 100vh; */
+  width: 90%;
+  display: grid;
+  place-items: center;
+  grid-template-columns: 50px 1fr 50px;
+  margin: 4rem auto;
+  .prev,
+  .next {
+    cursor: pointer;
+    font-size: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .slider {
     position: relative;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    width: 80%;
-    padding: 0 1rem;
-  }
-  .image-container {
-    display: flex;
+    width: 100%;
+    height: 300px; /* adjust height as needed */
     overflow: hidden;
-    max-width: 1200px;
-    gap: 1rem;
-    justify-content: center;
-    transition: transform 0.5s ease-in-out;
-    img {
-      max-width: 400px;
-      height: 200px;
-      object-fit: contain;
-    }
   }
-  @media (max-width: 992px) {
-    .image-container {
-      max-width: 400px;
-    }
-    .image-container img {
-      max-width: 200px;
-    }
-  }
-  @media (max-width: 630px) {
-    .image-container img {
-      max-width: 100px;
-    }
-  }
-  .prev,
-  .next {
-    background: transparent;
-    color: #d50505;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
+
+  .slider-item {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-  }
-  .prev {
+    top: 0;
     left: 0;
+    margin-top: 3rem;
+    width: calc(100% / ${VISIBLE_COUNT});
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    transition: transform 1.5s ease,
+      opacity 0.1s ease;
+    opacity: 0;
+    text-decoration: none;
+    color: black;
   }
-  .next {
-    right: 0;
+
+  .slider-item.visible {
+    opacity: 1;
+  }
+
+  .slider-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  @media (min-width: 992px) {
+    .slider-item img {
+      width: 340px;
+      height: 180px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .slider-item img {
+      width: 340px;
+      height: 250px;
+    }
+  }
+
+  .slider-item p {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 500;
   }
 `;
 

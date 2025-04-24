@@ -15,6 +15,7 @@ import userRouter from './routes/userRouter.js';
 import firearmRouter from './routes/firearmRouter.js';
 import blogRouter from './routes/blogRouter.js';
 import cartRouter from './routes/cartRouter.js';
+import orderRouter from './routes/orderRouter.js';
 
 //public folder
 import { dirname } from 'path';
@@ -49,11 +50,21 @@ app.use(
   })
 );
 
-app.use('/api/v1/firearms', authenticateUser, firearmRouter);
-app.use('/api/v1/users', authenticateUser, userRouter);
+app.use('/api/v1/firearms', firearmRouter);
+app.use(
+  '/api/v1/users',
+  authenticateUser,
+  userRouter
+);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/blogs', blogRouter);
-app.use('/api/v1/cart', authenticateUser, cartRouter);
+app.use(
+  '/api/v1/cart',
+  authenticateUser,
+  cartRouter
+);
+app.use('/api/v1/orders', orderRouter);
+
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });
