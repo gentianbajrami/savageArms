@@ -12,9 +12,18 @@ const FirearmsSchema = new mongoose.Schema(
     photo: String,
     photoPublicId: String,
     features: String,
-    caliber: { type: String, enum: Object.values(FIREARMS_CALIBER) },
-    model: { type: String, enum: Object.values(FIREARMS_MODEL) },
-    manufacturer: { type: String, enum: Object.values(FIREARMS_MANUFACTURER) },
+    caliber: {
+      type: String,
+      enum: Object.values(FIREARMS_CALIBER),
+    },
+    model: {
+      type: String,
+      enum: Object.values(FIREARMS_MODEL),
+    },
+    manufacturer: {
+      type: String,
+      enum: Object.values(FIREARMS_MANUFACTURER),
+    },
     price: Number,
     stock: Number,
     description: String,
@@ -27,10 +36,17 @@ const FirearmsSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: 'User',
     },
+    averageRating: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.model('Firearms', FirearmsSchema);
+export default mongoose.model(
+  'Firearms',
+  FirearmsSchema
+);

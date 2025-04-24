@@ -18,10 +18,10 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 export const loader = queryClient => async () => {
-  const user = await queryClient.ensureQueryData(
-    userQuery
-  );
-  console.log(user);
+  // const user = await queryClient.ensureQueryData(
+  //   userQuery
+  // );
+  // console.log(user);
   return null;
 };
 

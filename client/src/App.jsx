@@ -49,6 +49,7 @@ import { action as singleProductAction } from './pages/SingleProductPage';
 import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
 import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
 import { action as checkoutAction } from './components/CheckoutForm';
+import { action as createReviewAction } from './components/CreateReview';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -160,6 +161,10 @@ const router = createBrowserRouter([
       {
         path: '/confirm-order',
         loader: confirmOrderLoader(queryClient),
+      },
+      {
+        path: 'create-review/:productId',
+        action: createReviewAction(queryClient),
       },
     ],
   },

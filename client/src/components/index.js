@@ -22,3 +22,4 @@ export { default as FormRange } from './FormRange';
 export { default as StatItem } from './StatItem';
 export { default as Loading } from './Loading';
 export { default as CheckoutForm } from './CheckoutForm';
+export { default as CreateReview } from './CreateReview';
