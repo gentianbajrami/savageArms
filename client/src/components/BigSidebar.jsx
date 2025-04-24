@@ -5,16 +5,13 @@ import { GiPistolGun } from 'react-icons/gi';
 import { IoClose } from 'react-icons/io5';
 import { useDashboardContext } from '../pages/Dashboard/DashboardLayout';
 const BigSidebar = () => {
-  const { showSidebar, toggleSidebar } =
-    useDashboardContext();
+  const { showSidebar, toggleSidebar } = useDashboardContext();
 
   return (
     <Wrapper>
       <div
         className={`${
-          showSidebar
-            ? 'sidebar-container'
-            : 'sidebar-container show-sidebar'
+          showSidebar ? 'sidebar-container' : 'sidebar-container show-sidebar'
         }`}
       >
         <div className="logo">
@@ -22,14 +19,10 @@ const BigSidebar = () => {
         </div>
 
         <div className="links">
-          <DashboardLinks
-            toggleSidebar={toggleSidebar}
-          />
+          <DashboardLinks toggleSidebar={toggleSidebar} />
         </div>
         <div className="sidebar-footer">
-          <p>
-            �� 2025 G-Arms. All rights reserved.
-          </p>
+          <p>© 2025 G-Arms. All rights reserved.</p>
         </div>
       </div>
     </Wrapper>
@@ -49,9 +42,7 @@ const Wrapper = styled.aside`
       transition: margin-left 0.5s ease-in-out;
       margin-left: -29rem;
       padding-top: 3rem;
-      background-color: var(
-        --background-secondary-color
-      );
+      background-color: var(--background-secondary-color);
     }
     .show-sidebar {
       margin-left: 0;

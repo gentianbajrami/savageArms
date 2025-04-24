@@ -45,10 +45,13 @@ import { action1 as editFirearmAction } from './pages/Firearms/EditFirearm';
 import { action as createBlogAction } from './pages/Blog/CreateBlog';
 import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
 import { action as editBlogAction } from './pages/Blog/EditBlog';
+
+import { action as profileAction } from './pages/Profile';
 import { action as singleProductAction } from './pages/SingleProductPage';
 import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
 import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
 import { action as checkoutAction } from './components/CheckoutForm';
+
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -113,7 +116,6 @@ const router = createBrowserRouter([
         element: <Blog />,
         loader: blogLoader(queryClient),
       },
-      { path: 'profile', element: <Profile /> },
       {
         path: 'about',
         element: <About />,
@@ -185,15 +187,12 @@ const router = createBrowserRouter([
         action: addFirearmAction(queryClient),
       },
       {
-        path: 'add-firearm', // ✅ accessible at /dashboard/add-firearm too
+        path: 'add-firearm',
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
-      {
-        path: 'admin',
-        element: <Admin />,
-        loader: adminLoader,
-      },
+      { path: 'admin', element: <Admin />, loader: adminLoader },
+      { path: 'profile', element: <Profile />, action: profileAction },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
