@@ -6,6 +6,7 @@ import {
 import {
   BadRequestError,
   NotFoundError,
+  UnauthorizedError,
 } from '../errors/customErrors.js';
 import UserModel from '../models/UserModel.js';
 import Firearms from '../models/FirearmsModel.js';
@@ -131,16 +132,17 @@ export const validateIdParam =
           `No firearm with id ${value}`
         );
       }
-      const isAdmin = req.user.role === 'admin';
-      const isOwner =
-        req.user.userId ===
-        firearm.companyId.toString();
+      // const isAdmin = req.user?.role === 'admin';
+      // const isOwner =
+      //   req.user?.userId ===
+      //   firearm.companyId.toString();
 
-      if (!isAdmin && !isOwner) {
-        throw new UnauthorizedError(
-          'Unauthorized to access this route'
-        );
-      }
+      // kshyre taj qa pot vyn qikjo se qitu keq o mu perdor
+      // if (!isAdmin && !isOwner) {
+      //   throw new UnauthorizedError(
+      //     'Unauthorized to access this route'
+      //   );
+      // }
     }),
   ]);
 

@@ -1,19 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+} from 'react';
 import styled from 'styled-components';
 import { Navbar } from '../components';
-import { Outlet, useNavigation } from 'react-router-dom';
+import {
+  Outlet,
+  useNavigation,
+} from 'react-router-dom';
 import Footer from './Footer';
 import Loading from '../components/Loading';
 import SecondaryMenu from '../components/SecondaryMenu';
+import {
+  cartQuery,
+  userQuery,
+} from '../utils/allQueryForProject';
+import { useQuery } from '@tanstack/react-query';
 
-export const loader = (queryClient) => async () => {
-  return '';
+export const loader = queryClient => async () => {
+  const user = await queryClient.ensureQueryData(
+    userQuery
+  );
+  console.log(user);
+  return null;
 };
 
 const MainLayout = () => {
   const navigation = useNavigation();
-  const isPageLoading = navigation.state === 'loading';
-  const [isScrolled, setIsScrolled] = useState(false);
+  const isPageLoading =
+    navigation.state === 'loading';
+  const [isScrolled, setIsScrolled] =
+    useState(false);
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -24,9 +41,15 @@ const MainLayout = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener(
+      'scroll',
+      handleScroll
+    );
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener(
+        'scroll',
+        handleScroll
+      );
     };
   }, []);
 

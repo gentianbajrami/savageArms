@@ -21,3 +21,4 @@ export { default as SearchContainer } from './SearchContainer';
 export { default as FormRange } from './FormRange';
 export { default as StatItem } from './StatItem';
 export { default as Loading } from './Loading';
+export { default as CheckoutForm } from './CheckoutForm';

@@ -4,12 +4,17 @@ import {
   formatPrice,
   generateAmountOptions,
 } from '../utils';
+import {
+  Form,
+  useSubmit,
+} from 'react-router-dom';
 
 const CartItem = ({
   product,
   price,
   quantity,
 }) => {
+  const submit = useSubmit();
   return (
     <Wrapper>
       {' '}
@@ -25,28 +30,38 @@ const CartItem = ({
       </div>
       <div className="amount">
         {/* AMOUNT */}
-        <div className="input">
+        <Form
+          method="POST"
+          action={`/cart/update/${product?._id}`}
+          className="input"
+        >
           <label
-            htmlFor="amount"
+            htmlFor="quantity"
             className="label p-0"
           >
             Amount
           </label>
           <select
-            name="amount"
-            id="amount"
+            name="quantity"
+            id="quantity"
             className="input"
             value={quantity}
+            onChange={e =>
+              submit(e.currentTarget.form)
+            }
           >
-            {generateAmountOptions(quantity + 5)}
+            {generateAmountOptions(
+              product?.stock
+            )}
           </select>
-        </div>
+        </Form>
         {/* REMOVE */}
-        <button
-        //   onClick={removeItemFromTheCart}
+        <Form
+          method="POST"
+          action={`/cart/remove/${product?._id}`}
         >
-          remove
-        </button>
+          <button>remove</button>
+        </Form>
       </div>
       <div className="price">
         <p>{formatPrice(price)}</p>
