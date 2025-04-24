@@ -6,24 +6,17 @@ import { useDashboardContext } from '../pages/Dashboard/DashboardLayout';
 import { FaTimes } from 'react-icons/fa';
 
 const SmallSidebar = () => {
-  const { showSidebar, toggleSidebar } =
-    useDashboardContext();
+  const { showSidebar, toggleSidebar, user } = useDashboardContext();
 
   return (
     <Wrapper>
       <div
         className={`${
-          showSidebar
-            ? 'sidebar-container show-sidebar'
-            : 'sidebar-container'
+          showSidebar ? 'sidebar-container show-sidebar' : 'sidebar-container'
         }`}
       >
         <div className="content">
-          <button
-            className="close-btn"
-            type="button"
-            onClick={toggleSidebar}
-          >
+          <button className="close-btn" type="button" onClick={toggleSidebar}>
             <FaTimes />
           </button>
           <div className="logo">
@@ -31,14 +24,11 @@ const SmallSidebar = () => {
           </div>
 
           <div className="links">
-            <DashboardLinks
-              toggleSidebar={toggleSidebar}
-              shouldToggle
-            />
+            <DashboardLinks toggleSidebar={toggleSidebar} shouldToggle />
           </div>
           <div className="sidebar-footer">
             <p>
-              �� 2025 G-Arms. All rights reserved.
+              <p>© 2025 G-Arms. All rights reserved.</p>
             </p>
           </div>
         </div>

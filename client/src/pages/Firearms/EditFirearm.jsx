@@ -41,9 +41,7 @@ export const action1 = async ({ request, params }) => {
 
 const EditFirearm = () => {
   const { firearm } = useLoaderData();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === 'submitting';
-
+  console.log(firearm);
   if (!firearm || Object.keys(firearm).length === 0) {
     return <p>Loading firearm data...</p>;
   }
