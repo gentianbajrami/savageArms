@@ -19,6 +19,7 @@ export { default as CartTotal } from './CartTotal';
 export { default as FirearmsContainer } from './FirearmsContainer';
 export { default as SearchContainer } from './SearchContainer';
 export { default as FormRange } from './FormRange';
+export { default as ProductFilters } from './ProductFilters';
 export { default as StatItem } from './StatItem';
 export { default as Loading } from './Loading';
 export { default as CheckoutForm } from './CheckoutForm';
