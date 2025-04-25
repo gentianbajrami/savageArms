@@ -1,7 +1,11 @@
 import React from 'react';
-import { Banner } from '../components';
+import {
+  Banner,
+  CreateReview,
+} from '../components';
 import customFetch, {
   formatPrice,
+  renderStars,
 } from '../utils';
 import {
   Form,
@@ -11,6 +15,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { reviewQuery } from '../utils/allQueryForProject';
 
 const singleProductQuery = id => {
   return {
@@ -28,6 +33,9 @@ export const loader =
   async ({ params }) => {
     await queryClient.ensureQueryData(
       singleProductQuery(params.id)
+    );
+    await queryClient.ensureQueryData(
+      reviewQuery(params.id)
     );
     return { id: params.id };
   };
@@ -57,6 +65,12 @@ const SingleProductPage = () => {
   const { firearm } = useQuery(
     singleProductQuery(id)
   ).data;
+
+  const { reviews } = useQuery(
+    reviewQuery(id)
+  ).data;
+  console.log(reviews);
+
   const product = firearm || {};
   console.log(product);
 
@@ -71,7 +85,9 @@ const SingleProductPage = () => {
         />
         <div className="data">
           <div className="header">
-            <p>{product.fullName}</p>
+            <p className="name">
+              {product.fullName}
+            </p>
             <p className="company">
               {product.manufacturer}
             </p>
@@ -90,6 +106,11 @@ const SingleProductPage = () => {
             <p className="type">
               {' '}
               Model: {product.model}
+            </p>
+            <p className="rating">
+              {' '}
+              Rating:{' '}
+              {renderStars(product.averageRating)}
             </p>
           </div>
           <Form method="post">
@@ -112,6 +133,10 @@ const SingleProductPage = () => {
           </Form>
         </div>
       </div>
+      <CreateReview
+        reviews={reviews}
+        productId={product?._id}
+      />
     </Wrapper>
   );
 };
@@ -136,7 +161,7 @@ const Wrapper = styled.div`
   }
 
   .header {
-    :first-child {
+    .name {
       font-size: 2rem;
       line-height: 1.8;
       text-transform: capitalize;

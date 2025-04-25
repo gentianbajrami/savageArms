@@ -59,3 +59,15 @@ export const allProductsQuery = queryParams => {
       }),
   };
 };
+
+export const reviewQuery = id => {
+  return {
+    queryKey: ['review', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(
+        '/reviews/products/' + id
+      );
+      return data;
+    },
+  };
+};

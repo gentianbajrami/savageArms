@@ -16,6 +16,7 @@ import firearmRouter from './routes/firearmRouter.js';
 import blogRouter from './routes/blogRouter.js';
 import cartRouter from './routes/cartRouter.js';
 import orderRouter from './routes/orderRouter.js';
+import reviewRouter from './routes/reviewsRouter.js';
 
 //public folder
 import { dirname } from 'path';
@@ -64,6 +65,7 @@ app.use(
   cartRouter
 );
 app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 
 app.use('*', (req, res) => {

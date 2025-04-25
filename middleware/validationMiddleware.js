@@ -230,3 +230,22 @@ export const validateCreateBlogInput =
       .notEmpty()
       .withMessage('Content is required'),
   ]);
+
+export const validateCreateReview =
+  withValidationErrors([
+    body('comment')
+      .notEmpty()
+      .withMessage('Comment is required')
+      .isLength({ min: 5, max: 200 })
+      .withMessage(
+        'Comment must be at least 5 characters long'
+      ),
+    body('rating')
+      .isInt({ min: 1, max: 5 })
+      .withMessage(
+        'Rating must be an integer from 1 to 5'
+      ),
+    body('productId')
+      .isMongoId()
+      .withMessage('Provide a valid product ID'),
+  ]);
