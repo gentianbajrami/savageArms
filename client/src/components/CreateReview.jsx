@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {
   Form,
   redirect,
+  useLoaderData,
   useSubmit,
 } from 'react-router-dom';
 import customFetch, {
@@ -12,6 +13,7 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import { useAppContext } from '../context/AppContext';
 
 export const action =
   queryClient =>
@@ -51,6 +53,7 @@ export const action =
   };
 
 const CreateReview = ({ reviews, productId }) => {
+  const { user } = useAppContext();
   const [isEditing, setIsEditing] =
     useState(false);
   const [comment, setComment] = useState('');
@@ -73,84 +76,99 @@ const CreateReview = ({ reviews, productId }) => {
     setRating('');
   };
 
+  const userHasAnyReview =
+    user &&
+    reviews.some(
+      r =>
+        String(r?.user?._id) === String(user._id)
+    );
+
+  console.log(user);
+
   return (
     <Wrapper>
       <h2>Reviews</h2>
 
-      <Form
-        method="post"
-        action={`../create-review/${productId}`}
-        className="create"
-      >
-        {isEditing && (
-          <input
-            type="hidden"
-            name="reviewId"
-            value={reviewId}
-          />
-        )}
-
-        <div className="form-row">
-          <label
-            htmlFor={'comment'}
-            className="form-label"
-          >
-            Comment
-          </label>
-          <input
-            type={'text'}
-            name={'comment'}
-            className="form-input"
-            onChange={e =>
-              setComment(e.target.value)
-            }
-            value={comment}
-          />
-        </div>
-        <div className="form-row">
-          <label
-            htmlFor={'rating'}
-            className="form-label"
-          >
-            rating
-          </label>
-          <input
-            type={'number'}
-            name={'rating'}
-            className="form-input"
-            onChange={e =>
-              setRating(e.target.value)
-            }
-            value={rating}
-            max={5}
-            min={1}
-          />
-        </div>
-        <button
-          className="btn"
-          type="button"
-          onClick={e => {
-            submit(e.currentTarget.form);
-            handleCancel();
-          }}
+      {user && (
+        <Form
+          method="post"
+          action={`../create-review/${productId}`}
+          className="create"
         >
-          {isEditing
-            ? 'update review'
-            : 'create review'}
-        </button>
-        {isEditing && (
+          {isEditing && (
+            <input
+              type="hidden"
+              name="reviewId"
+              value={reviewId}
+            />
+          )}
+
+          <div className="form-row">
+            <label
+              htmlFor={'comment'}
+              className="form-label"
+            >
+              Comment
+            </label>
+            <input
+              type={'text'}
+              name={'comment'}
+              className="form-input"
+              onChange={e =>
+                setComment(e.target.value)
+              }
+              value={comment}
+            />
+          </div>
+          <div className="form-row">
+            <label
+              htmlFor={'rating'}
+              className="form-label"
+            >
+              rating
+            </label>
+            <input
+              type={'number'}
+              name={'rating'}
+              className="form-input"
+              onChange={e =>
+                setRating(e.target.value)
+              }
+              value={rating}
+              max={5}
+              min={1}
+            />
+          </div>
           <button
+            className="btn"
             type="button"
-            onClick={handleCancel}
-            className="btn cancel-btn"
+            onClick={e => {
+              submit(e.currentTarget.form);
+              handleCancel();
+            }}
           >
-            Cancel
+            {isEditing
+              ? 'update review'
+              : 'create review'}
           </button>
-        )}
-      </Form>
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="btn cancel-btn"
+            >
+              Cancel
+            </button>
+          )}
+        </Form>
+      )}
+
+      {user == null && <p></p>}
 
       {reviews && reviews.length == 0 ? (
-        <div>No reviews available</div>
+        <p style={{ marginTop: '2rem' }}>
+          No reviews available
+        </p>
       ) : (
         <table className="reviews-table">
           <thead>
@@ -160,7 +178,11 @@ const CreateReview = ({ reviews, productId }) => {
               <th>Rating</th>
               <th>Date</th>
               <th>By</th>
-              <th>Action</th>
+              {user &&
+                (user.role === 'admin' ||
+                  userHasAnyReview) && (
+                  <th>Action</th>
+                )}
             </tr>
           </thead>
           <tbody>
@@ -181,25 +203,34 @@ const CreateReview = ({ reviews, productId }) => {
                     ' ' +
                     r?.user?.lastName || 'N/A'}
                 </td>
-                <td className="actions">
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(r)}
-                  >
-                    <FaEdit />
-                  </button>
-                  <Form
-                    method="post"
-                    action={`../reviews/delete/${r._id}/${productId}`}
-                  >
+                {user &&
+                (user.role === 'admin' ||
+                  String(user._id) ===
+                    String(r?.user?._id)) ? (
+                  <td className="actions">
                     <button
-                      type="submit"
-                      className="delete-btn"
+                      type="button"
+                      onClick={() =>
+                        handleEdit(r)
+                      }
                     >
-                      <MdDelete />
+                      <FaEdit />
                     </button>
-                  </Form>
-                </td>
+                    <Form
+                      method="post"
+                      action={`../reviews/delete/${r._id}/${productId}`}
+                    >
+                      <button
+                        type="submit"
+                        className="delete-btn"
+                      >
+                        <MdDelete />
+                      </button>
+                    </Form>
+                  </td>
+                ) : userHasAnyReview ? (
+                  <td></td>
+                ) : null}
               </tr>
             ))}
           </tbody>

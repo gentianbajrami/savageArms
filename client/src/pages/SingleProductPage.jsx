@@ -15,7 +15,11 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import { reviewQuery } from '../utils/allQueryForProject';
+import {
+  reviewQuery,
+  userQuery,
+} from '../utils/allQueryForProject';
+import { useAppContext } from '../context/AppContext';
 
 const singleProductQuery = id => {
   return {
@@ -37,7 +41,24 @@ export const loader =
     await queryClient.ensureQueryData(
       reviewQuery(params.id)
     );
-    return { id: params.id };
+    // try {
+    //   const data =
+    //     await queryClient.ensureQueryData(
+    //       userQuery
+    //     );
+    //   console.log(data.user);
+    //   return {
+    //     id: params.id,
+    //     user: data?.user || null,
+    //   };
+    // } catch (error) {
+    //   if (error?.response?.status === 401) {
+    //     // Silently ignore the error (do not throw)
+    //     console.log(error);
+    //   }
+    //   throw error; // Re-throw for other errors
+    // }
+    return { id: params.id }; // Just continue
   };
 
 export const action =
@@ -62,6 +83,7 @@ export const action =
 
 const SingleProductPage = () => {
   const { id } = useLoaderData();
+
   const { firearm } = useQuery(
     singleProductQuery(id)
   ).data;
@@ -69,10 +91,8 @@ const SingleProductPage = () => {
   const { reviews } = useQuery(
     reviewQuery(id)
   ).data;
-  console.log(reviews);
 
   const product = firearm || {};
-  console.log(product);
 
   return (
     <Wrapper className="page">
@@ -208,7 +228,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media (min-width: 500px) {
+  @media (min-width: 650px) {
     .product {
       grid-template-columns: 1fr 1fr;
       justify-content: center;
