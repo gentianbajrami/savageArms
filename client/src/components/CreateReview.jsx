@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import { useAppContext } from '../context/AppContext';
 
 export const action =
   queryClient =>
@@ -52,7 +53,7 @@ export const action =
   };
 
 const CreateReview = ({ reviews, productId }) => {
-  const { user } = useLoaderData();
+  const { user } = useAppContext();
   const [isEditing, setIsEditing] =
     useState(false);
   const [comment, setComment] = useState('');
@@ -82,7 +83,8 @@ const CreateReview = ({ reviews, productId }) => {
         String(r?.user?._id) === String(user._id)
     );
 
-  console.log(reviews);
+  console.log(user);
+
   return (
     <Wrapper>
       <h2>Reviews</h2>
@@ -161,8 +163,12 @@ const CreateReview = ({ reviews, productId }) => {
         </Form>
       )}
 
+      {user == null && <p></p>}
+
       {reviews && reviews.length == 0 ? (
-        <div>No reviews available</div>
+        <p style={{ marginTop: '2rem' }}>
+          No reviews available
+        </p>
       ) : (
         <table className="reviews-table">
           <thead>

@@ -32,9 +32,16 @@ const AppProvider = ({ children }) => {
         }
       );
       console.log(data);
-      if (data.user) saveUser(data.user);
+      if (data.user) saveUser(data?.user);
       else saveUser(null);
     } catch (error) {
+      if (error?.response?.status === 401) {
+        console.log(
+          'error here in app context',
+          error
+        );
+        removeUser();
+      }
       removeUser();
     } finally {
       setIsUserLoading(false);
@@ -56,7 +63,7 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // fetchUser();
+    fetchUser();
   }, []);
 
   const toggleSidebar = () => {

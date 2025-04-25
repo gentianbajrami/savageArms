@@ -20,19 +20,22 @@ export const formatPrice = price => {
       style: 'currency',
       currency: 'USD',
     }
-  ).format(price.toFixed(2));
+  ).format(price);
   return dollarsAmount;
 };
 
-export const generateAmountOptions = (number) => {
-  return Array.from({ length: number }, (_, index) => {
-    const amount = index + 1;
-    return (
-      <option key={amount} value={amount}>
-        {amount}
-      </option>
-    );
-  });
+export const generateAmountOptions = number => {
+  return Array.from(
+    { length: number },
+    (_, index) => {
+      const amount = index + 1;
+      return (
+        <option key={amount} value={amount}>
+          {amount}
+        </option>
+      );
+    }
+  );
 };
 
 export const renderStars = rating => {
