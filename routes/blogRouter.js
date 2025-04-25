@@ -1,31 +1,57 @@
-import { Router } from 'express';
+// routes/blogRoutes.js
+import express from 'express';
+import { authenticateUser } from '../middleware/authMiddleware.js';
 import {
-  createBlog,
-  getSingleBlog,
-  allBlogs,
-  updateBlog,
-  deleteBlog,
-} from '../controller/blogController.js';
-import { validateCreateBlogInput } from '../middleware/validationMiddleware.js';
-import upload from '../middleware/multerMiddleware.js';
-const router = Router();
+  getPublishedPosts,
+  getPostBySlug,
+  getPostById,
+  createPost,
+  updatePost,
+  updateComment,
+  deleteComment,
+  deletePost,
+  addComment,
+  toggleLike,
+} from '../controller/blogsController.js';
 
-router
-  .route('/')
-  .post(
-    upload.single('image'),
-    validateCreateBlogInput,
-    createBlog
-  )
-  .get(allBlogs);
-router
-  .route('/:id')
-  .get(getSingleBlog)
-  .patch(
-    upload.single('image'),
-    validateCreateBlogInput,
-    updateBlog
-  )
-  .delete(deleteBlog);
+const router = express.Router();
+
+router.get('/', getPublishedPosts);
+router.get('/slug/:slug', getPostBySlug);
+router.get('/:id', getPostById);
+
+router.post('/', authenticateUser, createPost);
+router.patch(
+  '/:id',
+  authenticateUser,
+  updatePost
+);
+router.delete(
+  '/:id',
+  authenticateUser,
+  deletePost
+);
+
+router.post(
+  '/:id/comments',
+  authenticateUser,
+  addComment
+);
+router.patch(
+  '/:id/comments/:commentId',
+  authenticateUser,
+  updateComment
+);
+router.delete(
+  '/:id/comments/:commentId',
+  authenticateUser,
+  deleteComment
+);
+
+router.post(
+  '/:id/like',
+  authenticateUser,
+  toggleLike
+);
 
 export default router;
