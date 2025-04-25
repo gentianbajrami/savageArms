@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { FirearmsContainer, ProductFilters } from '../../components';
+import { FirearmsContainer, SearchContainer } from '../../components';
 import customFetch from '../../utils/index';
 import { useLoaderData } from 'react-router-dom';
 import { useContext, createContext } from 'react';
@@ -23,7 +23,7 @@ const AllFirearms = () => {
   return (
     <>
       <AllFirearmsContext.Provider value={{ data }}>
-        <ProductFilters />
+        <SearchContainer />
         <FirearmsContainer />
       </AllFirearmsContext.Provider>
     </>
