@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import FormRow from './FormRow';
-import { Form, redirect } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useSubmit,
+} from 'react-router-dom';
 import customFetch, {
   renderStars,
 } from '../utils';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 export const action =
   queryClient =>
@@ -17,12 +22,21 @@ export const action =
 
     console.log(data);
     try {
-      await customFetch.post('/reviews', data);
+      if (data.reviewId) {
+        await customFetch.patch(
+          `/reviews/${data.reviewId}`,
+          data
+        );
+        toast.success('Review updated');
+      } else {
+        await customFetch.post('/reviews', data);
+        toast.success('Review added');
+      }
+
       queryClient.invalidateQueries([
         'reviews',
-        params?.productId || '',
+        params?.productId,
       ]);
-      toast.success('Review added');
     } catch (error) {
       console.log(error);
       toast.error(
@@ -37,9 +51,27 @@ export const action =
   };
 
 const CreateReview = ({ reviews, productId }) => {
-  if (!reviews) {
-    reviews = [];
-  }
+  const [isEditing, setIsEditing] =
+    useState(false);
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState('');
+  const [reviewId, setReviewId] = useState(null);
+  const submit = useSubmit();
+
+  if (!reviews) reviews = [];
+
+  const handleEdit = review => {
+    setIsEditing(true);
+    setComment(review.comment);
+    setRating(review.rating);
+    setReviewId(review._id);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setComment('');
+    setRating('');
+  };
 
   return (
     <Wrapper>
@@ -50,17 +82,71 @@ const CreateReview = ({ reviews, productId }) => {
         action={`../create-review/${productId}`}
         className="create"
       >
-        <FormRow type={'text'} name={'comment'} />
-        <FormRow
-          type={'number'}
-          name={'rating'}
-          defaultValue={''}
-          min={1}
-          max={5}
-        />
-        <button type="submit" className="btn">
-          create review
+        {isEditing && (
+          <input
+            type="hidden"
+            name="reviewId"
+            value={reviewId}
+          />
+        )}
+
+        <div className="form-row">
+          <label
+            htmlFor={'comment'}
+            className="form-label"
+          >
+            Comment
+          </label>
+          <input
+            type={'text'}
+            name={'comment'}
+            className="form-input"
+            onChange={e =>
+              setComment(e.target.value)
+            }
+            value={comment}
+          />
+        </div>
+        <div className="form-row">
+          <label
+            htmlFor={'rating'}
+            className="form-label"
+          >
+            rating
+          </label>
+          <input
+            type={'number'}
+            name={'rating'}
+            className="form-input"
+            onChange={e =>
+              setRating(e.target.value)
+            }
+            value={rating}
+            max={5}
+            min={1}
+          />
+        </div>
+        <button
+          className="btn"
+          type="button"
+          onClick={e => {
+            submit(e.currentTarget.form);
+            handleCancel();
+          }}
+        >
+          {isEditing
+            ? 'update review'
+            : 'create review'}
         </button>
+        {isEditing && (
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="btn cancel-btn"
+          >
+            Cancel
+          </button>
+        )}
       </Form>
 
       {reviews && reviews.length == 0 ? (
@@ -74,6 +160,7 @@ const CreateReview = ({ reviews, productId }) => {
               <th>Rating</th>
               <th>Date</th>
               <th>By</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -94,6 +181,25 @@ const CreateReview = ({ reviews, productId }) => {
                     ' ' +
                     r?.user?.lastName || 'N/A'}
                 </td>
+                <td className="actions">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(r)}
+                  >
+                    <FaEdit />
+                  </button>
+                  <Form
+                    method="post"
+                    action={`../reviews/delete/${r._id}/${productId}`}
+                  >
+                    <button
+                      type="submit"
+                      className="delete-btn"
+                    >
+                      <MdDelete />
+                    </button>
+                  </Form>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -111,8 +217,16 @@ const Wrapper = styled.div`
   h2 {
     letter-spacing: 2px;
   }
-  @media (min-width: 800px) {
+  .cancel-btn {
+    margin-left: 0.5rem;
+  }
+  @media (min-width: 600px) {
     grid-template-columns: 1fr 2fr;
+    .reviews-table {
+      grid-column: span 2;
+    }
+  }
+  @media (min-width: 800px) {
     .create {
       display: flex;
       gap: 1rem;
@@ -128,7 +242,7 @@ const Wrapper = styled.div`
   }
   .reviews-table {
     margin-top: 1rem;
-    grid-column: span 2;
+
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
@@ -155,6 +269,31 @@ const Wrapper = styled.div`
   .reviews-table .comment {
     max-width: 300px;
     word-wrap: break-word;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    button {
+      color: #000000;
+      background-color: transparent;
+      border: transparent;
+      font-size: 1rem;
+      transition: var(--tranistion);
+      :hover {
+        color: #343434;
+      }
+    }
+
+    .delete-btn {
+      color: red;
+      :hover {
+        color: darkred;
+      }
+    }
   }
 `;
 export default CreateReview;

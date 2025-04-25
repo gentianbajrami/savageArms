@@ -1,8 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError } from '../errors/customErrors.js';
+import {
+  BadRequestError,
+  NotFoundError,
+} from '../errors/customErrors.js';
 import Product from '../models/FirearmsModel.js';
 import Review from '../models/Review.js';
 import mongoose from 'mongoose';
+import { checkPermissions } from '../utils/checkPermissions.js';
 
 export const createReview = async (
   req,
@@ -55,18 +59,70 @@ export const getAllReviewsForProduct = async (
     product: id,
   }).populate('user');
 
-  console.log(reviewsForProduct, id);
   return res
     .status(StatusCodes.OK)
     .json({ reviews: reviewsForProduct });
 };
 
-export const updateReview = (req, res, next) => {
-  return res.send('createReview');
+export const updateReview = async (
+  req,
+  res,
+  next
+) => {
+  const { id } = req.params;
+
+  const review = await Review.findById(id);
+  if (!review) {
+    throw new BadRequestError('Review not found');
+  }
+  checkPermissions(req.user, review.user);
+
+  const { comment, rating, productId } = req.body;
+
+  const productExists = await Product.exists({
+    _id: productId,
+  });
+
+  if (!productExists) {
+    throw new BadRequestError(
+      'Invalid product ID provided'
+    );
+  }
+
+  await Review.findByIdAndUpdate(id, {
+    comment,
+    rating,
+    product: productId,
+    user: req.user.userId,
+  });
+
+  await updateAverageRating(productId);
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ msg: 'review updated' });
 };
 
-export const deleteReview = (req, res, next) => {
-  return res.send('createReview');
+export const deleteReview = async (
+  req,
+  res,
+  next
+) => {
+  const { id } = req.params;
+  const review = await Review.findById(id);
+
+  if (!review) {
+    throw new NotFoundError('Review not found');
+  }
+  const productId = review.product;
+
+  await review.deleteOne();
+
+  await updateAverageRating(productId);
+
+  return res
+    .status(StatusCodes.OK)
+    .json({ msg: 'product deleted succesfully' });
 };
 
 const updateAverageRating = async productId => {

@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 
 const customFetch = axios.create({
-  baseURL: 'http://localhost:5101/api/v1',
+  baseURL: 'http://localhost:5100/api/v1',
   withCredentials: true,
 });
 

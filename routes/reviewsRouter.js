@@ -32,7 +32,11 @@ router.get(
 );
 router
   .route('/:id')
-  .patch(updateReview)
-  .delete(deleteReview);
+  .patch(
+    authenticateUser,
+    validateCreateReview,
+    updateReview
+  )
+  .delete(authenticateUser, deleteReview);
 
 export default router;
