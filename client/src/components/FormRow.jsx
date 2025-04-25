@@ -24,8 +24,6 @@ const FormRow = ({
         defaultValue={defaultValue || ''}
         required
         placeholder={placeholder}
-        min={min}
-        max={max}
       />
     </div>
   );
