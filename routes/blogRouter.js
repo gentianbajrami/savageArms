@@ -1,6 +1,9 @@
 // routes/blogRoutes.js
 import express from 'express';
-import { authenticateUser } from '../middleware/authMiddleware.js';
+import {
+  authenticateUser,
+  authorizePermissions,
+} from '../middleware/authMiddleware.js';
 import {
   getPublishedPosts,
   getPostBySlug,
@@ -13,6 +16,7 @@ import {
   addComment,
   toggleLike,
 } from '../controller/blogsController.js';
+import upload from '../middleware/multerMiddleware.js';
 
 const router = express.Router();
 
@@ -20,7 +24,13 @@ router.get('/', getPublishedPosts);
 router.get('/slug/:slug', getPostBySlug);
 router.get('/:id', getPostById);
 
-router.post('/', authenticateUser, createPost);
+router.post(
+  '/',
+  upload.single('image'),
+  authenticateUser,
+  authorizePermissions('admin'),
+  createPost
+);
 router.patch(
   '/:id',
   authenticateUser,

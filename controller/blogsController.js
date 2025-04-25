@@ -3,7 +3,12 @@ import slugify from 'slugify';
 import BlogPost from '../models/Blog.js';
 import { StatusCodes } from 'http-status-codes';
 import { checkPermissions } from '../utils/checkPermissions.js';
-import { NotFoundError } from '../errors/customErrors.js';
+import {
+  BadRequestError,
+  NotFoundError,
+} from '../errors/customErrors.js';
+import cloudinary from 'cloudinary';
+import { formatImage } from '../middleware/multerMiddleware.js';
 
 // GET all published posts
 export const getPublishedPosts = async (
@@ -63,14 +68,30 @@ export const getPostById = async (req, res) => {
 
 // CREATE a new post
 export const createPost = async (req, res) => {
+  let image, imagePublicId;
+  if (!req.file) {
+    throw new BadRequestError(
+      'You must provide a file'
+    );
+  }
+
   const {
     title,
     content,
-    featuredImage,
     tags = [],
     category = 'General',
-    status = 'draft',
+    status = 'published',
   } = req.body;
+
+  console.log(req.file);
+
+  const file = formatImage(req.file);
+  const response =
+    await cloudinary.v2.uploader.upload(file);
+  image = response.secure_url;
+  imagePublicId = response.public_id;
+
+  const newTags = tags.split(',');
 
   const slug = slugify(title, {
     lower: true,
@@ -84,8 +105,9 @@ export const createPost = async (req, res) => {
     title,
     slug,
     content,
-    featuredImage,
-    tags,
+    featuredImage: image,
+    imagePublicId,
+    tags: newTags,
     category,
     status,
     readTime,

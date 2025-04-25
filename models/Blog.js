@@ -49,6 +49,7 @@ const blogPostSchema = new mongoose.Schema(
     },
     readTime: { type: Number }, // in minutes
     views: { type: Number, default: 0 },
+    imagePublicId: String,
   },
   { timestamps: true }
 );

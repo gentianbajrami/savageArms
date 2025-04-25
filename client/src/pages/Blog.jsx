@@ -62,6 +62,10 @@ const Blog = () => {
   const { data } = useQuery(
     blogsQuery(searchValues)
   );
+
+  const blogs = data?.posts || [];
+
+  console.log(blogs);
   const submit = useSubmit();
 
   const debounce = onChange => {
@@ -101,35 +105,47 @@ const Blog = () => {
           </Link>
         </Form>
       </div>
-      {data?.blogs?.length === 0 ? (
-        <>
-          <h3 className="noBlog">
-            No blog found reset the filter
-          </h3>
-        </>
-      ) : (
-        <>
-          <div className="blogs">
-            {data?.blogs.map(blog => {
-              return (
-                <SingleBlog
-                  key={blog?._id}
-                  {...blog}
-                />
-              );
-            })}
-          </div>
-          {data?.numOfPages > 1 && (
-            <PageBtnContainer
-              currentPage={data?.currentPage}
-              numOfPages={data?.numOfPages}
-            />
-          )}
-        </>
-      )}
+
+      <ListContainer>
+        {blogs.map(post => (
+          <ArticleItem key={post._id}>
+            <Link to={`/post/${post.slug}`}>
+              <Title>{post.title}</Title>
+            </Link>
+            <Meta>
+              By {post.author.username} •{' '}
+              {post.readTime} min read
+            </Meta>
+          </ArticleItem>
+        ))}
+      </ListContainer>
     </Wrapper>
   );
 };
+
+const ListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const ArticleItem = styled.article`
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+`;
+
+const Title = styled.h2`
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0;
+`;
+
+const Meta = styled.p`
+  font-size: 0.875rem;
+  color: #666;
+  margin: 8px 0 0;
+`;
 
 const Wrapper = styled.main`
   .blogs {
