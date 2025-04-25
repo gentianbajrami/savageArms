@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import { formatPrice } from '../utils';
 import { useState } from 'react';
-const FormRange = ({ label, name, price }) => {
-  const step = 1000;
-  const maxPrice = 100000;
+const FormRange = ({
+  label,
+  name,
+  price,
+  onChange,
+}) => {
+  const step = 100;
+  const maxPrice = 10000;
   const [selectedPrice, setSelectedPrice] =
     useState(price || maxPrice);
 
@@ -19,9 +24,10 @@ const FormRange = ({ label, name, price }) => {
         min={0}
         max={maxPrice}
         value={selectedPrice}
-        onChange={e =>
-          setSelectedPrice(e.target.value)
-        }
+        onChange={e => {
+          setSelectedPrice(e.target.value);
+          onChange && onChange(e);
+        }}
         step={step}
       />
       <div className="data">

@@ -14,7 +14,7 @@ import styled from 'styled-components';
 export const loader = async () => {
   try {
     const data = await customFetch.get('/users/current-user');
-    return data;
+    return { user: data };
   } catch (error) {
     return redirect('/');
   }
@@ -50,6 +50,12 @@ const DashboardLayout = () => {
     // queryClient.invalidateQueries();
     toast.success('Logging out...');
   };
+
+  if (!user) {
+    return <Loading />;
+  }
+
+  // const { data: user } = useQuery(userQuery);
 
   // customFetch.interceptors.response.use(
   //   (response) => {

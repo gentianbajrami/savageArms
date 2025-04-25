@@ -15,6 +15,13 @@ import userRouter from './routes/userRouter.js';
 import firearmRouter from './routes/firearmRouter.js';
 import blogRouter from './routes/blogRouter.js';
 import cartRouter from './routes/cartRouter.js';
+import orderRouter from './routes/orderRouter.js';
+import reviewRouter from './routes/reviewsRouter.js';
+
+//public folder
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
 //middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
@@ -26,31 +33,25 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.use(express.static(path.resolve(__dirname, './public')));
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Allow requests from your frontend
+    origin: 'http://localhost:5173',
     credentials: true,
-    methods: [
-      'GET',
-      'POST',
-      'PUT',
-      'DELETE',
-      'PATCH',
-    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   })
 );
 
-app.use(
-  '/api/v1/firearms',
-  authenticateUser,
-  firearmRouter
-);
+app.use('/api/v1/firearms', firearmRouter);
 app.use(
   '/api/v1/users',
   authenticateUser,
@@ -63,6 +64,9 @@ app.use(
   authenticateUser,
   cartRouter
 );
+app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/reviews', reviewRouter);
+
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });
@@ -72,12 +76,16 @@ app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5100;
 
-try {
-  await mongoose.connect(process.env.MONGO_URL);
-  app.listen(port, () => {
-    console.log(`server running on port ${port}`);
-  });
-} catch (error) {
-  console.log(error);
-  process.exit(1);
-}
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    app.listen(port, () => {
+      console.log(`server running on port ${port}`);
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+start();

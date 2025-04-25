@@ -6,6 +6,7 @@ import {
 import {
   BadRequestError,
   NotFoundError,
+  UnauthorizedError,
 } from '../errors/customErrors.js';
 import UserModel from '../models/UserModel.js';
 import Firearms from '../models/FirearmsModel.js';
@@ -131,16 +132,17 @@ export const validateIdParam =
           `No firearm with id ${value}`
         );
       }
-      const isAdmin = req.user.role === 'admin';
-      const isOwner =
-        req.user.userId ===
-        firearm.companyId.toString();
+      // const isAdmin = req.user?.role === 'admin';
+      // const isOwner =
+      //   req.user?.userId ===
+      //   firearm.companyId.toString();
 
-      if (!isAdmin && !isOwner) {
-        throw new UnauthorizedError(
-          'Unauthorized to access this route'
-        );
-      }
+      // kshyre taj qa pot vyn qikjo se qitu keq o mu perdor
+      // if (!isAdmin && !isOwner) {
+      //   throw new UnauthorizedError(
+      //     'Unauthorized to access this route'
+      //   );
+      // }
     }),
   ]);
 
@@ -227,4 +229,23 @@ export const validateCreateBlogInput =
     body('content')
       .notEmpty()
       .withMessage('Content is required'),
+  ]);
+
+export const validateCreateReview =
+  withValidationErrors([
+    body('comment')
+      .notEmpty()
+      .withMessage('Comment is required')
+      .isLength({ min: 5, max: 200 })
+      .withMessage(
+        'Comment must be at least 5 characters long'
+      ),
+    body('rating')
+      .isInt({ min: 1, max: 5 })
+      .withMessage(
+        'Rating must be an integer from 1 to 5'
+      ),
+    body('productId')
+      .isMongoId()
+      .withMessage('Provide a valid product ID'),
   ]);

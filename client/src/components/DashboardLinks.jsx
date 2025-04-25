@@ -3,29 +3,25 @@ import links from '../utils/links';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
-const DashboardLinks = ({
-  toggleSidebar,
-  shouldToggle = false,
-}) => {
+const DashboardLinks = ({ toggleSidebar, shouldToggle = false, user }) => {
   return (
     <Wrapper>
-      {links.map(({ text, path, icon }) => {
-        // if (
-        //   path === 'admin' &&
-        //   user.role !== 'admin'
-        // )
-        //   return;
+      {links.map((link) => {
+        const { text, path, icon } = link;
+
+        if (user?.role !== 'admin' && path === '/admin') {
+          return null;
+        }
+
         return (
           <NavLink
             key={text}
             to={path}
-            className={'nav-link'}
+            className="nav-link"
             end
-            onClick={
-              shouldToggle && toggleSidebar
-            }
+            onClick={shouldToggle ? toggleSidebar : undefined}
           >
-            <span className="icon"> {icon}</span>
+            <span className="icon">{icon}</span>
             {text}
           </NavLink>
         );
@@ -51,9 +47,10 @@ const Wrapper = styled.div`
     }
 
     .icon {
-      margin-right: 10px; /* Space between the icon and text */
-      font-size: 1.3rem; /* Adjust icon size as needed */
+      margin-right: 10px;
+      font-size: 1.3rem;
     }
   }
 `;
+
 export default DashboardLinks;

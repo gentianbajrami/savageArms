@@ -35,6 +35,10 @@ const Filters = () => {
     };
   };
 
+  const handlePriceChange = debounce(form => {
+    submit(form);
+  });
+
   return (
     <Wrapper>
       <Form>
@@ -105,9 +109,7 @@ const Filters = () => {
           name="price"
           label="select price"
           price={price}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={handlePriceChange}
         />
 
         <Link to="/products" className="btn">
@@ -135,6 +137,11 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  @media (max-width: 992px) {
+    .btn {
+      margin-top: 2rem;
+    }
   }
   @media (min-width: 992px) {
     form {

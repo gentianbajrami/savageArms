@@ -1,14 +1,21 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import customFetch from '../utils';
 
 const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
-  const [isSidebarOpen, setIsSidebar] = useState(false);
+  const [isSidebarOpen, setIsSidebar] =
+    useState(false);
   const [user, setUser] = useState(null);
-  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] =
+    useState(true);
 
-  const saveUser = (user) => {
+  const saveUser = user => {
     setUser(user);
   };
 
@@ -18,11 +25,23 @@ const AppProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const { data } = await customFetch.get('/users/current-user', {
-        withCredentials: true,
-      });
-      saveUser(data.user);
+      const { data } = await customFetch.get(
+        '/users/current-user',
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      if (data.user) saveUser(data?.user);
+      else saveUser(null);
     } catch (error) {
+      if (error?.response?.status === 401) {
+        console.log(
+          'error here in app context',
+          error
+        );
+        removeUser();
+      }
       removeUser();
     } finally {
       setIsUserLoading(false);

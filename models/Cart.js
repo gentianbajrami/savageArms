@@ -34,7 +34,7 @@ const cartSchema = new mongoose.Schema({
   },
   shipping: {
     type: Number,
-    default: 0,
+    default: 1000,
   },
   tax: {
     type: Number,

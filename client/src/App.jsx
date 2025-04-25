@@ -1,5 +1,11 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   Accessories,
@@ -27,6 +33,8 @@ import {
   Cart,
   Products,
   SingleProductPage,
+  Checkout,
+  Orders,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -38,16 +46,30 @@ import { action as createBlogAction } from './pages/Blog/CreateBlog';
 import { action as deleteBlogAction } from './pages/Blog/DeleteBlog';
 import { action as editBlogAction } from './pages/Blog/EditBlog';
 
+import { action as profileAction } from './pages/Profile';
+import { action as singleProductAction } from './pages/SingleProductPage';
+import { action as deleteCartItemAction } from './pages/DeleteCartItemAction';
+import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
+import { action as checkoutAction } from './components/CheckoutForm';
+import { action as createReviewAction } from './components/CreateReview';
+import { action as deleteReviewAction } from './pages/DeleteReviewForProduct';
+
+
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
 import { loader as editBlogLoader } from './pages/Blog/EditBlog';
+import { loader as ordersLoader } from './pages/Orders';
+import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
+import { loader as homeLoader } from './pages/Home';
 
+import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
 import { loader as blogLoader } from './pages/Blog';
 import { loader as cartLoader } from './pages/Cart';
 import { loader as productLoader } from './pages/Products';
 import { loader as singleProductLoader } from './pages/SingleProductPage';
+import { loader as mainLayoutLoader } from './pages/MainLayout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -61,9 +83,14 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    loader: mainLayoutLoader(queryClient),
     errorElement: <Error />,
     children: [
-      { index: true, element: <Home /> }, // homepage content
+      {
+        index: true,
+        element: <Home />,
+        loader: homeLoader(queryClient),
+      }, // homepage content
       { path: 'firearms', element: <Firearms /> },
       {
         path: 'accessories',
@@ -91,8 +118,6 @@ const router = createBrowserRouter([
         element: <Blog />,
         loader: blogLoader(queryClient),
       },
-      { path: 'profile', element: <Profile /> },
-      { path: 'admin', element: <Admin /> },
       {
         path: 'about',
         element: <About />,
@@ -101,6 +126,24 @@ const router = createBrowserRouter([
         path: 'cart',
         element: <Cart />,
         loader: cartLoader(queryClient),
+        children: [
+          {
+            path: 'update/:id',
+            action:
+              updateCartItemAction(queryClient),
+          },
+          {
+            path: 'remove/:id',
+            action:
+              deleteCartItemAction(queryClient),
+          },
+        ],
+      },
+      {
+        path: 'checkout',
+        element: <Checkout />,
+        loader: cartLoader(queryClient),
+        action: checkoutAction(queryClient),
       },
       {
         path: 'products',
@@ -111,6 +154,24 @@ const router = createBrowserRouter([
         path: 'products/:id',
         element: <SingleProductPage />,
         loader: singleProductLoader(queryClient),
+        action: singleProductAction(queryClient),
+      },
+      {
+        path: '/orders',
+        element: <Orders />,
+        loader: ordersLoader(queryClient),
+      },
+      {
+        path: '/confirm-order',
+        loader: confirmOrderLoader(queryClient),
+      },
+      {
+        path: 'create-review/:productId',
+        action: createReviewAction(queryClient),
+      },
+      {
+        path: 'reviews/delete/:id/:productId',
+        action: deleteReviewAction(queryClient),
       },
     ],
   },
@@ -130,19 +191,28 @@ const router = createBrowserRouter([
     loader: dashboardLoader,
     errorElement: <Error />,
     children: [
-      { index: true, element: <Dashboard /> },
+      {
+        index: true,
+        element: <AddFirearm />,
+        action: addFirearmAction(queryClient),
+      },
       {
         path: 'add-firearm',
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
+      { path: 'admin', element: <Admin />, loader: adminLoader },
+      { path: 'profile', element: <Profile />, action: profileAction },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,
         loader: editFirearmLoader,
         action: editFirearmAction,
       },
-      { path: 'delete-firearm/:id', action: deleteFirearmAction },
+      {
+        path: 'delete-firearm/:id',
+        action: deleteFirearmAction,
+      },
       {
         path: 'all-firearms',
         element: <AllFirearms />,

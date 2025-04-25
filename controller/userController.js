@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/UserModel.js';
+import Firearm from '../models/FirearmsModel.js';
 
 export const getCurrentUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
@@ -9,7 +10,8 @@ export const getCurrentUser = async (req, res) => {
 
 export const getApplicationStats = async (req, res) => {
   const users = await User.countDocuments();
-  res.status(StatusCodes.OK).json({ users });
+  const firearms = await Firearm.countDocuments();
+  res.status(StatusCodes.OK).json({ users, firearms });
 };
 
 export const updateUser = async (req, res) => {

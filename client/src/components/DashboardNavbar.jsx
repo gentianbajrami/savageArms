@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDashboardContext } from '../pages/Dashboard/DashboardLayout';
 import { FaAlignLeft } from 'react-icons/fa';
-import LogoutContainer from './LogoutContainer';
+import LogoutContainer from './BackButton';
 const DashboardNavbar = () => {
   const { toggleSidebar } = useDashboardContext();
 
@@ -29,6 +29,7 @@ const Wrapper = styled.nav`
   justify-content: center;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.1);
   background: var(--background-secondary-color);
+  z-index: 1000;
   .nav-center {
     display: flex;
     width: 90vw;

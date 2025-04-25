@@ -1,11 +1,25 @@
 import React from 'react';
-import { Banner } from '../components';
+import {
+  Banner,
+  CreateReview,
+} from '../components';
 import customFetch, {
   formatPrice,
+  renderStars,
 } from '../utils';
-import { useLoaderData } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useLoaderData,
+} from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
+import {
+  reviewQuery,
+  userQuery,
+} from '../utils/allQueryForProject';
+import { useAppContext } from '../context/AppContext';
 
 const singleProductQuery = id => {
   return {
@@ -24,16 +38,61 @@ export const loader =
     await queryClient.ensureQueryData(
       singleProductQuery(params.id)
     );
-    return { id: params.id };
+    await queryClient.ensureQueryData(
+      reviewQuery(params.id)
+    );
+    // try {
+    //   const data =
+    //     await queryClient.ensureQueryData(
+    //       userQuery
+    //     );
+    //   console.log(data.user);
+    //   return {
+    //     id: params.id,
+    //     user: data?.user || null,
+    //   };
+    // } catch (error) {
+    //   if (error?.response?.status === 401) {
+    //     // Silently ignore the error (do not throw)
+    //     console.log(error);
+    //   }
+    //   throw error; // Re-throw for other errors
+    // }
+    return { id: params.id }; // Just continue
+  };
+
+export const action =
+  queryClient =>
+  async ({ request, params }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    console.log(data);
+    try {
+      await customFetch.post(
+        '/cart/add-product/' + params.id,
+        data
+      );
+      queryClient.invalidateQueries(['cart']);
+      toast.success('Product added successfully');
+      return redirect('/products');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+    return null;
   };
 
 const SingleProductPage = () => {
   const { id } = useLoaderData();
+
   const { firearm } = useQuery(
     singleProductQuery(id)
   ).data;
+
+  const { reviews } = useQuery(
+    reviewQuery(id)
+  ).data;
+
   const product = firearm || {};
-  console.log(product);
 
   return (
     <Wrapper className="page">
@@ -46,17 +105,58 @@ const SingleProductPage = () => {
         />
         <div className="data">
           <div className="header">
-            <p>{product.fullName}</p>
+            <p className="name">
+              {product.fullName}
+            </p>
             <p className="company">
               {product.manufacturer}
             </p>
             <p className="price">
               {formatPrice(product.price)}
             </p>
-            <p>{product.description}</p>
+            <p className="desc">
+              {product.description}
+            </p>
+            <p className="features">
+              {product.features}
+            </p>
+            <p className="type">
+              Type: {product.type}
+            </p>
+            <p className="type">
+              {' '}
+              Model: {product.model}
+            </p>
+            <p className="rating">
+              {' '}
+              Rating:{' '}
+              {renderStars(product.averageRating)}
+            </p>
           </div>
+          <Form method="post">
+            <div className="amount">
+              <label htmlFor="amount">
+                Amount
+              </label>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                min="1"
+                defaultValue={1}
+                max={product?.stock}
+              />
+            </div>
+            <button type="submit" className="btn">
+              Add to cart
+            </button>
+          </Form>
         </div>
       </div>
+      <CreateReview
+        reviews={reviews}
+        productId={product?._id}
+      />
     </Wrapper>
   );
 };
@@ -81,7 +181,7 @@ const Wrapper = styled.div`
   }
 
   .header {
-    :first-child {
+    .name {
       font-size: 2rem;
       line-height: 1.8;
       text-transform: capitalize;
@@ -98,14 +198,37 @@ const Wrapper = styled.div`
       line-height: 1.2;
       margin-top: 0.5rem;
     }
-    :last-child {
+    .desc,
+    .features,
+    .type {
       margin-top: 1rem;
       line-height: 2;
       color: var(--grey-600);
     }
+    .type {
+      margin-top: 0;
+      text-transform: capitalize;
+    }
   }
 
-  @media (min-width: 500px) {
+  form {
+    .amount {
+      margin-bottom: 1rem;
+      display: grid;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: start;
+      input {
+        width: 15rem;
+        padding: 0.5rem;
+        border: 1px solid var(--grey-300);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  @media (min-width: 650px) {
     .product {
       grid-template-columns: 1fr 1fr;
       justify-content: center;
