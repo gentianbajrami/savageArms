@@ -12,11 +12,6 @@ export const action =
   queryClient =>
   async ({ request }) => {
     const formData = await request.formData();
-    const file = formData.get('image');
-    if (file && file.size > 500000) {
-      toast.error('Image size to large');
-      return null;
-    }
 
     try {
       await customFetch.post('/blogs', formData);

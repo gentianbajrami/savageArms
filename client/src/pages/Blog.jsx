@@ -6,19 +6,19 @@ import {
   redirect,
   useLoaderData,
   useNavigation,
+  useOutletContext,
   useSubmit,
 } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import customFetch from '../utils';
+import { Banner } from '../components';
 import {
-  Banner,
-  FormRow,
-  Logo,
-  SingleBlog,
-} from '../components';
-import PageBtnContainer from '../components/PageBtnContainer';
-import Loading from '../components/Loading';
+  FaCommentDots,
+  FaEye,
+  FaHeart,
+} from 'react-icons/fa';
+import { CiHeart } from 'react-icons/ci';
 
 const blogsQuery = params => {
   const { search, page } = params;
@@ -56,15 +56,46 @@ export const loader =
       return redirect('/');
     }
   };
+export const action =
+  queryClient =>
+  async ({ params, request }) => {
+    const { id } = params;
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+      const response = await customFetch.post(
+        `/blogs/${id}/like`
+      );
+      queryClient.invalidateQueries(['blogs']);
+      toast.success(
+        `Blog ${
+          response.data.liked
+            ? 'liked'
+            : 'unliked'
+        } successfully`
+      );
+
+      if (data?.slug) {
+        console.log(data?.slug);
+        return redirect(`/blogs/${data?.slug}`);
+      }
+      return redirect('/blogs');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+    return null;
+  };
 
 const Blog = () => {
   const { searchValues } = useLoaderData();
   const { data } = useQuery(
     blogsQuery(searchValues)
   );
+  const user = useOutletContext();
 
   const blogs = data?.posts || [];
 
+  console.log(user);
   console.log(blogs);
   const submit = useSubmit();
 
@@ -106,53 +137,169 @@ const Blog = () => {
         </Form>
       </div>
 
-      <ListContainer>
+      <div className="blogs">
         {blogs.map(post => (
-          <ArticleItem key={post._id}>
-            <Link to={`/post/${post.slug}`}>
-              <Title>{post.title}</Title>
+          <article
+            className="blog"
+            key={post._id}
+          >
+            <Link
+              to={`/blogs/${post.slug}`}
+              className="img-container"
+            >
+              <img
+                src={post?.featuredImage}
+                alt="no image"
+                className="img"
+              />
             </Link>
-            <Meta>
-              By {post.author.username} •{' '}
-              {post.readTime} min read
-            </Meta>
-          </ArticleItem>
+
+            <div className="data">
+              <Link to={`/blogs/${post.slug}`}>
+                <h3>{post.title}</h3>
+              </Link>
+
+              <div className="content">
+                <p>
+                  {post?.content?.slice(0, 250)}{' '}
+                  ...
+                </p>
+                <p>
+                  Tags:{' '}
+                  {post?.tags?.map((t, idx) => {
+                    return (
+                      <span key={t}>
+                        {t}
+                        {idx ===
+                        post.tags.length - 1
+                          ? ' '
+                          : ', '}
+                      </span>
+                    );
+                  })}
+                </p>
+              </div>
+
+              <div className="actions">
+                <div className="like">
+                  {post?.likes?.length || 0}
+                  <span>
+                    <Form
+                      method="post"
+                      action={`toggle-like/${post?._id}`}
+                    >
+                      <button type="submit">
+                        {' '}
+                        {post?.likes?.includes(
+                          user?._id.toString()
+                        ) ? (
+                          <FaHeart />
+                        ) : (
+                          <CiHeart />
+                        )}
+                      </button>
+                    </Form>
+                  </span>
+                </div>
+                <div className="comment">
+                  {post?.comments?.length || 0}
+                  <span>
+                    <FaCommentDots />
+                  </span>
+                </div>
+                <div className="views">
+                  {post?.views || 0}
+                  <span>
+                    <FaEye />
+                  </span>
+                </div>
+              </div>
+              <p className="by">
+                By{' '}
+                {post.author?.firstName +
+                  ' ' +
+                  post.author?.lastName}{' '}
+                • {post.readTime} min read
+              </p>
+            </div>
+          </article>
         ))}
-      </ListContainer>
+      </div>
     </Wrapper>
   );
 };
 
-const ListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const ArticleItem = styled.article`
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-`;
-
-const Title = styled.h2`
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 0;
-`;
-
-const Meta = styled.p`
-  font-size: 0.875rem;
-  color: #666;
-  margin: 8px 0 0;
-`;
-
 const Wrapper = styled.main`
   .blogs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 3rem;
+    display: grid;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+  }
+
+  @media (min-width: 992px) {
+    .blogs {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  .blog {
+    color: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-2);
+    .img-container .img {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      max-height: 300px;
+      height: 300px;
+    }
+
+    .data {
+      padding: 1.5rem 1rem;
+      color: black;
+      a {
+        color: black;
+        text-align: center;
+      }
+
+      .content {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        color: var(--grey-800);
+        :last-child {
+          margin-top: 0.5rem;
+          text-transform: capitalize;
+        }
+      }
+      .actions {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: 2rem;
+        div {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
+          span {
+            margin-top: 0.3rem;
+          }
+        }
+        .like {
+          button {
+            border: none;
+            background: transparent;
+          }
+        }
+      }
+
+      .by {
+        margin-top: 1rem;
+        text-align: end;
+      }
+    }
   }
   .searchForm {
     display: flex;

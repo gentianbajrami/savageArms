@@ -35,6 +35,7 @@ import {
   SingleProductPage,
   Checkout,
   Orders,
+  SingleBlog,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -53,6 +54,7 @@ import { action as updateCartItemAction } from './pages/UpdateCartItemAction';
 import { action as checkoutAction } from './components/CheckoutForm';
 import { action as createReviewAction } from './components/CreateReview';
 import { action as deleteReviewAction } from './pages/DeleteReviewForProduct';
+import { action as togglelikeBlog } from './pages/Blog';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -69,6 +71,7 @@ import { loader as cartLoader } from './pages/Cart';
 import { loader as productLoader } from './pages/Products';
 import { loader as singleProductLoader } from './pages/SingleProductPage';
 import { loader as mainLayoutLoader } from './pages/MainLayout';
+import { loader as singleBlogLoader } from './pages/SingleBlog';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -115,9 +118,18 @@ const router = createBrowserRouter([
         element: <Performance />,
       },
       {
-        path: 'blog',
+        path: 'blogs',
         element: <Blog />,
         loader: blogLoader(queryClient),
+      },
+      {
+        path: 'blogs/toggle-like/:id',
+        action: togglelikeBlog(queryClient),
+      },
+      {
+        path: 'blogs/:slug',
+        element: <SingleBlog />,
+        loader: singleBlogLoader(queryClient),
       },
       {
         path: 'about',
