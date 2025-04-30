@@ -9,7 +9,11 @@ import {
 import { MdDelete } from 'react-icons/md';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
-import { Form, redirect } from 'react-router-dom';
+import {
+  Form,
+  redirect,
+  useOutletContext,
+} from 'react-router-dom';
 import { toast } from 'react-toastify';
 import customFetch from '../utils';
 
@@ -88,6 +92,9 @@ const Comments = ({
   onDelete,
   slug,
 }) => {
+  const user = useOutletContext();
+  const [commentContent, setCommentContent] =
+    useState('');
   const [editingId, setEditingId] =
     useState(null);
 
@@ -97,6 +104,7 @@ const Comments = ({
 
   useEffect(() => {
     setEditingId(null);
+    setCommentContent('');
   }, [comments]);
 
   return (
@@ -111,6 +119,10 @@ const Comments = ({
           rows="2"
           placeholder="Add a comment..."
           name="content"
+          value={commentContent}
+          onChange={e =>
+            setCommentContent(e.target.value)
+          }
         />
         <button className="btn" type="submit">
           Post
@@ -136,70 +148,77 @@ const Comments = ({
             </small>
           </div>
 
-          <div>
-            {editingId === c._id ? (
-              <Form
-                method="post"
-                action={`../blogs/edit-comment/${slug}/${editingId}`}
-                className="editComment"
-              >
-                <textarea
-                  rows="2"
-                  defaultValue={c?.content}
-                  name="content"
-                />
-                <div className="buttons">
-                  <button
-                    className="btn"
-                    type="submit"
-                    onClick={() =>
-                      handleEdit(c._id)
-                    }
-                  >
-                    Save
-                  </button>
-                  <button
-                    className="btn"
-                    onClick={() =>
-                      setEditingId(null)
-                    }
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Form>
-            ) : (
-              <div className="content">
-                <p>{c.content}</p>
-                <div className="buttons">
-                  <button
-                    onClick={() => {
-                      setEditingId(c._id);
-                    }}
-                  >
-                    <FaEdit />
-                  </button>
-                  <Form
-                    method="post"
-                    action={`../blogs/delete-comment/${slug}`}
-                  >
-                    <input
-                      type="text"
-                      defaultValue={c?._id}
-                      hidden
-                      name="id"
-                    />
+          {!user ? (
+            <p>{c.content}</p>
+          ) : (
+            <div>
+              {editingId === c._id ? (
+                <Form
+                  method="post"
+                  action={`../blogs/edit-comment/${slug}/${editingId}`}
+                  className="editComment"
+                >
+                  <textarea
+                    rows="2"
+                    defaultValue={c?.content}
+                    name="content"
+                  />
+                  <div className="buttons">
                     <button
+                      className="btn"
                       type="submit"
-                      className="delete"
+                      onClick={() =>
+                        handleEdit(c._id)
+                      }
                     >
-                      <MdDelete />
+                      Save
                     </button>
-                  </Form>
+                    <button
+                      className="btn"
+                      onClick={() =>
+                        setEditingId(null)
+                      }
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Form>
+              ) : (
+                <div className="content">
+                  <p>{c.content}</p>
+                  {(user?._id == c.user?._id ||
+                    user?.role == 'admin') && (
+                    <div className="buttons">
+                      <button
+                        onClick={() => {
+                          setEditingId(c._id);
+                        }}
+                      >
+                        <FaEdit />
+                      </button>
+                      <Form
+                        method="post"
+                        action={`../blogs/delete-comment/${slug}`}
+                      >
+                        <input
+                          type="text"
+                          defaultValue={c?._id}
+                          hidden
+                          name="id"
+                        />
+                        <button
+                          type="submit"
+                          className="delete"
+                        >
+                          <MdDelete />
+                        </button>
+                      </Form>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </article>
       ))}
     </Wrapper>
@@ -220,6 +239,7 @@ const Wrapper = styled.div`
       width: 90%;
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
+      outline: none;
     }
     .btn {
       height: 53px;
