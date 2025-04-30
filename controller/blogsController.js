@@ -34,12 +34,16 @@ export const getPostBySlug = async (req, res) => {
     },
     { $inc: { views: 1 } },
     { new: true }
-  ).populate('author', 'username');
+  )
+    .populate('author')
+    .populate('comments.user');
+
   if (!post)
     return res
       .status(404)
       .json({ error: 'Not found' });
-  res.json(post);
+
+  return res.status(StatusCodes.OK).json(post);
 };
 
 // GET one post by ID
@@ -197,9 +201,9 @@ export const deletePost = async (req, res) => {
 // ADD a comment
 export const addComment = async (req, res) => {
   const { content } = req.body;
-  const post = await BlogPost.findById(
-    req.params.id
-  );
+  const post = await BlogPost.findOne({
+    slug: req.params.slug,
+  });
 
   if (!post)
     throw new NotFoundError('post not found');
@@ -218,9 +222,9 @@ export const addComment = async (req, res) => {
 
 // EDIT a comment
 export const updateComment = async (req, res) => {
-  const post = await BlogPost.findById(
-    req.params.id
-  );
+  const post = await BlogPost.findOne({
+    slug: req.params.slug,
+  });
 
   if (!post)
     throw new NotFoundError('post not found');
@@ -244,9 +248,9 @@ export const updateComment = async (req, res) => {
 
 // DELETE a comment
 export const deleteComment = async (req, res) => {
-  const post = await BlogPost.findById(
-    req.params.id
-  );
+  const post = await BlogPost.findOne({
+    slug: req.params.slug,
+  });
 
   if (!post)
     throw new NotFoundError('blog not found');

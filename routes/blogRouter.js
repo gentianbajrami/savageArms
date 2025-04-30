@@ -45,17 +45,17 @@ router.delete(
 );
 
 router.post(
-  '/:id/comments',
+  '/:slug/comments',
   authenticateUser,
   addComment
 );
 router.patch(
-  '/:id/comments/:commentId',
+  '/:slug/comments/:commentId',
   authenticateUser,
   updateComment
 );
 router.delete(
-  '/:id/comments/:commentId',
+  '/:slug/comments/:commentId',
   authenticateUser,
   deleteComment
 );

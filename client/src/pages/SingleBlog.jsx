@@ -54,6 +54,20 @@ const SingleBlog = () => {
 
           <p>{blog.content}</p>
 
+          <p className="tags">
+            Tags:{' '}
+            {blog?.tags?.map((t, idx) => {
+              return (
+                <span key={t}>
+                  {t}
+                  {idx === blog.tags.length - 1
+                    ? ' '
+                    : ', '}
+                </span>
+              );
+            })}
+          </p>
+
           <div className="actions">
             <div className="like">
               {blog?.likes?.length || 0}
@@ -105,6 +119,7 @@ const SingleBlog = () => {
 
         <Comments
           comments={blog?.comments || []}
+          slug={slug}
         />
       </div>
     </Wrapper>
@@ -112,6 +127,7 @@ const SingleBlog = () => {
 };
 
 const Wrapper = styled.main`
+  max-width: 1200px;
   .img {
     border-radius: 5px;
     box-shadow: var(--shadow-3);
@@ -130,6 +146,11 @@ const Wrapper = styled.main`
     .by {
       margin-top: 1rem;
       text-align: end;
+    }
+    .tags {
+      text-transform: capitalize;
+      color: var(--grey-800);
+      margin-top: 1rem;
     }
   }
 

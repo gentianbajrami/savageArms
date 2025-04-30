@@ -55,6 +55,11 @@ import { action as checkoutAction } from './components/CheckoutForm';
 import { action as createReviewAction } from './components/CreateReview';
 import { action as deleteReviewAction } from './pages/DeleteReviewForProduct';
 import { action as togglelikeBlog } from './pages/Blog';
+import {
+  createCommentAction,
+  editCommentAction,
+  deleteCommentAction,
+} from './components/Comments';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -130,6 +135,18 @@ const router = createBrowserRouter([
         path: 'blogs/:slug',
         element: <SingleBlog />,
         loader: singleBlogLoader(queryClient),
+      },
+      {
+        path: 'blogs/add-comment/:slug',
+        action: createCommentAction(queryClient),
+      },
+      {
+        path: 'blogs/edit-comment/:slug/:id',
+        action: editCommentAction(queryClient),
+      },
+      {
+        path: 'blogs/delete-comment/:slug',
+        action: deleteCommentAction(queryClient),
       },
       {
         path: 'about',
