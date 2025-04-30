@@ -33,7 +33,9 @@ router.post(
 );
 router.patch(
   '/:id',
+  upload.single('image'),
   authenticateUser,
+  authorizePermissions('admin'),
   updatePost
 );
 router.delete(

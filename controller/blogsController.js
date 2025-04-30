@@ -124,6 +124,17 @@ export const createPost = async (req, res) => {
 // UPDATE a post
 export const updatePost = async (req, res) => {
   const updates = { ...req.body };
+
+  let image, imagePublicId;
+
+  if (req.file) {
+    const file = formatImage(req.file);
+    const response =
+      await cloudinary.v2.uploader.upload(file);
+    image = response.secure_url;
+    imagePublicId = response.public_id;
+  }
+
   if (updates.title) {
     updates.slug = slugify(updates.title, {
       lower: true,
@@ -143,6 +154,12 @@ export const updatePost = async (req, res) => {
     return res
       .status(404)
       .json({ error: 'Not found' });
+
+  if (req.file && post.imagePublicId) {
+    await cloudinary.v2.uploader.destroy(
+      post.imagePublicId
+    );
+  }
 
   checkPermissions(req.user, post.author);
 
@@ -166,6 +183,12 @@ export const deletePost = async (req, res) => {
       .json({ error: 'Not found' });
 
   checkPermissions(req.user, post.author);
+
+  if (post.imagePublicId) {
+    await cloudinary.v2.uploader.destroy(
+      post.imagePublicId
+    );
+  }
 
   await post.deleteOne();
   res.json({ message: 'Post deleted' });

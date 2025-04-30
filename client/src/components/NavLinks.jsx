@@ -8,7 +8,7 @@ import {
 import { useAppContext } from '../context/AppContext';
 
 const NavLinks = ({ isSidebar = false }) => {
-  const { user } = useAppContext();
+  const { user } = useLoaderData();
   return (
     <Wrapper
       className={`${

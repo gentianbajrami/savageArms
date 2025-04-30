@@ -4,6 +4,7 @@ import {
   Form,
   redirect,
   useLoaderData,
+  useOutletContext,
   useSubmit,
 } from 'react-router-dom';
 import customFetch, {
@@ -53,7 +54,8 @@ export const action =
   };
 
 const CreateReview = ({ reviews, productId }) => {
-  const { user } = useAppContext();
+  const user = useOutletContext();
+  console.log(user);
   const [isEditing, setIsEditing] =
     useState(false);
   const [comment, setComment] = useState('');

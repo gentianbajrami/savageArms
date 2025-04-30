@@ -54,7 +54,6 @@ import { action as checkoutAction } from './components/CheckoutForm';
 import { action as createReviewAction } from './components/CreateReview';
 import { action as deleteReviewAction } from './pages/DeleteReviewForProduct';
 
-
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
 import { loader as blogDashboardLoader } from './pages/Blog/BlogDashboard';
@@ -82,7 +81,9 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <MainLayout queryClient={queryClient} />
+    ),
     loader: mainLayoutLoader(queryClient),
     errorElement: <Error />,
     children: [
@@ -178,7 +179,7 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
-    action: loginAction,
+    action: loginAction(queryClient),
   },
   {
     path: '/register',
@@ -201,8 +202,16 @@ const router = createBrowserRouter([
         element: <AddFirearm />,
         action: addFirearmAction(queryClient),
       },
-      { path: 'admin', element: <Admin />, loader: adminLoader },
-      { path: 'profile', element: <Profile />, action: profileAction },
+      {
+        path: 'admin',
+        element: <Admin />,
+        loader: adminLoader,
+      },
+      {
+        path: 'profile',
+        element: <Profile />,
+        action: profileAction,
+      },
       {
         path: 'edit-firearm/:id',
         element: <EditFirearm />,

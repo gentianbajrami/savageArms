@@ -7,30 +7,38 @@ import { Navbar } from '../components';
 import {
   Outlet,
   useNavigation,
+  useLoaderData,
 } from 'react-router-dom';
 import Footer from './Footer';
 import Loading from '../components/Loading';
 import SecondaryMenu from '../components/SecondaryMenu';
-import {
-  cartQuery,
-  userQuery,
-} from '../utils/allQueryForProject';
-import { useQuery } from '@tanstack/react-query';
+import { userQuery } from '../utils/allQueryForProject';
 
 export const loader = queryClient => async () => {
-  // const user = await queryClient.ensureQueryData(
-  //   userQuery
-  // );
-  // console.log(user);
-  return null;
+  let user;
+  try {
+    const data1 =
+      await queryClient.ensureQueryData(
+        userQuery
+      );
+    user = data1?.user;
+  } catch (error) {
+    if (error?.data?.status == 401) {
+      user = null;
+    }
+  }
+
+  return { user };
 };
 
-const MainLayout = () => {
+const MainLayout = ({ queryClient }) => {
   const navigation = useNavigation();
   const isPageLoading =
     navigation.state === 'loading';
   const [isScrolled, setIsScrolled] =
     useState(false);
+
+  const { user } = useLoaderData();
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -55,9 +63,16 @@ const MainLayout = () => {
 
   return (
     <Wrapper>
-      <SecondaryMenu isScrolled={isScrolled} />
+      <SecondaryMenu
+        isScrolled={isScrolled}
+        queryClient={queryClient}
+      />
       <Navbar isScrolled={isScrolled} />
-      {isPageLoading ? <Loading /> : <Outlet />}
+      {isPageLoading ? (
+        <Loading />
+      ) : (
+        <Outlet context={user} />
+      )}
       <Footer />
     </Wrapper>
   );
