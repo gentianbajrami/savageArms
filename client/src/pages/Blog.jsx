@@ -242,12 +242,28 @@ const Wrapper = styled.main`
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
     }
+    .data {
+      max-height: 295px;
+      min-height: 295px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .blogs {
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .data {
+      max-height: 375px;
+      height: 370px;
+    }
   }
 
   .blog {
     color: white;
     border-radius: 20px;
-    box-shadow: var(--shadow-2);
+    box-shadow: var(--shadow-1);
+    transition: var(--transition);
+
     .img-container .img {
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
@@ -267,6 +283,9 @@ const Wrapper = styled.main`
         margin-top: 1rem;
         margin-bottom: 1rem;
         color: var(--grey-800);
+        :first-child {
+          line-height: 1.3;
+        }
         :last-child {
           margin-top: 0.5rem;
           text-transform: capitalize;
@@ -300,6 +319,10 @@ const Wrapper = styled.main`
         text-align: end;
       }
     }
+  }
+
+  .blog:hover {
+    box-shadow: var(--shadow-3);
   }
   .searchForm {
     display: flex;
