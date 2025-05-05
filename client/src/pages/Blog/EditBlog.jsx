@@ -20,7 +20,6 @@ const singleBlogQuery = id => {
       const response = await customFetch.get(
         `/blogs/${id}`
       );
-      console.log(response.data);
       return response.data;
     },
   };
@@ -43,6 +42,7 @@ export const loader =
       return redirect('/dashboard');
     }
   };
+
 export const action =
   queryClient =>
   async ({ request, params }) => {
@@ -69,10 +69,9 @@ export const action =
 
 const EditBlog = () => {
   const { id } = useLoaderData();
-  const { blog } = useQuery(
-    singleBlogQuery(id)
-  ).data;
-  console.log(blog);
+  const { data } = useQuery(singleBlogQuery(id));
+  console.log(data);
+  const blog = data;
   return (
     <Wrapper>
       <Form
@@ -110,8 +109,19 @@ const EditBlog = () => {
               name="content"
               className="form-input"
               defaultValue={blog?.content}
+              rows="3"
             ></textarea>
           </div>
+          <FormRow
+            type={'text'}
+            name={'category'}
+            defaultValue={blog?.category}
+          />
+          <FormRow
+            type={'text'}
+            name={'tags'}
+            defaultValue={blog?.tags}
+          />
           <SubmitButton formBtn />
         </div>
       </Form>

@@ -3,7 +3,7 @@ import { Form, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const SingleBlogDashboard = ({
-  image,
+  featuredImage,
   title,
   content,
   _id,
@@ -16,7 +16,7 @@ const SingleBlogDashboard = ({
 
   return (
     <Wrapper>
-      <img src={image} alt="no image" />
+      <img src={featuredImage} alt="no image" />
       <div className="content">
         <h2>{title}</h2>
         {content.length > 200}
