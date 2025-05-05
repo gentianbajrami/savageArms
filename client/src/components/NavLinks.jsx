@@ -8,7 +8,7 @@ import {
 import { useAppContext } from '../context/AppContext';
 
 const NavLinks = ({ isSidebar = false }) => {
-  const { user } = useAppContext();
+  const { user } = useLoaderData();
   return (
     <Wrapper
       className={`${
@@ -24,8 +24,8 @@ const NavLinks = ({ isSidebar = false }) => {
       <NavLink to="/performance">
         <p>Performance</p>
       </NavLink>
-      <NavLink to={'/blog'}>
-        <p>Blog</p>
+      <NavLink to={'/blogs'}>
+        <p>Blogs</p>
       </NavLink>
       {user && (
         <NavLink to="/cart">

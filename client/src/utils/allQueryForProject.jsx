@@ -71,3 +71,15 @@ export const reviewQuery = id => {
     },
   };
 };
+
+export const singleBlogQueryBySlug = id => {
+  return {
+    queryKey: ['blog', id],
+    queryFn: async () => {
+      const { data } = await customFetch.get(
+        '/blogs/slug/' + id
+      );
+      return data;
+    },
+  };
+};

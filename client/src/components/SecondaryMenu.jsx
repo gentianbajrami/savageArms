@@ -1,43 +1,73 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useLoaderData,
+} from 'react-router-dom';
 import { useAppContext } from '../context/AppContext'; // Adjust path if needed
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; // Adjust path if needed
+import customFetch from '../utils';
 
-const SecondaryMenu = ({ isScrolled }) => {
-  const { user, logoutUser } = useAppContext();
-
+const SecondaryMenu = ({
+  isScrolled,
+  queryClient,
+}) => {
+  const { user } = useLoaderData();
   const navigate = useNavigate();
 
-  const handleDashboardClick = (e) => {
+  const handleDashboardClick = e => {
     e.preventDefault();
     if (!user) {
-      toast.error('You must be logged in to access the dashboard.');
+      toast.error(
+        'You must be logged in to access the dashboard.'
+      );
     } else {
       navigate('/dashboard');
     }
   };
 
+  const logoutUser = async () => {
+    await customFetch('/auth/logout');
+    queryClient.removeQueries();
+    navigate('/');
+    toast.success('Logging out...');
+  };
+
   return (
-    <Wrapper className={`secondary-menu ${isScrolled ? 'hidden' : ''}`}>
+    <Wrapper
+      className={`secondary-menu ${
+        isScrolled ? 'hidden' : ''
+      }`}
+    >
       <div className="menu-container">
         <div className="dashboard">
-          <span className="btn" onClick={handleDashboardClick}>
+          <span
+            className="btn"
+            onClick={handleDashboardClick}
+          >
             Dashboard
           </span>
         </div>
         <div className="menu-right">
           {user ? (
             <>
-              <span className="welcome-msg">Welcome, {user.firstName}!</span>
-              <Link className="btn" onClick={logoutUser}>
+              <span className="welcome-msg">
+                Welcome, {user.firstName}!
+              </span>
+              <Link
+                className="btn"
+                onClick={logoutUser}
+              >
                 Logout
               </Link>
             </>
           ) : (
             <>
-              <Link to="/register" className="btn">
+              <Link
+                to="/register"
+                className="btn"
+              >
                 Register
               </Link>
               <Link to="/login" className="btn">

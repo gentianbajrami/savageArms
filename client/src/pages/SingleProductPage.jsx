@@ -11,15 +11,12 @@ import {
   Form,
   redirect,
   useLoaderData,
+  useOutletContext,
 } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
-import {
-  reviewQuery,
-  userQuery,
-} from '../utils/allQueryForProject';
-import { useAppContext } from '../context/AppContext';
+import { reviewQuery } from '../utils/allQueryForProject';
 
 const singleProductQuery = id => {
   return {
@@ -41,24 +38,8 @@ export const loader =
     await queryClient.ensureQueryData(
       reviewQuery(params.id)
     );
-    // try {
-    //   const data =
-    //     await queryClient.ensureQueryData(
-    //       userQuery
-    //     );
-    //   console.log(data.user);
-    //   return {
-    //     id: params.id,
-    //     user: data?.user || null,
-    //   };
-    // } catch (error) {
-    //   if (error?.response?.status === 401) {
-    //     // Silently ignore the error (do not throw)
-    //     console.log(error);
-    //   }
-    //   throw error; // Re-throw for other errors
-    // }
-    return { id: params.id }; // Just continue
+
+    return { id: params.id };
   };
 
 export const action =
@@ -83,7 +64,6 @@ export const action =
 
 const SingleProductPage = () => {
   const { id } = useLoaderData();
-
   const { firearm } = useQuery(
     singleProductQuery(id)
   ).data;

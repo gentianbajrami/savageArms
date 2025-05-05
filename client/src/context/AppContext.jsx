@@ -63,7 +63,7 @@ const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchUser();
+    // fetchUser();
   }, []);
 
   const toggleSidebar = () => {
