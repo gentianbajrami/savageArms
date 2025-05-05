@@ -80,7 +80,7 @@ export const confirmOrder = async (req, res) => {
 
   await Order.create({
     user: req.user.userId,
-    orderItems: cart.cartItems,
+    cartItems: cart.cartItems,
     orderTotal: cart.cartTotal,
     numItemsInCart: cart.numItemsInCart,
     name,

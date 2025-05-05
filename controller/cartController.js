@@ -38,20 +38,21 @@ export const addProductToCart = async (
     } else {
       doesCartExist.cartItems.push({
         product: id,
-        quantity: amount,
-        price: product?.price,
+        quantity: +amount,
+        price: +product?.price,
       });
     }
-
+    console.log('before', doesCartExist);
     doesCartExist.numItemsInCart += +amount;
     doesCartExist.cartTotal +=
-      product.price * amount;
-    doesCartExist.orderTotal =
-      doesCartExist.cartTotal +
-      doesCartExist.tax +
-      doesCartExist.shipping;
+      +product.price * +amount;
 
-    console.log(doesCartExist);
+    doesCartExist.orderTotal =
+      +doesCartExist.cartTotal +
+      +doesCartExist.tax +
+      +doesCartExist.shipping;
+
+    console.log('after', doesCartExist);
     await doesCartExist.save();
     return res
       .status(StatusCodes.OK)
@@ -62,18 +63,18 @@ export const addProductToCart = async (
       cartItems: [
         {
           product: id,
-          quantity: amount,
-          price: product?.price,
+          quantity: +amount,
+          price: +product?.price,
         },
       ],
-      numItemsInCart: amount,
-      cartTotal: product.price * amount,
+      numItemsInCart: +amount,
+      cartTotal: +product.price * +amount,
       tax: process.env.TAX,
       shipping: process.env.SHIPPING,
       orderTotal:
         product.price * amount +
-        process.env.SHIPPING +
-        process.env.TAX,
+        +process.env.SHIPPING +
+        +process.env.TAX,
     });
     console.log(newCart);
     await newCart.save();
@@ -155,7 +156,6 @@ export const updateProductQuantityInCart = async (
 ) => {
   const { id: productId } = req.params;
   const { quantity } = req.body;
-
   if (!quantity || quantity < 1) {
     return res.status(400).json({
       msg: 'Quantity must be at least 1',
@@ -165,6 +165,7 @@ export const updateProductQuantityInCart = async (
   const cart = await Cart.findOne({
     createdBy: req.user.userId,
   });
+  console.log('before', cart);
 
   if (!cart) {
     return res
@@ -182,22 +183,33 @@ export const updateProductQuantityInCart = async (
       .json({ msg: 'Product not in cart' });
   }
 
-  item.quantity = quantity;
+  item.quantity = +quantity;
 
   // Recalculate totals
-  cart.cartTotal = cart.cartItems.reduce(
-    (sum, i) => sum + i.price * i.quantity,
+  const cartTotal = cart.cartItems.reduce(
+    (sum, i) => sum + +i.price * +i.quantity,
     0
   );
-  cart.numItemsInCart = cart.cartItems.reduce(
-    (sum, i) => sum + i.quantity,
+
+  const numItemsInCart = cart.cartItems.reduce(
+    (sum, i) => +sum + +i.quantity,
     0
   );
+
+  cart.cartTotal = cartTotal;
+  cart.numItemsInCart = numItemsInCart;
+
+  console.log(
+    'orderTotal',
+    +cartTotal + +cart.tax + +cart.shipping
+  );
+
+  //
   cart.orderTotal =
-    cart.orderTotal + cart.tax + cart.shipping;
+    +cartTotal + +cart.tax + +cart.shipping;
 
+  console.log('after', cart);
   await cart.save();
-
   return res.status(200).json({
     msg: 'Product quantity updated',
     cart,
