@@ -24,10 +24,7 @@ export const loader =
       );
       queryClient.invalidateQueries(['orders']);
       toast.success('Order Confirmed');
-      setTimeout(() => {
-        redirect('/orders');
-      }, 3000);
-      return null;
+      return redirect('/orders');
     } catch (error) {
       console.log(error);
       toast.error(
@@ -40,7 +37,7 @@ export const loader =
 
 const ConfirmOrder = () => {
   return (
-    <Wrapper>
+    <Wrapper className="page">
       <div className="success-center">
         <MdAttachMoney />
         <h3>Payment Successfully</h3>

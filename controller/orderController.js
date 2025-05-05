@@ -121,7 +121,9 @@ export const getAllOrders = async (req, res) => {
     delete query.user;
   }
 
-  const orders = await Order.find(query);
+  const orders = await Order.find(query).populate(
+    'cartItems.product'
+  );
   return res
     .status(200)
     .json({ msg: 'get all orders', orders });

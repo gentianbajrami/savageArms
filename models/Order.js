@@ -6,10 +6,20 @@ const orderSchema = new mongoose.Schema({
   orderTotal: { type: String, required: true },
   cartItems: [
     {
-      itemId: mongoose.Schema.Types.ObjectId, // or String, depending on your data
-      name: String,
-      quantity: Number,
-      price: Number,
+      product: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Firearms',
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
     },
   ],
   numItemsInCart: {
