@@ -11,24 +11,12 @@ import { useQuery } from '@tanstack/react-query';
 import {
   Form,
   Link,
+  redirect,
   useLoaderData,
   useSubmit,
 } from 'react-router-dom';
 import PageBtnContainer from '../../components/PageBtnContainer';
-
-const blogsQuery = params => {
-  const { search, page } = params;
-  return {
-    queryKey: ['blogs', search ?? '', page ?? 1],
-    queryFn: async () => {
-      const { data } = await customFetch(
-        '/blogs',
-        { params }
-      );
-      return data;
-    },
-  };
-};
+import { blogsQuery } from '../../utils/allQueryForProject';
 
 export const loader =
   queryClient =>
@@ -51,11 +39,13 @@ export const loader =
       return redirect('/dashboard');
     }
   };
+
 const BlogDashboard = () => {
   const { searchValues } = useLoaderData();
   const { data } = useQuery(
     blogsQuery(searchValues)
   );
+
   const submit = useSubmit();
 
   const debounce = onChange => {
@@ -69,9 +59,10 @@ const BlogDashboard = () => {
     };
   };
   console.log(data);
-  const blogs = data?.blogs || [];
-  const numOfPages = data?.numOfPages;
 
+  const blogs = data?.posts || [];
+  const numOfPages = data?.numOfPages;
+  console.log(blogs);
   return (
     <Wrapper>
       <div className="search">

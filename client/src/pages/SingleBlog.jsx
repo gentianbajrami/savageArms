@@ -15,6 +15,7 @@ import {
   FaHeart,
 } from 'react-icons/fa';
 import { CiHeart } from 'react-icons/ci';
+import { toast } from 'react-toastify';
 
 export const loader =
   queryClient =>
@@ -37,7 +38,6 @@ const SingleBlog = () => {
     singleBlogQueryBySlug(slug)
   ).data;
   const user = useOutletContext();
-
   console.log(blog);
   return (
     <Wrapper className="page">

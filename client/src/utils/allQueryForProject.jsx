@@ -83,3 +83,17 @@ export const singleBlogQueryBySlug = id => {
     },
   };
 };
+
+export const blogsQuery = params => {
+  const { search, page } = params;
+  return {
+    queryKey: ['blogs', search ?? '', page ?? 1],
+    queryFn: async () => {
+      const { data } = await customFetch(
+        '/blogs',
+        { params }
+      );
+      return data;
+    },
+  };
+};
