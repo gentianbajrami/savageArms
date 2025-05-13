@@ -13,11 +13,13 @@ import {
 } from '../middleware/validationMiddleware.js';
 import upload from '../middleware/multerMiddleware.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
-
+import { checkForTestUser } from '../middleware/authMiddleware.js';
 router
   .route('/')
   .get(getAllFirearms)
   .post(
+    authenticateUser,
+    checkForTestUser,
     upload.single('photo'),
     validateFirearmsInput,
     createFirearm
@@ -28,15 +30,12 @@ router
   .get(validateIdParam, getOneFirearm)
   .patch(
     authenticateUser,
+    checkForTestUser,
     upload.single('photo'),
     validateFirearmsInput,
     validateIdParam,
     updateFirearm
   )
-  .delete(
-    authenticateUser,
-    validateIdParam,
-    deleteFirearm
-  );
+  .delete(authenticateUser, checkForTestUser, validateIdParam, deleteFirearm);
 
 export default router;

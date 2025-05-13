@@ -1,16 +1,12 @@
-import {
-  Form,
-  Link,
-  redirect,
-  useNavigation,
-} from 'react-router-dom';
+import { Form, Link, redirect, useNavigate } from 'react-router-dom';
 import { FormRow } from '../components';
 import customFetch from '../utils';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import { SubmitButton } from '../components';
 
 export const action1 =
-  queryClient =>
+  (queryClient) =>
   async ({ request }) => {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
@@ -22,47 +18,40 @@ export const action1 =
     } catch (error) {
       toast.error(error?.response?.data?.msg);
       return {
-        error:
-          error.response?.data?.message ||
-          'Failed to login',
+        error: error.response?.data?.message || 'Failed to login',
       };
     }
   };
 
 const Login = () => {
-  const navigation = useNavigation();
-  const isSubmitting =
-    navigation.state === 'submitting';
+  const navigate = useNavigate();
+  const loginDemoUser = async () => {
+    const data = {
+      email: 'test@test.com',
+      password: 'secret123',
+    };
+    try {
+      await customFetch.post('/auth/login', data);
+      toast.success('take a test drive');
+      navigate('/');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+    }
+  };
 
   return (
     <Wrapper>
       <Form method="post" className="form">
         <h4 className="login">Login</h4>
-        <FormRow
-          type="email"
-          name="email"
-          defaultValue="ab@gmail.com"
-        />
-        <FormRow
-          type="password"
-          name="password"
-          defaultValue="12345678"
-        />
-        <button
-          type="submit"
-          className="btn btn-block"
-          disabled={isSubmitting}
-        >
-          {isSubmitting
-            ? 'Submitting...'
-            : 'Submit'}
+        <FormRow type="email" name="email" defaultValue="ab@gmail.com" />
+        <FormRow type="password" name="password" defaultValue="12345678" />
+        <SubmitButton />
+        <button type="button" className="btn btn-block" onClick={loginDemoUser}>
+          explore the app
         </button>
         <p>
           Not a member yet?
-          <Link
-            to="/register"
-            className="member-btn"
-          >
+          <Link to="/register" className="member-btn">
             Register
           </Link>
         </p>

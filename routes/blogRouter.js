@@ -17,7 +17,7 @@ import {
   toggleLike,
 } from '../controller/blogsController.js';
 import upload from '../middleware/multerMiddleware.js';
-
+import { checkForTestUser } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
 router.get('/', getPublishedPosts);
@@ -28,6 +28,7 @@ router.post(
   '/',
   upload.single('image'),
   authenticateUser,
+  checkForTestUser,
   authorizePermissions('admin'),
   createPost
 );
@@ -35,35 +36,26 @@ router.patch(
   '/:id',
   upload.single('image'),
   authenticateUser,
+  checkForTestUser,
   authorizePermissions('admin'),
   updatePost
 );
-router.delete(
-  '/:id',
-  authenticateUser,
-  deletePost
-);
+router.delete('/:id', authenticateUser, checkForTestUser, deletePost);
 
-router.post(
-  '/:slug/comments',
-  authenticateUser,
-  addComment
-);
+router.post('/:slug/comments', authenticateUser, checkForTestUser, addComment);
 router.patch(
   '/:slug/comments/:commentId',
   authenticateUser,
+  checkForTestUser,
   updateComment
 );
 router.delete(
   '/:slug/comments/:commentId',
   authenticateUser,
+  checkForTestUser,
   deleteComment
 );
 
-router.post(
-  '/:id/like',
-  authenticateUser,
-  toggleLike
-);
+router.post('/:id/like', authenticateUser, toggleLike);
 
 export default router;
