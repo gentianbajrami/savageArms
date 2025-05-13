@@ -1,24 +1,38 @@
-import { Form, Link, redirect, useNavigation } from 'react-router-dom';
+import {
+  Form,
+  Link,
+  redirect,
+  useNavigation,
+} from 'react-router-dom';
 import { FormRow } from '../components';
 import customFetch from '../utils';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-export const action1 = async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  try {
-    await customFetch.post('/auth/login', data);
-    toast.success('Login successful');
-    return redirect('/');
-  } catch (error) {
-    toast.error(error?.response?.data?.msg);
-    return { error: error.response?.data?.message || 'Failed to login' };
-  }
-};
+
+export const action1 =
+  queryClient =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+      await customFetch.post('/auth/login', data);
+      toast.success('Login successful');
+      queryClient.invalidateQueries();
+      return redirect('/');
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      return {
+        error:
+          error.response?.data?.message ||
+          'Failed to login',
+      };
+    }
+  };
 
 const Login = () => {
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === 'submitting';
+  const isSubmitting =
+    navigation.state === 'submitting';
 
   return (
     <Wrapper>
@@ -27,15 +41,28 @@ const Login = () => {
         <FormRow
           type="email"
           name="email"
-          defaultValue="gentian.bajrami20@outlook.com"
+          defaultValue="ab@gmail.com"
         />
-        <FormRow type="password" name="password" />
-        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+        <FormRow
+          type="password"
+          name="password"
+          defaultValue="12345678"
+        />
+        <button
+          type="submit"
+          className="btn btn-block"
+          disabled={isSubmitting}
+        >
+          {isSubmitting
+            ? 'Submitting...'
+            : 'Submit'}
         </button>
         <p>
           Not a member yet?
-          <Link to="/register" className="member-btn">
+          <Link
+            to="/register"
+            className="member-btn"
+          >
             Register
           </Link>
         </p>

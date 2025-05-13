@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useSubmit,
-} from 'react-router-dom';
+import { Form, Link, useLoaderData, useSubmit } from 'react-router-dom';
 import FormRow from './FormRow';
 import FormRowSelect from './FormRowSelect';
 import FormRange from './FormRange';
@@ -13,20 +8,13 @@ import styled from 'styled-components';
 const Filters = () => {
   const { params, meta } = useLoaderData();
   console.log('🚀 ~ Filters ~ meta:', params);
-  const {
-    search,
-    caliber,
-    model,
-    type,
-    order,
-    price,
-  } = params;
+  const { search, caliber, model, type, order, price } = params;
 
   const submit = useSubmit();
 
-  const debounce = onChange => {
+  const debounce = (onChange) => {
     let timeout;
-    return e => {
+    return (e) => {
       const form = e.currentTarget.form;
       clearTimeout(timeout);
       timeout = setTimeout(() => {
@@ -44,50 +32,31 @@ const Filters = () => {
           name="search"
           size="input-sm"
           defaultValue={search}
-          onChange={debounce(form =>
-            submit(form)
-          )}
+          onChange={debounce((form) => submit(form))}
         />
         <FormRowSelect
           label="select caliber"
           name="caliber"
-          list={[
-            'all',
-            ...Object.values(
-              meta.FIREARMS_CALIBER
-            ),
-          ]}
+          list={['all', ...Object.values(meta.FIREARMS_CALIBER)]}
           size="select-sm"
           defaultValue={caliber}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={(e) => submit(e.currentTarget.form)}
         />
         <FormRowSelect
           label="select model"
           name="model"
-          list={[
-            'all',
-            ...Object.values(meta.FIREARMS_MODEL),
-          ]}
+          list={['all', ...Object.values(meta.FIREARMS_MODEL)]}
           size="select-sm"
           defaultValue={model}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={(e) => submit(e.currentTarget.form)}
         />
         <FormRowSelect
           label="select type"
           name="type"
-          list={[
-            'all',
-            ...Object.values(meta.FIREARMS_TYPE),
-          ]}
+          list={['all', ...Object.values(meta.FIREARMS_TYPE)]}
           size="select-sm"
           defaultValue={type}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={(e) => submit(e.currentTarget.form)}
         />
 
         <FormRowSelect
@@ -96,18 +65,14 @@ const Filters = () => {
           list={['a-z', 'z-a', 'high', 'low']}
           size="select-sm"
           defaultValue={order}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={(e) => submit(e.currentTarget.form)}
         />
         {/* PRICE */}
         <FormRange
           name="price"
           label="select price"
           price={price}
-          onChange={e =>
-            submit(e.currentTarget.form)
-          }
+          onChange={(e) => submit(e.currentTarget.form)}
         />
 
         <Link to="/products" className="btn">

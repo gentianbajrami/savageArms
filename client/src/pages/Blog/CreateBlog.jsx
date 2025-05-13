@@ -1,19 +1,17 @@
 import React from 'react';
 import { Form, redirect } from 'react-router-dom';
-import { FormRow, SubmitButton } from '../../components';
+import {
+  FormRow,
+  SubmitButton,
+} from '../../components';
 import styled from 'styled-components';
 import customFetch from '../../utils';
 import { toast } from 'react-toastify';
 
 export const action =
-  (queryClient) =>
+  queryClient =>
   async ({ request }) => {
     const formData = await request.formData();
-    const file = formData.get('image');
-    if (file && file.size > 500000) {
-      toast.error('Image size to large');
-      return null;
-    }
 
     try {
       await customFetch.post('/blogs', formData);
@@ -29,12 +27,19 @@ export const action =
 const CreateBlog = () => {
   return (
     <Wrapper>
-      <Form className="form" method="post" encType="multipart/form-data">
+      <Form
+        className="form"
+        method="post"
+        encType="multipart/form-data"
+      >
         <h4 className="form-title">Add blog</h4>
         <div className="form-center">
           <FormRow type={'text'} name={'title'} />
           <div className="form-row">
-            <label htmlFor="image" className="form-label">
+            <label
+              htmlFor="image"
+              className="form-label"
+            >
               Select an image(max 0.5mb)
             </label>
             <input
@@ -46,9 +51,24 @@ const CreateBlog = () => {
             />
           </div>
           <div className="form-row">
-            <label className="form-label">Content</label>
-            <textarea name="content" className="form-input"></textarea>
+            <label className="form-label">
+              Content
+            </label>
+            <textarea
+              name="content"
+              className="form-input"
+            ></textarea>
           </div>
+          <FormRow
+            name={'category'}
+            type={'text'}
+            defaultValue="General"
+          />
+          <FormRow
+            name={'tags'}
+            type={'text'}
+            placeholder={'Seperate by coma'}
+          />
           <SubmitButton formBtn />
         </div>
       </Form>
@@ -59,7 +79,9 @@ const CreateBlog = () => {
 const Wrapper = styled.section`
   border-radius: var(--border-radius);
   width: 100%;
-  background-color: var(--background-secondary-color);
+  background-color: var(
+    --background-secondary-color
+  );
   padding: 3rem 2rem 4rem;
   .form-title {
     text-align: center;
