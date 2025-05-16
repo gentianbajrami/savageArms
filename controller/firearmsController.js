@@ -8,6 +8,7 @@ import {
   FIREARMS_MODEL,
   FIREARMS_TYPE,
 } from '../utils/constants.js';
+import mongoose from 'mongoose';
 
 export const getAllFirearms = async (req, res) => {
   const { search, caliber, model, sort, price } = req.query;
@@ -155,4 +156,8 @@ export const deleteFirearm = async (req, res) => {
     msg: 'firearm deleted',
     firearm: firearms,
   });
+};
+
+export const showStats = async (req, res) => {
+  res.send('show stats');
 };

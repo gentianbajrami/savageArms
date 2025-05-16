@@ -31,6 +31,9 @@ export const login = async (req, res) => {
     throw new UnauthenticatedError('invalid credentials');
   }
 
+  user.lastLogin = new Date();
+  await user.save();
+
   const token = createJWT({
     userId: user._id,
     role: user.role,

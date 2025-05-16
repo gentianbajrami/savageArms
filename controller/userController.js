@@ -11,7 +11,28 @@ export const getCurrentUser = async (req, res) => {
 export const getApplicationStats = async (req, res) => {
   const users = await User.countDocuments();
   const firearms = await Firearm.countDocuments();
-  res.status(StatusCodes.OK).json({ users, firearms });
+
+  const now = new Date();
+  const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+  const recentLogins = await User.countDocuments({
+    lastLogin: { $gte: dayAgo },
+  });
+
+  const hourlyLogins = await User.aggregate([
+    { $match: { lastLogin: { $gte: dayAgo } } },
+    {
+      $group: {
+        _id: {
+          hour: { $hour: '$lastLogin' },
+        },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { '_id.hour': 1 } },
+  ]);
+
+  res.status(StatusCodes.OK).json({ users, firearms, recentLogins, hourlyLogins });
 };
 
 export const updateUser = async (req, res) => {
