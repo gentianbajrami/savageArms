@@ -13,30 +13,15 @@ import {
   authorizePermissions,
 } from '../middleware/authMiddleware.js';
 import { validateCreateReview } from '../middleware/validationMiddleware.js';
-
+import { checkForTestUser } from '../middleware/authMiddleware.js';
 router
   .route('/')
-  .post(
-    authenticateUser,
-    validateCreateReview,
-    createReview
-  )
-  .get(
-    authenticateUser,
-    authorizePermissions('admin'),
-    getAllReviews
-  );
-router.get(
-  '/products/:id',
-  getAllReviewsForProduct
-);
+  .post(authenticateUser, checkForTestUser, validateCreateReview, createReview)
+  .get(authenticateUser, authorizePermissions('admin'), getAllReviews);
+router.get('/products/:id', getAllReviewsForProduct);
 router
   .route('/:id')
-  .patch(
-    authenticateUser,
-    validateCreateReview,
-    updateReview
-  )
-  .delete(authenticateUser, deleteReview);
+  .patch(authenticateUser, checkForTestUser, validateCreateReview, updateReview)
+  .delete(authenticateUser, checkForTestUser, deleteReview);
 
 export default router;

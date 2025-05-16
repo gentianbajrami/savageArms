@@ -1,11 +1,5 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   Accessories,
@@ -89,9 +83,7 @@ const queryClient = new QueryClient({
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <MainLayout queryClient={queryClient} />
-    ),
+    element: <MainLayout queryClient={queryClient} />,
     loader: mainLayoutLoader(queryClient),
     errorElement: <Error />,
     children: [
@@ -159,13 +151,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'update/:id',
-            action:
-              updateCartItemAction(queryClient),
+            action: updateCartItemAction(queryClient),
           },
           {
             path: 'remove/:id',
-            action:
-              deleteCartItemAction(queryClient),
+            action: deleteCartItemAction(queryClient),
           },
         ],
       },

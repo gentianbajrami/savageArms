@@ -4,10 +4,12 @@ import customFetch from '../utils/index';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { StatItem } from '../components';
+import HourlyLoginChart from '../components/HourlyLoginChart';
+import LoginGraph from '../components/LoginGraph';
 
 export const loader1 = async () => {
   try {
-    const data = await customFetch.get('/users/admin/app-stats');
+    const data = await customFetch.get('/users/app-stats');
     console.log('API Response:', data); // Debug log
     return data;
   } catch (error) {
@@ -28,7 +30,15 @@ const Admin = () => {
     return <p style={{ textAlign: 'center' }}>No data available</p>;
   }
 
-  const { users = 0, firearms = 0 } = data.data;
+  const { users = 0, firearms = 0, recentLogins = 0, hourlyLogins = [] } = data.data;
+
+  const chartData = Array.from({ length: 24 }, (_, hour) => {
+    const found = hourlyLogins.find((item) => item._id.hour === hour);
+    return {
+      hour: `${hour}:00`,
+      logins: found ? found.count : 0,
+    };
+  });
 
   return (
     <Wrapper>
@@ -46,6 +56,15 @@ const Admin = () => {
         bcg="#e0e8f9"
         icon={<FaCalendarCheck />}
       />
+      <StatItem
+        title="logins last 24h"
+        count={recentLogins}
+        color="#2cb1bc"
+        bcg="#d3f6f8"
+        icon={<FaCalendarCheck />}
+      />
+
+      <LoginGraph data={chartData} />
     </Wrapper>
   );
 };

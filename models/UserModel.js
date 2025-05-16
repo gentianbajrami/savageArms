@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'admin', 'company'],
     default: 'user',
   },
+  lastLogin: { type: Date, default: null },
 });
 
 UserSchema.methods.toJSON = function () {

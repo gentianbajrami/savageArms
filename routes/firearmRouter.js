@@ -6,6 +6,7 @@ import {
   getAllFirearms,
   getOneFirearm,
   updateFirearm,
+  showStats,
 } from '../controller/firearmsController.js';
 import {
   validateFirearmsInput,
@@ -13,30 +14,31 @@ import {
 } from '../middleware/validationMiddleware.js';
 import upload from '../middleware/multerMiddleware.js';
 import { authenticateUser } from '../middleware/authMiddleware.js';
-
+import { checkForTestUser } from '../middleware/authMiddleware.js';
 router
   .route('/')
   .get(getAllFirearms)
   .post(
+    authenticateUser,
+    checkForTestUser,
     upload.single('photo'),
     validateFirearmsInput,
     createFirearm
   );
+
+router.route('/stats').get(showStats);
 
 router
   .route('/:id')
   .get(validateIdParam, getOneFirearm)
   .patch(
     authenticateUser,
+    checkForTestUser,
     upload.single('photo'),
     validateFirearmsInput,
     validateIdParam,
     updateFirearm
   )
-  .delete(
-    authenticateUser,
-    validateIdParam,
-    deleteFirearm
-  );
+  .delete(authenticateUser, checkForTestUser, validateIdParam, deleteFirearm);
 
 export default router;
