@@ -10,7 +10,6 @@ import LoginGraph from '../components/LoginGraph';
 export const loader1 = async () => {
   try {
     const data = await customFetch.get('/users/app-stats');
-    console.log('API Response:', data); // Debug log
     return data;
   } catch (error) {
     console.error('Loader Error:', error.response?.data || error.message);

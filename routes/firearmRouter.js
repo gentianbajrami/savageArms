@@ -6,7 +6,7 @@ import {
   getAllFirearms,
   getOneFirearm,
   updateFirearm,
-  showStats,
+  showUserStats,
 } from '../controller/firearmsController.js';
 import {
   validateFirearmsInput,
@@ -26,7 +26,7 @@ router
     createFirearm
   );
 
-router.route('/stats').get(showStats);
+router.route('/stats').get(authenticateUser, showUserStats);
 
 router
   .route('/:id')

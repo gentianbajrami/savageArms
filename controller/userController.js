@@ -19,19 +19,6 @@ export const getApplicationStats = async (req, res) => {
     lastLogin: { $gte: dayAgo },
   });
 
-  // const hourlyLogins = await User.aggregate([
-  //   { $match: { lastLogin: { $gte: dayAgo } } },
-  //   {
-  //     $group: {
-  //       _id: {
-  //         hour: { $hour: '$lastLogin' },
-  //       },
-  //       count: { $sum: 1 },
-  //     },
-  //   },
-  //   { $sort: { '_id.hour': 1 } },
-  // ]);
-
   const hourlyLogins = await User.aggregate([
     {
       $match: {
