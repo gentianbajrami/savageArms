@@ -9,7 +9,11 @@ const DashboardLinks = ({ toggleSidebar, shouldToggle = false, user }) => {
       {links.map((link) => {
         const { text, path, icon } = link;
 
-        if (user?.role !== 'admin' && path === '/admin') {
+        if (user?.role !== 'admin' && path === 'admin') {
+          return null;
+        }
+
+        if (user?.role !== 'admin' && path === 'blog') {
           return null;
         }
 

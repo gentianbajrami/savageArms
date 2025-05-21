@@ -43,8 +43,12 @@ const Login = () => {
     <Wrapper>
       <Form method="post" className="form">
         <h4 className="login">Login</h4>
-        <FormRow type="email" name="email" defaultValue="ab@gmail.com" />
-        <FormRow type="password" name="password" defaultValue="12345678" />
+        <FormRow
+          type="email"
+          name="email"
+          defaultValue="gentian.bajrami20@outlook.com"
+        />
+        <FormRow type="password" name="password" defaultValue="secret123" />
         <SubmitButton />
         <button type="button" className="btn btn-block" onClick={loginDemoUser}>
           explore the app
