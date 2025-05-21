@@ -157,7 +157,3 @@ export const deleteFirearm = async (req, res) => {
     firearm: firearms,
   });
 };
-
-export const showStats = async (req, res) => {
-  res.send('show stats');
-};
