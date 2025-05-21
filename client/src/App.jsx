@@ -17,7 +17,6 @@ import {
   Suppressor,
   Bipods,
   DashboardLayout,
-  Dashboard,
   CreateBlog,
   BlogDashboard,
   EditBlog,
@@ -30,6 +29,7 @@ import {
   Checkout,
   Orders,
   SingleBlog,
+  UserManagement,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -62,6 +62,7 @@ import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 import { loader as ordersLoader } from './pages/Orders';
 import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
 import { loader as homeLoader } from './pages/Home';
+import { loader as userManagementLoader } from './pages/UserManagement';
 
 import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
@@ -265,6 +266,11 @@ const router = createBrowserRouter([
         element: <EditBlog />,
         loader: editBlogLoader(queryClient),
         action: editBlogAction(queryClient),
+      },
+      {
+        path: 'user-management',
+        element: <UserManagement />,
+        loader: userManagementLoader,
       },
     ],
   },
