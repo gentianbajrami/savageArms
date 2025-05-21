@@ -19,17 +19,46 @@ export const getApplicationStats = async (req, res) => {
     lastLogin: { $gte: dayAgo },
   });
 
+  // const hourlyLogins = await User.aggregate([
+  //   { $match: { lastLogin: { $gte: dayAgo } } },
+  //   {
+  //     $group: {
+  //       _id: {
+  //         hour: { $hour: '$lastLogin' },
+  //       },
+  //       count: { $sum: 1 },
+  //     },
+  //   },
+  //   { $sort: { '_id.hour': 1 } },
+  // ]);
+
   const hourlyLogins = await User.aggregate([
-    { $match: { lastLogin: { $gte: dayAgo } } },
+    {
+      $match: {
+        lastLogin: { $gte: dayAgo },
+      },
+    },
     {
       $group: {
         _id: {
-          hour: { $hour: '$lastLogin' },
+          $dateToParts: {
+            date: '$lastLogin',
+            timezone: 'Europe/Belgrade',
+          },
         },
         count: { $sum: 1 },
       },
     },
-    { $sort: { '_id.hour': 1 } },
+    {
+      $project: {
+        hour: '$_id.hour',
+        count: 1,
+        _id: 0,
+      },
+    },
+    {
+      $sort: { hour: 1 },
+    },
   ]);
 
   res.status(StatusCodes.OK).json({ users, firearms, recentLogins, hourlyLogins });
