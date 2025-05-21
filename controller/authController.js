@@ -4,6 +4,7 @@ import { comparePassword, hashPassword } from '../utils/passwordUtils.js';
 import { UnauthenticatedError } from '../errors/customErrors.js';
 import { createJWT } from '../utils/tokenUtils.js';
 import moment from 'moment-timezone';
+import LoginEvent from '../models/LoginEvent.js';
 
 export const register = async (req, res) => {
   const isFirstUser = (await UserModel.countDocuments()) === 0;
@@ -34,6 +35,12 @@ export const login = async (req, res) => {
 
   user.lastLogin = moment().tz('Europe/Belgrade').toDate();
   await user.save();
+
+  // Log the login event separately:
+  await LoginEvent.create({
+    user: user._id,
+    timestamp: user.lastLogin,
+  });
 
   const token = createJWT({
     userId: user._id,
