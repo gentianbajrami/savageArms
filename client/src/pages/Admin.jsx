@@ -33,7 +33,7 @@ const Admin = () => {
   const { users = 0, firearms = 0, recentLogins = 0, hourlyLogins = [] } = data.data;
 
   const chartData = Array.from({ length: 24 }, (_, hour) => {
-    const found = hourlyLogins.find((item) => item._id.hour === hour);
+    const found = hourlyLogins.find((item) => item.hour === hour);
     return {
       hour: `${hour}:00`,
       logins: found ? found.count : 0,
