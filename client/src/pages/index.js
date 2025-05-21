@@ -27,3 +27,5 @@ export { default as Checkout } from './Checkout';
 export { default as Orders } from './Orders';
 export { default as SingleBlog } from './SingleBlog';
 export { default as UserManagement } from './UserManagement';
+export { default as Stats } from './Stats';
+

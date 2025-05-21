@@ -30,6 +30,7 @@ import {
   Orders,
   SingleBlog,
   UserManagement,
+  Stats,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -63,6 +64,7 @@ import { loader as ordersLoader } from './pages/Orders';
 import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
 import { loader as homeLoader } from './pages/Home';
 import { loader as userManagementLoader } from './pages/UserManagement';
+import { loader as statsLoader } from './pages/Stats';
 
 import { loader1 as adminLoader } from './pages/Admin';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
@@ -246,6 +248,11 @@ const router = createBrowserRouter([
         path: 'all-firearms',
         element: <AllFirearms />,
         loader: allFirearmsLoader,
+      },
+      {
+        path: 'stats',
+        element: <Stats />,
+        loader: statsLoader,
       },
       {
         path: 'create-blog',

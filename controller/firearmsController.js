@@ -9,6 +9,9 @@ import {
   FIREARMS_TYPE,
 } from '../utils/constants.js';
 import mongoose from 'mongoose';
+import Cart from '../models/Cart.js';
+import Order from '../models/Order.js';
+import LoginEvent from '../models/LoginEvent.js';
 
 export const getAllFirearms = async (req, res) => {
   const { search, caliber, model, sort, price } = req.query;
@@ -151,13 +154,81 @@ export const updateFirearm = async (req, res, next) => {
 };
 
 export const deleteFirearm = async (req, res) => {
+  const userId = req.user.userId;
+  const user = await User.findById(userId);
+
+  if (user.role !== 'admin' && user.role !== 'company') {
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      msg: 'Only admins and companies can delete firearms',
+    });
+  }
+
   const firearms = await Firearms.findByIdAndDelete(req.params.id);
+
   res.status(StatusCodes.OK).json({
     msg: 'firearm deleted',
     firearm: firearms,
   });
 };
 
-export const showStats = async (req, res) => {
-  res.send('show stats');
+export const showUserStats = async (req, res) => {
+  const userId = req.user.userId;
+
+  const cart = await Cart.findOne({ createdBy: userId });
+  const firearmsInCart = cart ? cart.numItemsInCart : 0;
+
+  const orders = await Order.find({ user: userId });
+  const firearmsPurchased = orders.reduce((total, order) => {
+    return total + order.numItemsInCart;
+  }, 0);
+
+  const now = new Date();
+  const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+  const recentLogins = await LoginEvent.countDocuments({
+    user: userId,
+    timestamp: { $gte: dayAgo },
+  });
+
+  const hourlyLogins = await LoginEvent.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(userId),
+        timestamp: { $gte: dayAgo },
+      },
+    },
+    {
+      $addFields: {
+        hour: {
+          $hour: {
+            date: '$timestamp',
+            timezone: 'Europe/Belgrade',
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: '$hour',
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $project: {
+        hour: '$_id',
+        count: 1,
+        _id: 0,
+      },
+    },
+    {
+      $sort: { hour: 1 },
+    },
+  ]);
+
+  res.status(StatusCodes.OK).json({
+    firearmsInCart,
+    firearmsPurchased,
+    hourlyLogins,
+    recentLogins,
+  });
 };
