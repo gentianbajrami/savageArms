@@ -42,6 +42,10 @@ export const login = async (req, res) => {
     timestamp: user.lastLogin,
   });
 
+  if (user.locked) {
+    return res.status(403).json({ msg: 'Your account has been locked' });
+  }
+
   const token = createJWT({
     userId: user._id,
     role: user.role,

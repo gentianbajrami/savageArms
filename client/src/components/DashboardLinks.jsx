@@ -2,20 +2,26 @@ import React from 'react';
 import links from '../utils/links';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { useDashboardContext } from '../pages/Dashboard/DashboardLayout';
 
-const DashboardLinks = ({ toggleSidebar, shouldToggle = false, user }) => {
+const DashboardLinks = ({ toggleSidebar, shouldToggle = false }) => {
+  const { user } = useDashboardContext();
+
+  if (!user) {
+    return null;
+  }
   return (
     <Wrapper>
       {links.map((link) => {
         const { text, path, icon } = link;
 
-        if (user?.role !== 'admin' && path === 'admin') {
-          return null;
-        }
+        // if (user?.role !== 'admin' && path === 'admin') {
+        //   return null;
+        // }
 
-        if (user?.role !== 'admin' && path === 'blog') {
-          return null;
-        }
+        // if (user?.role !== 'admin' && path === 'blog') {
+        //   return null;
+        // }
 
         return (
           <NavLink

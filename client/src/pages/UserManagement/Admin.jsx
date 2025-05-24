@@ -1,11 +1,11 @@
 import { FaSuitcaseRolling, FaCalendarCheck } from 'react-icons/fa';
 import { useLoaderData, redirect } from 'react-router-dom';
-import customFetch from '../utils/index';
+import customFetch from '../../utils/index';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { StatItem } from '../components';
-import HourlyLoginChart from '../components/HourlyLoginChart';
-import LoginGraph from '../components/LoginGraph';
+import { StatItem } from '../../components';
+import HourlyLoginChart from '../../components/HourlyLoginChart';
+import LoginGraph from '../../components/LoginGraph';
 
 export const loader1 = async () => {
   try {

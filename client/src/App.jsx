@@ -31,6 +31,7 @@ import {
   SingleBlog,
   UserManagement,
   Stats,
+  AdminEditUser,
 } from './pages';
 
 import { action1 as registerAction } from './pages/Register';
@@ -55,6 +56,7 @@ import {
   editCommentAction,
   deleteCommentAction,
 } from './components/Comments';
+import { action as adminEditAction } from './pages/UserManagement/AdminEditUser';
 
 import { loader as allFirearmsLoader } from './pages/Firearms/AllFirearms';
 import { loader as editFirearmLoader } from './pages/Firearms/EditFirearm';
@@ -63,10 +65,11 @@ import { loader as editBlogLoader } from './pages/Blog/EditBlog';
 import { loader as ordersLoader } from './pages/Orders';
 import { loader as confirmOrderLoader } from './pages/ConfirmOrder';
 import { loader as homeLoader } from './pages/Home';
-import { loader as userManagementLoader } from './pages/UserManagement';
+import { loader as userManagementLoader } from './pages/UserManagement/UserManagement';
 import { loader as statsLoader } from './pages/Stats';
 
-import { loader1 as adminLoader } from './pages/Admin';
+import { loader1 as adminLoader } from './pages/UserManagement/Admin';
+import { loader as adminEditLoader } from './pages/UserManagement/AdminEditUser';
 import { loader as dashboardLoader } from './pages/Dashboard/DashboardLayout';
 import { loader as blogLoader } from './pages/Blog';
 import { loader as cartLoader } from './pages/Cart';
@@ -278,6 +281,12 @@ const router = createBrowserRouter([
         path: 'user-management',
         element: <UserManagement />,
         loader: userManagementLoader,
+      },
+      {
+        path: 'admin-edit-user/:id',
+        element: <AdminEditUser />,
+        loader: adminEditLoader,
+        action: adminEditAction,
       },
     ],
   },

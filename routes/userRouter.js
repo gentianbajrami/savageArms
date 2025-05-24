@@ -9,6 +9,7 @@ import {
   deleteUser,
   adminUpdateUser,
   createUser,
+  toggleUserLock,
 } from '../controller/userController.js';
 
 import { ROLE } from '../utils/constants.js';
@@ -29,4 +30,5 @@ router.patch(
   adminUpdateUser
 );
 router.delete('/delete-user/:id', authorizePermissions(ROLE.ADMIN), deleteUser);
+router.patch('/lock/:id', authorizePermissions(ROLE.ADMIN), toggleUserLock);
 export default router;

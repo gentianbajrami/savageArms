@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     default: 'user',
   },
   lastLogin: { type: Date, default: null },
+  locked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.methods.toJSON = function () {
