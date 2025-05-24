@@ -113,3 +113,16 @@ export const deleteUser = async (req, res) => {
   await user.deleteOne();
   res.status(StatusCodes.OK).json({ msg: 'User deleted' });
 };
+
+export const toggleUserLock = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+  if (!user) throw new NotFoundError('User not found');
+  user.locked = !user.locked;
+  await user.save();
+
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: `User ${user.locked ? 'locked' : 'unlocked'}`, user });
+};

@@ -1,4 +1,4 @@
-export { default as Admin } from './Admin';
+export { default as Admin } from './UserManagement/Admin';
 export { default as Blog } from './Blog';
 export { default as Error } from './Error';
 export { default as Firearms } from './Firearms/Firearms';
@@ -26,6 +26,6 @@ export { default as SingleProductPage } from './SingleProductPage';
 export { default as Checkout } from './Checkout';
 export { default as Orders } from './Orders';
 export { default as SingleBlog } from './SingleBlog';
-export { default as UserManagement } from './UserManagement';
+export { default as UserManagement } from './UserManagement/UserManagement';
 export { default as Stats } from './Stats';
-
+export { default as AdminEditUser } from './UserManagement/AdminEditUser';
