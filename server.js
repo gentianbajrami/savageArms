@@ -25,7 +25,7 @@ import path from 'path';
 
 //middlewares
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import { authenticateUser } from './middleware/authMiddleware.js';
+import { authenticateUser, checkForTestUser } from './middleware/authMiddleware.js';
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -52,21 +52,12 @@ app.use(
 );
 
 app.use('/api/v1/firearms', firearmRouter);
-app.use(
-  '/api/v1/users',
-  authenticateUser,
-  userRouter
-);
+app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/blogs', blogRouter);
-app.use(
-  '/api/v1/cart',
-  authenticateUser,
-  cartRouter
-);
+app.use('/api/v1/cart', authenticateUser, checkForTestUser, cartRouter);
 app.use('/api/v1/orders', orderRouter);
 app.use('/api/v1/reviews', reviewRouter);
-
 
 app.use('*', (req, res) => {
   res.status(404).json({ msg: 'not found' });

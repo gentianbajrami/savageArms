@@ -6,7 +6,6 @@ import {
   getApplicationStats,
   updateUser,
   getAllUsers,
-  deleteUser,
   adminUpdateUser,
   createUser,
   toggleUserLock,
@@ -29,6 +28,5 @@ router.patch(
   authorizePermissions(ROLE.ADMIN),
   adminUpdateUser
 );
-router.delete('/delete-user/:id', authorizePermissions(ROLE.ADMIN), deleteUser);
 router.patch('/lock/:id', authorizePermissions(ROLE.ADMIN), toggleUserLock);
 export default router;

@@ -15,17 +15,9 @@ export const loader = async () => {
 const UserManagement = () => {
   const data = useLoaderData();
 
-  if (data === undefined) {
-    return <p style={{ textAlign: 'center' }}>Loading user management data...</p>;
-  }
-
-  if (!data) {
-    return <p style={{ textAlign: 'center' }}>No data available</p>;
-  }
-
   const [users, setUsers] = useState(data.users || []);
-
-  console.log(users._id);
+  console.log('Loaded Users:', users);
+  console.log(users.map((u) => u._id));
 
   const handleToggleLock = async (user) => {
     try {

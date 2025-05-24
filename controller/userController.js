@@ -100,18 +100,7 @@ export const adminUpdateUser = async (req, res) => {
 
   await user.save();
 
-  const userWithoutPassword = user.toJSON();
-  res.status(StatusCodes.OK).json({ user: userWithoutPassword });
-};
-
-export const deleteUser = async (req, res) => {
-  const { id } = req.params;
-
-  const user = await User.findById(id);
-  if (!user) throw new NotFoundError('User not found');
-
-  await user.deleteOne();
-  res.status(StatusCodes.OK).json({ msg: 'User deleted' });
+  res.status(StatusCodes.OK).json({ user });
 };
 
 export const toggleUserLock = async (req, res) => {

@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 export const loader = async ({ params }) => {
   try {
-    const { data } = await customFetch.get(`/admin-update-user/${params.id}`);
+    const { data } = await customFetch.get(`users/${params.id}`);
 
     return { data };
   } catch (error) {
@@ -23,11 +23,7 @@ export const action = async ({ request, params }) => {
   const userId = params.id;
 
   try {
-    await customFetch.patch(`/admin-update-user/${userId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    await customFetch.patch(`/admin-update-user/${userId}`, formData);
     toast.success('User updated successfully');
     return redirect('/dashboard/user-management');
   } catch (error) {
@@ -46,7 +42,7 @@ const AdminEditUser = () => {
 
   return (
     <Wrapper>
-      <Form method="post" className="form" encType="multipart/form-data">
+      <Form method="post" className="form">
         <h4 className="form-title">Edit User</h4>
         <div className="form-center">
           <FormRow
@@ -81,19 +77,6 @@ const AdminEditUser = () => {
             list={Object.values(ROLE)}
             defaultValue={user.role}
           />
-
-          <div className="form-row">
-            <label htmlFor="photo" className="form-label">
-              Select an image (max 0.5MB)
-            </label>
-            <input
-              type="file"
-              name="photo"
-              id="photo"
-              className="form-input"
-              accept="image/*"
-            />
-          </div>
           <SubmitButton formBtn />
         </div>
       </Form>

@@ -6,7 +6,7 @@ import { useDashboardContext } from '../pages/Dashboard/DashboardLayout';
 
 const DashboardLinks = ({ toggleSidebar, shouldToggle = false }) => {
   const { user } = useDashboardContext();
-
+  console.log(user);
   if (!user) {
     return null;
   }
@@ -15,13 +15,17 @@ const DashboardLinks = ({ toggleSidebar, shouldToggle = false }) => {
       {links.map((link) => {
         const { text, path, icon } = link;
 
-        // if (user?.role !== 'admin' && path === 'admin') {
-        //   return null;
-        // }
+        if (user?.role !== 'admin' && path === 'admin') {
+          return null;
+        }
 
-        // if (user?.role !== 'admin' && path === 'blog') {
-        //   return null;
-        // }
+        if (user?.role !== 'admin' && path === 'blog') {
+          return null;
+        }
+
+        if (user?.role !== 'admin' && path === 'user-management') {
+          return null;
+        }
 
         return (
           <NavLink

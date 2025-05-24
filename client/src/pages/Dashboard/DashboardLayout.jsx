@@ -14,7 +14,7 @@ import styled from 'styled-components';
 export const loader = async () => {
   try {
     const data = await customFetch.get('/users/current-user');
-    return { user: data };
+    return { user: data.data.user };
   } catch (error) {
     return redirect('/');
   }
