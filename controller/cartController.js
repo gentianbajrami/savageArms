@@ -14,8 +14,9 @@ export const addProductToCart = async (
   const { id } = req.params;
   const { amount } = req.body;
   const product = await Product.findById(id);
-  if (!product)
-    return new NotFoundError('Product not found');
+  if (!product) {
+    throw new NotFoundError('Product not found');
+  }
 
   if (product.stock < amount) {
     throw new BadRequestError(
